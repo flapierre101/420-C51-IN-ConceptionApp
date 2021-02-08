@@ -1,0 +1,121 @@
+// Membres : Caroline Emond Serret, François Lapierre, Dany Viens
+// Possibilité de visualiser le code interractif :
+// https://dbdiagram.io/d/6021a67080d742080a39b57d
+
+
+
+Table evenements  {
+  id int [pk] // auto-increment
+  nom varchar(64)
+  genre varchar(64) // soit ENUM ou créer TABLE de genre.
+  budget NUMERIC
+}
+
+Table transaction {
+  id int [pk] // auto-increment
+  evenement int
+  type VARCHAR(12) // dépense ou revenu
+  fournisseur int
+  desc VARCHAR(255)
+  montant NUMERIC
+}
+Ref: transaction.evenement > evenements.id
+Ref: transaction.fournisseur > fournisseur.id
+
+Table fournisseur {
+  id int [pk] 
+  courriel varchar(32) [not null]
+  nomCompagnie varchar(32)
+  nom varchar(16) [NOT NULL]
+  prenom varchar(16) [NOT NULL]
+  adresse varchar(32)
+  telephoneRessource varchar(32)
+  desc varchar(255)
+}
+
+Table personnels {
+  id int [pk] 
+  compagnie  int
+  mdp varchar(32) [not null]
+  nom varchar(16) [NOT NULL]
+  prenom varchar(16) [NOT NULL]
+  identifiantlogin varchar(16) [UNIQUE, NOT NULL]
+  role varchar(16) [NOT NULL, unique] // plus regex
+  courriel varchar(32)
+  date_embauche date
+}
+
+Table clients {
+  id int [pk] 
+  courriel varchar(32) [not null]
+  nom varchar(16) [NOT NULL]
+  prenom varchar(16) [NOT NULL]
+  adresse varchar(32)
+  telephoneRessource varchar(32)
+  DDN date
+}
+
+Table reunions {
+  id int [pk] 
+  date date [not null]
+  duree int [NOT NULL]
+  titre varchar(100)
+  sujet varchar(1000) [NOT NULL]
+  evenement int
+  livrable int
+  salle varchar(64)
+  responsable int [NOT NULL]
+}
+
+Ref: reunions.evenement > evenements.id
+Ref: reunions.livrable > livrables.id
+Ref: reunions.responsable > personnels.id
+
+Table reunion_participants {
+  id int [pk]
+  personnel int
+}
+
+Ref: reunion_participants.personnel > personnels.id
+
+Table client_eve {
+  id int [pk]
+  client int
+  evenement int
+}
+
+Ref: client_eve.client > clients.id
+Ref: client_eve.evenement > evenements.id
+
+Table pers_eve {
+  id int [pk]
+  personnel int
+  evenement int
+  role varchar(32)
+}
+
+Ref: pers_eve.personnel > personnels.id
+Ref: pers_eve.evenement > evenements.id
+
+
+Table echeancier {
+  id int [pk]
+  desc varchar(32) [NOT NULL, unique]
+  duedate date
+  evenement int [NOT NULL] // plus regex 3char débutant par 'S'
+  daterappel date
+  descrappel varchar(255)
+}
+
+Ref: echeancier.evenement > evenements.id
+
+Table livrables {
+  id int [pk] 
+  desc varchar(255) [NOT NULL, unique]
+  echeancier INT
+  responsable INT
+}
+
+Ref: livrables.echeancier > echeancier.id
+Ref: livrables.responsable > personnels.id
+

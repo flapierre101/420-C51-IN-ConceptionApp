@@ -1,0 +1,52 @@
+// Membres : Caroline Emond Serret, Vincent Gaudreault, François Lapierre, Dany Viens
+// Possibilité de visualiser le code interractif :
+// https://dbdiagram.io/d/60219e5580d742080a39b4bd
+
+
+
+Table clients  {
+  id int [pk] // auto-increment
+  nom varchar(32) [NOT NULL]
+  courriel varchar [NOT NULL, unique]
+  personneressource char [not null] // plus contrainte supp
+  date_inscript date [not null] // après 1er janvier 2020
+  forfait NUMERIC(2)
+  nbUtilisateurs NUMERIC
+}
+
+Ref : clients.personneressource > utilisateurs.id
+
+
+Table utilisateurs {
+  id int [pk] 
+  compagnie  int
+  mdp varchar(32) [not null]
+  nom varchar(16) [NOT NULL]
+  prenom varchar(16) [NOT NULL]
+  identifiantlogin varchar(16) [UNIQUE, NOT NULL]
+  role varchar(16) [NOT NULL, unique] // plus regex
+  
+}
+
+Ref: utilisateurs.compagnie > clients.id
+
+
+Table modules {
+  id int [pk]
+  nom varchar(32) [NOT NULL, unique]
+  sigle varchar(3) [NOT NULL, unique] // plus regex 3char débutant par 'S'
+  cout NUMERIC(5,2) [NOT NULL] // entre 25.00 et 250.00
+  forfait NUMERIC(2) [not null] // variant entre -1000.000 et 1000,000
+  description varchar(2)
+}
+
+Table forfaits {
+  id int [pk] 
+  nom varchar(16) [NOT NULL, unique]
+  cout NUMERIC
+  utilisateursMax NUMERIC
+}
+
+Ref: modules.forfait > forfaits.id
+Ref: clients.forfait > forfaits.id
+
