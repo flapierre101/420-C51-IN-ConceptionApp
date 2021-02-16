@@ -3,6 +3,10 @@
 // https://dbdiagram.io/d/60219e5580d742080a39b4bd
 
 
+Note PK = primarykey
+REF = foreign key (plusieurs > un)
+
+
 
 Table clients  {
   id int [pk] // auto-increment
