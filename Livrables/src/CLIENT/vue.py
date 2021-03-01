@@ -1,3 +1,7 @@
+from tkinter import *
+from tkinter.simpledialog import *
+from tkinter import ttk
+
 
 class Vue():
     def __init__(self,parent):

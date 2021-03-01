@@ -35,7 +35,7 @@ class Dbclient():
 
 class Dbman():
     def __init__(self):
-        nomdb=os.getcwd()+"/SaaS_DB/"+"Production CDJ_corpo"
+        nomdb=os.getcwd()+"/SaaS_DB/"+"Production CDJ_corpo.sqlite"
         self.conn = sqlite3.connect(nomdb)
         self.curs = self.conn.cursor()
 
