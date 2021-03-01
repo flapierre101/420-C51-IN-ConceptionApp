@@ -35,7 +35,7 @@ class Dbclient():
 
 class Dbman():
     def __init__(self):
-        self.conn = sqlite3.connect("CVMJMD_clientscorpo.sqlite")
+        self.conn = sqlite3.connect("Production_CDJ_corpo.sqlite")
         self.curs = self.conn.cursor()
 
     def identifierusager(self,nom,mdp):

@@ -13,7 +13,7 @@ app.secret_key="qwerasdf1234"
 
 class Dbclient():
     def __init__(self):
-        nomdb=os.getcwd()+"/SaaS_DB/"+"Production CDJ_client.sqlite"
+        nomdb=os.getcwd()+"/SaaS_DB/"+"Production_CDJ_client.sqlite"
         self.conn = sqlite3.connect(nomdb)
         self.curs = self.conn.cursor()
 
@@ -35,8 +35,9 @@ class Dbclient():
 
 class Dbman():
     def __init__(self):
-        nomdb=os.getcwd()+"/SaaS_DB/"+"Production CDJ_corpo.sqlite"
+        nomdb=os.getcwd()+"/SaaS_DB/"+"Production_CDJ_corpo.sqlite"
         self.conn = sqlite3.connect(nomdb)
+        #self.conn = sqlite3.connect("Production_CDJ_corpo.sqlite")
         self.curs = self.conn.cursor()
 
     def identifierusager(self,nom,mdp):
