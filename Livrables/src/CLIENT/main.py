@@ -30,7 +30,7 @@ class Controleur:
         fichier1.write(rep)
         fichier1.close()
         usager=json.dumps([self.modele.nom,self.modele.compagnie])
-        pid = Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid 
+        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid 
                   
     def testsimple(self):
         leurl=self.urlserveur
@@ -50,9 +50,8 @@ class Controleur:
     def trouverprojets(self): 
         url = self.urlserveur+"/trouverprojets"
         params = {}
-        reptext=self.appelserveur(url,params)
-        
-        mondict=json.loads(reptext)
+        reptext=self.appelserveur(url,params)        
+        mondict=json.loads(reptext)              
         return mondict
      
     def trouvermembres(self): 
@@ -69,8 +68,7 @@ class Controleur:
                   "mdp":mdp}
         reptext=self.appelserveur(url,params)
         
-        mondict=json.loads(reptext)
-        print(mondict)
+        mondict=json.loads(reptext)        
         if "inconnu" in mondict:
             self.vue.avertirusager("Inconnu","Reprendre?")
         else:
