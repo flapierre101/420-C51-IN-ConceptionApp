@@ -22,12 +22,12 @@ class Vue():
             
     def creercadres(self):
         self.cadres["login"]=self.creercadrelogin()
-        #self.cadres["principal"]=self.creercadreprincipal()
+        self.cadres["enregistrement"]=self.creercadresignup()
         
     def creercadrelogin(self):
         self.cadrelogin=Frame(self.cadreapp,width=800,height=400)
         
-        self.loginlabel=Label(self.cadrelogin,text="Identification pour GestMedia",font=("Arial",18),
+        self.loginlabel=Label(self.cadrelogin,text="Identification pour Production CDJ",font=("Arial",18),
                               borderwidth=2,relief=GROOVE)
         
         self.loginlabnom=Label(self.cadrelogin,text="Nom",font=("Arial",14))
@@ -38,6 +38,7 @@ class Vue():
         # les boutons d'actions
         self.btnannulerlogin=Button(self.cadrelogin,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulerlogin)
         self.btnidentifierlogin=Button(self.cadrelogin,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifierlogin)
+        self.btnenregistrementlogin=Button(self.cadrelogin,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementlogin)
         
         self.loginlabel.grid(row=10,column=10,columnspan=20,padx=10,pady=10,ipadx=10,ipady=10)
         self.loginlabnom.grid(row=20,column=10,sticky=E,padx=5,pady=5)
@@ -47,8 +48,37 @@ class Vue():
         
         self.btnannulerlogin.grid(row=40,column=20,sticky=W,padx=10,pady=10)
         self.btnidentifierlogin.grid(row=40,column=20,padx=10,pady=10)
+        self.btnenregistrementlogin.grid(row=40,column=40,padx=10,pady=10)
         
         return self.cadrelogin
+
+    def creercadresignup(self):
+        self.cadresignup=Frame(self.cadreapp,width=800,height=400)
+        
+        self.signuplabel=Label(self.cadresignup,text="Enregistrement pour Production CDJ",font=("Arial",18),
+                              borderwidth=2,relief=GROOVE)
+        
+        self.signuplabnom=Label(self.cadresignup,text="Nom",font=("Arial",14))
+        self.signupnom=Entry(self.cadresignup,font=("Arial",14),width=30)
+        self.signuplabmdp=Label(self.cadresignup,text="MotdePasse",font=("Arial",14))
+        self.signupmdp=Entry(self.cadresignup,font=("Arial",14),show="*",width=30)
+        
+        # les boutons d'actions
+        self.btnannulersignup=Button(self.cadresignup,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulersignup)
+        self.btnidentifiersignup=Button(self.cadresignup,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifiersignup)
+        self.btnenregistrementsignup=Button(self.cadresignup,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementsignup)
+        
+        self.signuplabel.grid(row=10,column=10,columnspan=20,padx=10,pady=10,ipadx=10,ipady=10)
+        self.signuplabnom.grid(row=20,column=10,sticky=E,padx=5,pady=5)
+        self.signupnom.grid(row=20,column=20,padx=10,pady=5)
+        self.signuplabmdp.grid(row=30,column=10,sticky=E,padx=5,pady=5)
+        self.signupmdp.grid(row=30,column=20,padx=10,pady=5)
+        
+        self.btnannulersignup.grid(row=40,column=20,sticky=W,padx=10,pady=10)
+        self.btnidentifiersignup.grid(row=40,column=20,padx=10,pady=10)
+        self.btnenregistrementsignup.grid(row=40,column=40,padx=10,pady=10)
+        
+        return self.cadresignup
     
     def creercadreprincipal(self,usager):
         self.root.title("GestionMedia")
@@ -166,6 +196,11 @@ class Vue():
         nom=self.loginnom.get()
         mdp=self.loginmdp.get()
         self.parent.identifierusager(nom,mdp)
+
+    def enregistrementlogin(self):
+        pass
+
+
         
     def avertirusager(self,titre,message):
         rep=messagebox.askyesno(titre,message)
