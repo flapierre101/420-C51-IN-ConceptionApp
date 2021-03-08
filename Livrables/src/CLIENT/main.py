@@ -4,13 +4,13 @@ from Vue import *
 from Modele import *
 
 import urllib.request
-import urllib.parse 
+import urllib.parse
 import sys
 
 
-import json 
+import json
 
-from subprocess import Popen 
+from subprocess import Popen
 ##################
 class Controleur:
     def __init__(self):
@@ -20,7 +20,7 @@ class Controleur:
         self.vue=Vue(self)
         self.vue.afficherlogin("jmd","jmd1")
         self.vue.root.mainloop()
-    
+
     def telechargermodule(self,fichier):
         leurl=self.urlserveur+"/telechargermodule"
         params = {"fichier":fichier}
@@ -30,49 +30,49 @@ class Controleur:
         fichier1.write(rep)
         fichier1.close()
         usager=json.dumps([self.modele.nom,self.modele.compagnie])
-        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid 
-                  
+        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid
+
     def testsimple(self):
         leurl=self.urlserveur
         r=urllib.request.urlopen(leurl)
         rep=r.read()
         dict=rep.decode('utf-8')
         print("testserveurSIMPLE", dict)
-    
-    def trouvermodules(self): 
+
+    def trouvermodules(self):
         url = self.urlserveur+"/trouvermodules"
         params = {}
         reptext=self.appelserveur(url,params)
-        
+
         mondict=json.loads(reptext)
-        return mondict  
-    
-    def trouverprojets(self): 
+        return mondict
+
+    def trouverprojets(self):
         url = self.urlserveur+"/trouverprojets"
         params = {}
-        reptext=self.appelserveur(url,params)        
-        mondict=json.loads(reptext)              
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
         return mondict
-     
-    def trouvermembres(self): 
+
+    def trouvermembres(self):
         url = self.urlserveur+"/trouvermembres"
         params = {}
         reptext=self.appelserveur(url,params)
-        
+
         mondict=json.loads(reptext)
         return mondict
-    
-    def identifierusager(self,nom,mdp): 
+
+    def identifierusager(self,nom,mdp):
         url = self.urlserveur+"/identifierusager"
         params = {"nom":nom,
                   "mdp":mdp}
         reptext=self.appelserveur(url,params)
-        
-        mondict=json.loads(reptext)        
+
+        mondict=json.loads(reptext)
         if "inconnu" in mondict:
             self.vue.avertirusager("Inconnu","Reprendre?")
         else:
-            
+
             self.modele.inscrireusager(mondict)
             self.vue.creercadreprincipal(self.modele)
             self.vue.changercadre("principal")
@@ -81,11 +81,11 @@ class Controleur:
     def appelserveur(self,url,params):
         query_string = urllib.parse.urlencode( params )
         data = query_string.encode( "ascii" )
-        url = url + "?" + query_string 
+        url = url + "?" + query_string
         rep=urllib.request.urlopen(url , data)
         reptext=rep.read()
         return reptext
-    
+
 if __name__ == '__main__':
     c=Controleur()
     print("FIN DE PROGRAMME")
