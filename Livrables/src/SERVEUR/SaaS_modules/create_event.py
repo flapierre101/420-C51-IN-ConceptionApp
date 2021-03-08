@@ -25,7 +25,7 @@ class Vue():
 
     def createInfoFrame(self):
 
-        fields = ["Nom", "Type", "Budget", "Date"]
+        fields = ["Nom", "Date", "Budget", "Description"]
         row = 0
         for i in fields:
             entryLabel = Label(self.infoFrame, text=i)
@@ -43,12 +43,12 @@ class Vue():
     def saveEvent(self):
 
         nom = self.eventInfo["Nom"].get()
-        type =self.eventInfo["Type"].get()
+        date =self.eventInfo["Date"].get()
         budget = self.eventInfo["Budget"].get()
-        date = self.eventInfo["Date"].get()
+        description = self.eventInfo["Description"].get()
 
-        print("ENREGISTRER: ", nom, type, budget, date)
-        self.parent.saveEvent([nom, type, budget, date])
+        print("ENREGISTRER: ", nom, date, budget, description)
+        self.parent.saveEvent([nom, date, budget, description])
 
 
 
