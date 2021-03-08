@@ -81,7 +81,7 @@ class Vue():
         return self.cadresignup
     
     def creercadreprincipal(self,usager):
-        self.root.title("GestionMedia")
+        self.root.title("Production CDJ")
         self.cadreprincipal=Frame(self.cadreapp,width=400,height=400)
         
         self.cadretitre=Frame(self.cadreapp,width=400,height=400)
