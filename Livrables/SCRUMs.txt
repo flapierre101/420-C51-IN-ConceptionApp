@@ -1,0 +1,16 @@
+Caroline Emond-Serret
+François Lapierre
+Dany Viens
+
+
+# Journal des rencontres (SCRUMS) :
+
+## 1 mars
+
+- Pas de scrum formel pour le début du sprit. Nous avons revisité la plannification globale après avoir analysé le code fourni en exemple.
+- Nous avons élaboré la plannification détaillée pour le sprint 1
+- Deux tables ont été créée pour la base de données.
+
+## 8 mars 
+
+- 
