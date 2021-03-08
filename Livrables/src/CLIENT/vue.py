@@ -64,9 +64,9 @@ class Vue():
         self.signupmdp=Entry(self.cadresignup,font=("Arial",14),show="*",width=30)
         
         # les boutons d'actions
-        self.btnannulersignup=Button(self.cadresignup,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulersignup)
-        self.btnidentifiersignup=Button(self.cadresignup,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifiersignup)
-        self.btnenregistrementsignup=Button(self.cadresignup,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementsignup)
+        #self.btnannulersignup=Button(self.cadresignup,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulersignup)
+        #self.btnidentifiersignup=Button(self.cadresignup,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifiersignup)
+        #self.btnenregistrementsignup=Button(self.cadresignup,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementsignup)
         
         self.signuplabel.grid(row=10,column=10,columnspan=20,padx=10,pady=10,ipadx=10,ipady=10)
         self.signuplabnom.grid(row=20,column=10,sticky=E,padx=5,pady=5)
@@ -74,9 +74,9 @@ class Vue():
         self.signuplabmdp.grid(row=30,column=10,sticky=E,padx=5,pady=5)
         self.signupmdp.grid(row=30,column=20,padx=10,pady=5)
         
-        self.btnannulersignup.grid(row=40,column=20,sticky=W,padx=10,pady=10)
-        self.btnidentifiersignup.grid(row=40,column=20,padx=10,pady=10)
-        self.btnenregistrementsignup.grid(row=40,column=40,padx=10,pady=10)
+        #self.btnannulersignup.grid(row=40,column=20,sticky=W,padx=10,pady=10)
+        #self.btnidentifiersignup.grid(row=40,column=20,padx=10,pady=10)
+        #self.btnenregistrementsignup.grid(row=40,column=40,padx=10,pady=10)
         
         return self.cadresignup
     
@@ -85,10 +85,10 @@ class Vue():
         self.cadreprincipal=Frame(self.cadreapp,width=400,height=400)
         
         self.cadretitre=Frame(self.cadreapp,width=400,height=400)
-        self.titreprincipal=Label(self.cadretitre,text="GestMedia"+" pour "+usager.compagnie["nom"],font=("Arial",18),
+        self.titreprincipal=Label(self.cadretitre,text="Production CDJ"+" pour "+usager.compagnie["nom"],font=("Arial",18),
                               borderwidth=2,relief=GROOVE)
         
-        self.usagercourant=Label(self.cadretitre,text=usager.nom+", "+usager.titre +" : "+usager.droit,font=("Arial",14))
+        self.usagercourant=Label(self.cadretitre,text=usager.nom+" "+usager.prenom +" : "+usager.droit,font=("Arial",14))
         self.titreprincipal.pack()
         self.usagercourant.pack()
         self.cadretitre.pack()
@@ -96,7 +96,7 @@ class Vue():
         # commande possible
         self.cadrecommande=Frame(self.cadreprincipal,width=400,height=400)
         btnsaction=[]
-        if usager.droit=="admin":
+        if usager.droit=="admin" or "Admin":
             btnsaction.append(Button(self.cadrecommande,text="Gestion de membres",
                                      font=("Arial",12),padx=10,pady=10,command=self.gerermembres))
         btnsaction.append(Button(self.cadrecommande,text="Gestion des projetsERP",
