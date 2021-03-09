@@ -38,7 +38,7 @@ class Vue():
         # les boutons d'actions
         self.btnannulerlogin=Button(self.cadrelogin,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulerlogin)
         self.btnidentifierlogin=Button(self.cadrelogin,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifierlogin)
-        self.btnenregistrementlogin=Button(self.cadrelogin,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementlogin)
+
         
         self.loginlabel.grid(row=10,column=10,columnspan=20,padx=10,pady=10,ipadx=10,ipady=10)
         self.loginlabnom.grid(row=20,column=10,sticky=E,padx=5,pady=5)
@@ -48,11 +48,11 @@ class Vue():
         
         self.btnannulerlogin.grid(row=40,column=20,sticky=W,padx=10,pady=10)
         self.btnidentifierlogin.grid(row=40,column=20,padx=10,pady=10)
-        self.btnenregistrementlogin.grid(row=40,column=40,padx=10,pady=10)
+
         
         return self.cadrelogin
 
-    def creercadresignup(self):
+    def creercadresignup(self): # à faire PAS PRIORITAIRE
         self.cadresignup=Frame(self.cadreapp,width=800,height=400)
         
         self.signuplabel=Label(self.cadresignup,text="Enregistrement pour Production CDJ",font=("Arial",18),
