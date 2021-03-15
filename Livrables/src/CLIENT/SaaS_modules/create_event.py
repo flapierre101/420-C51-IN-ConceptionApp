@@ -3,6 +3,7 @@ from tkinter.ttk import *
 import sys
 import urllib.request
 import urllib.parse
+from flask import json
 
 class Vue():
     def __init__(self,parent):
@@ -47,7 +48,8 @@ class Vue():
     def saveEvent(self):
 
         self.eventParam["Nom"] = "test"
-        self.eventParam["Date"] = "2020-03-15"
+        self.eventParam["Date_debut"] = "2020-03-15"
+        self.eventParam["Date_fin"] = "2020-03-17"
         self.eventParam["Budget"] = "1234"
         self.eventParam["Desc"] = "Allo"
 
@@ -65,7 +67,7 @@ class Modele():
         url = self.parent.urlserveur + "/newEvent"
         rep = self.parent.appelserveur(url, newEvent)
         repTxt =json.loads(rep)
-        print(rep)
+        print(repTxt)
 
 
 class Controleur():
