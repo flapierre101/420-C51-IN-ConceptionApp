@@ -113,7 +113,6 @@ class Vue():
             self.messageLabel.destroy()
 
     def saveEvent(self):
-        #TODO valider budget numbers only
         nom = self.eventInfo["Nom"].get()
         dateDebut = self.eventInfo["Date Début"].get_date()
         dateFin = self.eventInfo["Date Fin"].get_date()
