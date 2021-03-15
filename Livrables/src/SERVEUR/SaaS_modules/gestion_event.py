@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkcalendar import *
+import datetime
 
 
 class Vue():
@@ -8,6 +9,7 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.eventInfo = {}
+        self.messageLabel = None
         self.gestionFrame = Frame(self.root)
         self.createModuleFrame()
 
@@ -44,6 +46,7 @@ class Vue():
     def createButtonFrame(self):
         self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
         self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement")
+        #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createEventButton.pack(fill=Y)
         self.eventDetailsButton.pack(fill=Y)
@@ -58,6 +61,7 @@ class Vue():
         self.eventFrame = Frame(self.root)
         self.infoFrame = Frame(self.eventFrame)
         self.buttonFrame = Frame(self.eventFrame)
+        self.confirmationFrame = Frame(self.eventFrame)
 
         self.createInfoFrame()
         self.createEventButtonFrame()
@@ -67,14 +71,23 @@ class Vue():
         self.infoFrame.pack()
         self.buttonFrame.pack()
         self.eventFrame.pack()
+        self.confirmationFrame.pack(pady=10)
 
 
     def createInfoFrame(self):
-        fields = ["Nom", "Date", "Budget", "Description"]
+        fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
         row = 0
+
         for i in fields:
+
             entryLabel = Label(self.infoFrame, text=i)
-            entry = Entry(self.infoFrame)
+
+            if "Date" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+            else:
+                entry = Entry(self.infoFrame)
+
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
@@ -91,27 +104,30 @@ class Vue():
 
     def clearAllFields(self):
         self.eventInfo["Nom"].delete(0, "end")
-        self.eventInfo["Date"].delete(0, "end")
+        self.eventInfo["Date Début"].set_date(datetime.date.today())
+        self.eventInfo["Date Fin"].set_date(datetime.date.today())
         self.eventInfo["Budget"].delete(0, "end")
         self.eventInfo["Description"].delete(0, "end")
 
+        if self.messageLabel:
+            self.messageLabel.destroy()
+
     def saveEvent(self):
         nom = self.eventInfo["Nom"].get()
-        date = self.eventInfo["Date"].get()
+        dateDebut = self.eventInfo["Date Début"].get_date()
+        dateFin = self.eventInfo["Date Fin"].get_date()
         budget = self.eventInfo["Budget"].get()
         description = self.eventInfo["Description"].get()
-        self.parent.saveEvent([nom, date, budget, description])
+        self.parent.saveEvent([nom, dateDebut, dateFin, budget, description])
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
         self.gestionFrame.pack()
 
     def showMessage(self, reponseServeur):
-        self.confirmationFrame = Frame(self.eventFrame)
-        messageLabel = Label(self.confirmationFrame, text=reponseServeur)
-        messageLabel.pack()
-        self.confirmationFrame.pack(pady=10)
 
+        self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
+        self.messageLabel.pack()
 
 class Modele():
     def __init__(self, parent):
@@ -119,7 +135,6 @@ class Modele():
 
     def saveEvent(self, newEvent):
         pass
-
 
 class Controleur():
     def __init__(self):
