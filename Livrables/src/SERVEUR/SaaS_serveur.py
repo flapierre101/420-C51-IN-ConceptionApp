@@ -50,10 +50,10 @@ class Dbclient():
         return self.curs.fetchall()
 
     def newEvent(self, nom, date, budget, desc):
-        sqlRequest = ("INSERT INTO 'evenement'(nom, date, budget, desc) VALUE (\'" + nom + "\',\'" + date + "\',\'" + budget + "\',\'" + desc + "\')")
-
+        sqlRequest = "INSERT INTO 'evenement'(nom, date, budget, desc) VALUES (?,?,?,?)"
+        param = [nom, date, budget, desc]
         try:
-            self.curs.execute(sqlRequest)
+            self.curs.execute(sqlRequest, param)
             self.conn.commit()
         except sqlite3.Error as er:
             print(er)
@@ -243,6 +243,7 @@ def newEvent():
         desc = request.form["Desc"]
         db = Dbclient()
         db.newEvent(nom, date, budget, desc)
+        return "0"
 
 if __name__ == '__main__':
     #print(flask.__version__)
