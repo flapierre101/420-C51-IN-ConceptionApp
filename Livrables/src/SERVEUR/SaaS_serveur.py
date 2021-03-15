@@ -50,7 +50,7 @@ class Dbclient():
         return self.curs.fetchall()
 
     def newEvent(self, nom, date, budget, desc):
-        sqlRequest = ("INSERT INTO evenement(nom, date, budget, desc) VALUE (" + nom + "," + date + "," + budget + "," + desc + ")")
+        sqlRequest = ("INSERT INTO 'evenement'(nom, date, budget, desc) VALUE (\'" + nom + "\',\'" + date + "\',\'" + budget + "\',\'" + desc + "\')")
 
         try:
             self.curs.execute(sqlRequest)
@@ -237,12 +237,12 @@ def updateBDCorpo():
 @app.route('/newEvent', methods = ["GET", "POST"])
 def newEvent():
     if request.method == "POST":
-        nom = request.form["nom"]
-        date = request.form["date"]
-        budget = request.form["budget"]
-        desc = request.form["desc"]
-    db = Dbclient()
-    db.newEvent(nom, date, budget, desc)
+        nom = request.form["Nom"]
+        date = request.form["Date"]
+        budget = request.form["Budget"]
+        desc = request.form["Desc"]
+        db = Dbclient()
+        db.newEvent(nom, date, budget, desc)
 
 if __name__ == '__main__':
     #print(flask.__version__)
