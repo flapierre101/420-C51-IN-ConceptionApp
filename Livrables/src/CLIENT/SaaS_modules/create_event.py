@@ -30,7 +30,7 @@ class Vue():
 
     def createInfoFrame(self):
 
-        fields = ["Nom", "Date", "Budget", "Description"]
+        fields = ["Nom", "Date Debut", "Date Fin", "Budget", "Description"]
         row = 0
         for i in fields:
             entryLabel = Label(self.infoFrame, text=i)
@@ -47,13 +47,13 @@ class Vue():
 
     def saveEvent(self):
 
-        self.eventParam["Nom"] = "test"
-        self.eventParam["Date_debut"] = "2020-03-15"
-        self.eventParam["Date_fin"] = "2020-03-17"
-        self.eventParam["Budget"] = "1234"
-        self.eventParam["Desc"] = "Allo"
+        self.eventParam["Nom"] = self.eventInfo["Nom"].get()
+        self.eventParam["Date_debut"] = self.eventInfo["Date Debut"].get()
+        self.eventParam["Date_fin"] = self.eventInfo["Date Fin"].get()
+        self.eventParam["Budget"] = self.eventInfo["Budget"].get()
+        self.eventParam["Desc"] = self.eventInfo["Description"].get()
 
-        print(self.eventParam)
+        # print(self.eventParam)
         self.parent.saveEvent(self.eventParam)
 
 
@@ -65,9 +65,10 @@ class Modele():
 
     def saveEvent(self, newEvent):
         url = self.parent.urlserveur + "/newEvent"
-        rep = self.parent.appelserveur(url, newEvent)
-        repTxt =json.loads(rep)
-        print(repTxt)
+        return self.parent.appelserveur(url, newEvent)
+
+        # repTxt = json.loads(rep)
+        # print(repTxt)
 
 
 class Controleur():
@@ -79,7 +80,7 @@ class Controleur():
 
     def saveEvent(self, newEvent):
 
-        self.modele.saveEvent(newEvent)
+        return self.modele.saveEvent(newEvent)
 
     def appelserveur(self,url,params):
         query_string = urllib.parse.urlencode( params )
@@ -88,24 +89,6 @@ class Controleur():
         rep=urllib.request.urlopen(url , data)
         reptext=rep.read()
         return reptext
-# def identifierusager(self,nom,mdp):
-#         url = self.urlserveur+"/identifierusager"
-#         params = {"nom":nom,
-#                   "mdp":mdp}
-#         reptext=self.appelserveur(url,params)
-
-#         mondict=json.loads(reptext)
-#         if "inconnu" in mondict:
-#             self.vue.avertirusager("Inconnu","Reprendre?")
-#         else:
-
-#             self.modele.inscrireusager(mondict)
-#             self.vue.creercadreprincipal(self.modele)
-#             self.vue.changercadre("principal")
-
-
-
-
 
 
 if __name__ == '__main__':

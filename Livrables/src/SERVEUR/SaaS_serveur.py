@@ -49,12 +49,13 @@ class Dbclient():
         self.curs.execute(sqlRequest)
         return self.curs.fetchall()
 
-    def newEvent(self, nom, date, budget, desc):
-        sqlRequest = "INSERT INTO 'evenement'(nom, date, budget, desc) VALUES (?,?,?,?)"
-        param = [nom, date, budget, desc]
+    def newEvent(self, nom, date_debut, date_fin, budget, desc):
+        sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
+        param = [nom, date_debut, date_fin, budget, desc]
         try:
             self.curs.execute(sqlRequest, param)
             self.conn.commit()
+            return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
 
@@ -172,8 +173,6 @@ def trouverprojets():
     if request.method=="POST":
         db=Dbclient()
         projets=db.trouverprojets()
-        #db=Dbman()
-        #projets=db.trouvermembres()
         db.fermerdb()
         return Response(json.dumps(projets), mimetype='application/json')
         #return repr(usager)
@@ -197,7 +196,6 @@ def requeteserveur():
     if request.method=="POST":
         nomfonction=request.form["fonction"]
         rep=mesfonctions[nomfonction]()
-        n=1
         return Response(json.dumps(rep), mimetype='application/json')
         #return repr(usager)
     else:
@@ -238,12 +236,15 @@ def updateBDCorpo():
 def newEvent():
     if request.method == "POST":
         nom = request.form["Nom"]
-        date = request.form["Date"]
+        date_debut = request.form["Date_debut"]
+        date_fin = request.form["Date_fin"]
         budget = request.form["Budget"]
         desc = request.form["Desc"]
         db = Dbclient()
-        db.newEvent(nom, date, budget, desc)
-        return "0"
+
+        test2 = db.newEvent(nom, date_debut, date_fin, budget, desc)
+        print(str(test2))
+        return "test"
 
 if __name__ == '__main__':
     #print(flask.__version__)
