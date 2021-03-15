@@ -5,6 +5,7 @@ import urllib.request
 import urllib.parse
 from flask import json
 import datetime
+import re
 
 
 class Vue():
@@ -119,16 +120,25 @@ class Vue():
         dateFin = self.eventInfo["Date Fin"].get_date()
         budget = self.eventInfo["Budget"].get()
         description = self.eventInfo["Description"].get()
-        self.parent.saveEvent([nom, dateDebut, dateFin, budget, description])
+
+        if re.match(r"^[0-9.]*$",budget):
+            print("REGEX FTW")
+            self.parent.saveEvent([nom, dateDebut, dateFin, budget, description])
+        else:
+            self.showMessage("Veuillez entrer un budget valide")
+
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
         self.createModuleFrame()
 
-    def showMessage(self, reponseServeur):
+    def showMessage(self, message):
 
-        self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
-        self.messageLabel.pack()
+        if self.messageLabel == None:
+            self.messageLabel = Label(self.confirmationFrame, text=message)
+            self.messageLabel.pack()
+        else:
+            self.messageLabel.configure(text=message)
 
 class Modele():
     def __init__(self, parent):
