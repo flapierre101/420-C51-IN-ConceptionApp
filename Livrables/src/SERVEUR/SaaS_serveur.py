@@ -18,7 +18,7 @@ class Dbclient():
         self.curs = self.conn.cursor()
 
     def trouverprojets(self):
-        sqlnom=("select nom, date_debut, date_fin, desc from 'evenement'")
+        sqlnom=("select nom, date_debut, date_fin, desc, id from 'evenement'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info
@@ -113,11 +113,11 @@ def identifierusager():
 def trouverprojets():
     if request.method=="POST":
         db=Dbclient()
-        projets=db.trouverprojets()
+        events=db.trouverprojets()
         #db=Dbman()
         #projets=db.trouvermembres()
         db.fermerdb()
-        return Response(json.dumps(projets), mimetype='application/json')
+        return Response(json.dumps(events), mimetype='application/json')
         #return repr(usager)
     else:
         return repr("pas ok")
