@@ -52,7 +52,7 @@ class Vue():
         
         return self.cadrelogin
 
-    def creercadresignup(self): # à faire PAS PRIORITAIRE
+    def creercadresignup(self): # TODO PAS PRIORITAIRE
         self.cadresignup=Frame(self.cadreapp,width=800,height=400)
         
         self.signuplabel=Label(self.cadresignup,text="Enregistrement pour Production CDJ",font=("Arial",18),
@@ -88,7 +88,7 @@ class Vue():
         self.titreprincipal=Label(self.cadretitre,text="Production CDJ"+" pour "+usager.compagnie["nom"],font=("Arial",18),
                               borderwidth=2,relief=GROOVE)
         
-        self.usagercourant=Label(self.cadretitre,text=usager.nom+" "+usager.prenom +" : "+usager.droit,font=("Arial",14))
+        self.usagercourant=Label(self.cadretitre,text=usager.nom+" "+usager.prenom +" : "+usager.role,font=("Arial",14))
         self.titreprincipal.pack()
         self.usagercourant.pack()
         self.cadretitre.pack()
@@ -96,12 +96,12 @@ class Vue():
         # commande possible
         self.cadrecommande=Frame(self.cadreprincipal,width=400,height=400)
         btnsaction=[]
-        if usager.droit=="admin" or "Admin":
+        if usager.droit=="Admin":
             btnsaction.append(Button(self.cadrecommande,text="Gestion de membres",
                                      font=("Arial",12),padx=10,pady=10,command=self.gerermembres))
-        btnsaction.append(Button(self.cadrecommande,text="Gestion des projetsERP",
+        btnsaction.append(Button(self.cadrecommande,text="Gestion des projets",
                                  font=("Arial",12),padx=10,pady=10,command=self.gererprojets))
-        btnsaction.append(Button(self.cadrecommande,text="Modules disponiblesSaaS",
+        btnsaction.append(Button(self.cadrecommande,text="Modules",
                                  font=("Arial",12),padx=10,pady=10,command=self.gerermodules))
         for i in btnsaction:
             i.pack(side=LEFT, pady=10,padx=10)
@@ -176,12 +176,12 @@ class Vue():
         
     def gerermembres(self):
         listemembres=self.parent.trouvermembres()
-        entete=["identifiant","permission","titre"]
+        entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
              
     def gererprojets(self):
         listeprojets=self.parent.trouverprojets()
-        entete=["compagnie","projet","date de fin"]
+        entete=["Nom","Début","Fin", "Description"]
         self.integretableau(listeprojets,entete)
              
     def gerermodules(self):
@@ -197,7 +197,7 @@ class Vue():
         mdp=self.loginmdp.get()
         self.parent.identifierusager(nom,mdp)
 
-    def enregistrementlogin(self):
+    def creerUsager(self):
         pass
 
 
