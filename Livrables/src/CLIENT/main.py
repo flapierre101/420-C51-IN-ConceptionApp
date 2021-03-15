@@ -70,9 +70,8 @@ class Controleur:
         
         mondict=json.loads(reptext)        
         if "inconnu" in mondict:
-            self.vue.avertirusager("Inconnu","Reprendre?")
-        else:
-            
+            self.vue.avertirusager("Erreur","Mot de passe ou identifiant non reconnnu \n\nReesayer?")
+        else:            
             self.modele.inscrireusager(mondict)
             self.vue.creercadreprincipal(self.modele)
             self.vue.changercadre("principal")

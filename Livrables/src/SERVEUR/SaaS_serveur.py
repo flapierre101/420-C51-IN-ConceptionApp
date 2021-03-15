@@ -18,7 +18,7 @@ class Dbclient():
         self.curs = self.conn.cursor()
 
     def trouverprojets(self):
-        sqlnom=("select Nomdeprojet, datedelancement, datedefinprevue from 'projet'")
+        sqlnom=("select nom, date_debut, date_fin, desc from 'evenement'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info
@@ -53,7 +53,7 @@ class Dbman():
         return "inconnu"
 
     def trouvermembres(self):
-        sqlnom=("select identifiant, permission,titre from 'membre'")
+        sqlnom=("select Prenom || ' ' || Nom as nomcomplet, courriel,role, droit from 'utilisateurs'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info

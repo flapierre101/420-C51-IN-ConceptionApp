@@ -176,12 +176,12 @@ class Vue():
         
     def gerermembres(self):
         listemembres=self.parent.trouvermembres()
-        entete=["identifiant","permission","titre"]
+        entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
              
     def gererprojets(self):
         listeprojets=self.parent.trouverprojets()
-        entete=["compagnie","projet","date de fin"]
+        entete=["Nom","Début","Fin", "Description"]
         self.integretableau(listeprojets,entete)
              
     def gerermodules(self):
@@ -197,7 +197,7 @@ class Vue():
         mdp=self.loginmdp.get()
         self.parent.identifierusager(nom,mdp)
 
-    def enregistrementlogin(self):
+    def creerUsager(self):
         pass
 
 
