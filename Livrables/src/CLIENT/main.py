@@ -1,6 +1,6 @@
 ## -*- Encoding: UTF-8 -*-
 
-from Vue import *
+from vue import *
 from Modele import *
 
 import urllib.request
@@ -18,7 +18,7 @@ class Controleur:
         #self.urlserveur= "http://jmdeschamps.pythonanywhere.com"
         self.modele=Modele(self)
         self.vue=Vue(self)
-        self.vue.afficherlogin("jmd","jmd1")
+        self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
 
     def telechargermodule(self,fichier):

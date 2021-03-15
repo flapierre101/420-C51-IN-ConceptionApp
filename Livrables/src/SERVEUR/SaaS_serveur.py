@@ -86,12 +86,12 @@ class Dbman():
         self.curs = self.conn.cursor()
 
     def identifierusager(self,nom,mdp):
-        sqlnom=("select * from 'membre' where identifiant=:qui and mdp=:secret")
+        sqlnom=("select * from 'utilisateurs' where courriel=:qui and password=:secret")
         self.curs.execute(sqlnom, {'qui': nom, 'secret': mdp})
         info=self.curs.fetchall()
 
         if info:
-            sqlnom=("select nomcompagnie from 'compagnie' where idcompagnie=:qui")
+            sqlnom=("select nom from 'clients' where id=:qui")
             self.curs.execute(sqlnom, {'qui': info[0][1]})
             co=self.curs.fetchall()
             return [info,co]
