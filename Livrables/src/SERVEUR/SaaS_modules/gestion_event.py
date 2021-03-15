@@ -5,6 +5,7 @@ import urllib.request
 import urllib.parse
 from flask import json
 import datetime
+import sys
 
 
 class Vue():
