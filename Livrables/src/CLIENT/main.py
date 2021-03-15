@@ -1,7 +1,7 @@
 ## -*- Encoding: UTF-8 -*-
 
 from vue import *
-from Modele import *
+from modele import *
 
 import urllib.request
 import urllib.parse 

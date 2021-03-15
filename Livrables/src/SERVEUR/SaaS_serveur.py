@@ -43,13 +43,13 @@ class Dbman():
     def identifierusager(self,nom,mdp):
         sqlnom=("select * from 'utilisateurs' where courriel=:qui and password=:secret")
         self.curs.execute(sqlnom, {'qui': nom, 'secret': mdp})
-        info=self.curs.fetchall()
+        usager=self.curs.fetchall()
 
-        if info:
-            sqlnom=("select nom from 'clients' where id=:qui")
-            self.curs.execute(sqlnom, {'qui': info[0][1]})
-            co=self.curs.fetchall()
-            return [info,co]
+        if usager:
+            sqlnom=("select * from 'clients' where id=:qui")
+            self.curs.execute(sqlnom, {'qui': usager[0][1]})
+            compagnie=self.curs.fetchall()
+            return [usager,compagnie]
         return "inconnu"
 
     def trouvermembres(self):
