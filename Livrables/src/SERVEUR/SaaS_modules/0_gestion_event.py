@@ -27,7 +27,7 @@ class Vue():
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.listeprojets = self.parent.trouverprojets()
+        self.listeprojets = self.parent.getEvent()
         self.root.geometry("300x300")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
@@ -162,8 +162,8 @@ class Controleur():
         reponseServeur = "Nouvel évènement enregistré"
         self.vue.showMessage(reponseServeur)
 
-    def trouverprojets(self):
-        url = self.urlserveur+"/trouverprojets"
+    def getEvent(self):
+        url = self.urlserveur+"/getEvent"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)

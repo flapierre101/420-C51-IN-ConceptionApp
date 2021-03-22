@@ -8,10 +8,6 @@ import datetime
 import sys
 import re
 
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# import ../connexion.py
-from connexion import *
 
 class Vue():
     def __init__(self, parent):
@@ -27,7 +23,7 @@ class Vue():
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.listeprojets = self.parent.trouverprojets()
+        self.listeprojets = self.parent.getEvent()
         self.root.geometry("300x300")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
@@ -150,8 +146,7 @@ class Modele():
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
-        self.connexion = Connexion()
-        self.urlserveur = self.connexion.urlserveur
+        self.urlserveur = sys.argv[1]
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
@@ -162,8 +157,8 @@ class Controleur():
         reponseServeur = "Nouvel évènement enregistré"
         self.vue.showMessage(reponseServeur)
 
-    def trouverprojets(self):
-        url = self.urlserveur+"/trouverprojets"
+    def getEvent(self):
+        url = self.urlserveur+"/getEvent"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
