@@ -1,4 +1,5 @@
 #import flask
+from tkinter.constants import INSERT
 from flask import Flask,request,json
 from werkzeug.wrappers import Response
 import os
@@ -22,7 +23,7 @@ class Dbclient():
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info
-    
+
     def trouverclients(self):
         sqlnom=("select compagnie, nom, courriel from 'client'")
         self.curs.execute(sqlnom)
@@ -31,6 +32,51 @@ class Dbclient():
 
     def fermerdb(self):
         self.conn.close()
+
+    def updateDB(self, tableName, col, val, id):
+        sqlRequest = (
+            "Update"+tableName+
+            "Set" + col + "=" + val +
+            "Where id =" + id)
+        try:
+            self.curs.execute(sqlRequest)
+            self.conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+
+    def getEventList(self):
+        sqlRequest = ("SELECT * FROM 'evenement'")
+        self.curs.execute(sqlRequest)
+        return self.curs.fetchall()
+
+    def newEvent(self, nom, date_debut, date_fin, budget, desc):
+        sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
+        param = [nom, date_debut, date_fin, budget, desc]
+        try:
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
+
+    def getEvent(self):
+        pass
+
+    def getEventEcheancier(self):
+        pass
+
+    def newEcheancier(self):
+        pass
+
+    def getFournisseurList(self):
+        pass
+
+    def newFournisseur(self):
+        pass
+
+    def getEcheancierLivrable(self):
+        pass
+
 
 
 class Dbman():
@@ -62,12 +108,25 @@ class Dbman():
     def fermerdb(self):
         self.conn.close()
 
+    def updateDB(self, tableName, col, val, id):
+        sqlRequest = (
+            "Update"+tableName+
+            "Set" + col + "=" + val +
+            "Where id =" + id)
+        try:
+            self.curs.execute(sqlRequest)
+            self.conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+
+
+
 def demanderclients():
     db=Dbclient()
     clients=db.trouverclients()
     db.fermerdb()
     return clients
-    
+
 mesfonctions={"demanderclients":demanderclients}
 
 @app.route('/')
@@ -133,17 +192,62 @@ def trouvermembres():
         #return repr(usager)
     else:
         return repr("pas ok")
-    
+
 @app.route('/requeteserveur', methods=["GET","POST"])
 def requeteserveur():
     if request.method=="POST":
         nomfonction=request.form["fonction"]
         rep=mesfonctions[nomfonction]()
-        n=1
         return Response(json.dumps(rep), mimetype='application/json')
         #return repr(usager)
     else:
         return repr("pas ok")
+
+@app.route('/getEvents', methods=["GET","POST"])
+def getEvents():
+    if request.method == "POST":
+        db = Dbclient()
+        eventList = db.getEventList()
+        db.fermerdb()
+        return Response(json.dumps(eventList), mimetype='application/json')
+
+    else:
+        return repr("Error")
+
+@app.route('/updateBDClient', methods = ["GET", "POST"])
+def updateBDClient():
+    if request.method == "POST":
+        tableName = request.form["tableName"]
+        colonne = request.form["colonne"]
+        valeur = request.form["valeur"]
+        _id = request.form["_id"]
+        db = Dbclient()
+        db.updateDB(tableName, colonne, valeur, _id)
+
+@app.route('/updateBDCorpo', methods = ["GET", "POST"])
+def updateBDCorpo():
+    if request.method == "POST":
+        tableName = request.form["tableName"]
+        colonne = request.form["colonne"]
+        valeur = request.form["valeur"]
+        _id = request.form["_id"]
+        db = Dbman()
+        db.updateDB(tableName, colonne, valeur, _id)
+
+@app.route('/newEvent', methods = ["GET", "POST"])
+def newEvent():
+    if request.method == "POST":
+        nom = request.form["Nom"]
+        date_debut = request.form["Date_debut"]
+        date_fin = request.form["Date_fin"]
+        budget = request.form["Budget"]
+        desc = request.form["Desc"]
+        db = Dbclient()
+
+        test2 = db.newEvent(nom, date_debut, date_fin, budget, desc)
+        print(str(test2))
+        return "test"
+
 if __name__ == '__main__':
     #print(flask.__version__)
     #app.run(debug=True)
