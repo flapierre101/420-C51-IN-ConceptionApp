@@ -37,10 +37,10 @@ class Dbclient():
 
         sqlRequest = (
             "Update Evenement"
-            "Set nom = ?"
-            "Set date_debut = ?"
-            "Set date_fin = ?"
-            "Set budget = ?"
+            "Set nom = ?,"
+            "Set date_debut = ?,"
+            "Set date_fin = ?,"
+            "Set budget = ?,"
             "Set desc = ?"
             "Where id = ?")
 
@@ -111,6 +111,19 @@ class Dbman():
 
     def fermerdb(self):
         self.conn.close()
+
+    def updateForfaitClient(self, compagnie, forfait):
+        sqlRequest = ("update client set forfait = ? where nom = ?")
+        listData = [forfait, compagnie]
+        try:
+            self.curs.execute(sqlRequest, listData)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
+
+
+
 
     # def updateDB(self, tableName, col, val, id):
     #     sqlRequest = (
@@ -250,6 +263,8 @@ def newEvent():
         db = Dbclient()
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
+
+# A FAIRE route pour update forfait
 
 if __name__ == '__main__':
     #print(flask.__version__)
