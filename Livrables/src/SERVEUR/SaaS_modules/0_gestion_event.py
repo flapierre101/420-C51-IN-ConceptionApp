@@ -39,7 +39,7 @@ class Vue():
         row = 1
 
         for i in self.listeprojets:
-            self.eventList.insert(row, i[0])            
+            self.eventList.insert(row, i[0])
             row += 1
 
         listLabel = Label(self.listFrame, text="Liste des évènements")
@@ -183,7 +183,7 @@ class Vue():
         self.eventParam["Budget"] = self.eventInfo["Budget"].get()
         self.eventParam["Desc"] = self.eventInfo["Description"].get()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):            
+        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
             self.parent.saveEvent(self.eventParam)
         else:
             self.showMessage("Veuillez entrer un budget valide")
@@ -237,7 +237,7 @@ class Controleur():
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
-        
+
     def getEvent(self):
         return self.connexion.getEvent()
 

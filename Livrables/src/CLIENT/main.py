@@ -23,7 +23,8 @@ class Controleur:
         self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
 
-    
+    def getcompagnie(self):
+        return self.modele.compagnie
 
     def telechargermodule(self,fichier):
         self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.compagnie)
