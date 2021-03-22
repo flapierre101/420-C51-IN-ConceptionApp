@@ -121,7 +121,8 @@ class Vue():
             "\n\nPro (300$\\année)\n - Module de gestions des réunions \n - Template d'évènement \n - Base de données clients limite de 1500 clients" +
             "\n\nEntreprise (600$\\année)\n - Nombre de clients illimités et rapport sur mesure\n - Module finance\n - Module gestion de la sous-traitance" +
             "\n - Module campagne publicitaire\n - Module de gestion d'inventaire")
- 
+    
+        text_widget.config(state=DISABLED)
  
 
 
