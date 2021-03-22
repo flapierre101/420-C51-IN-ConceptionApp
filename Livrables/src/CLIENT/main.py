@@ -47,8 +47,8 @@ class Controleur:
         mondict=json.loads(reptext)
         return mondict
 
-    def trouverprojets(self):
-        url = self.urlserveur+"/trouverprojets"
+    def getEvent(self):
+        url = self.urlserveur+"/getEvent"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
