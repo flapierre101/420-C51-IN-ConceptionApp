@@ -180,8 +180,6 @@ class Vue():
                                      font=("Arial",12),padx=10,pady=10,command=self.gerermembres))
             btnsaction.append(Button(self.cadrecommande,text="Forfaits",
                             font=("Arial",12),padx=10,pady=10,command=self.gererforfait)),
-        btnsaction.append(Button(self.cadrecommande,text="Liste des évènements",
-                                 font=("Arial",12),padx=10,pady=10,command=self.gererprojets))
         btnsaction.append(Button(self.cadrecommande,text="Modules",
                                  font=("Arial",12),padx=10,pady=10,command=self.gerermodules))
         for i in btnsaction:
@@ -193,6 +191,9 @@ class Vue():
         self.cadrepied.pack()
 
         self.creertableau()
+        listemembres=self.parent.trouvermembres()
+        entete=["Nom", "courriel","Rôle","Droit d'accès"]
+        self.integretableau(listemembres,entete)
         self.cadres["principal"]=self.cadreprincipal
 
     def creertableau(self):
@@ -259,14 +260,7 @@ class Vue():
         listemembres=self.parent.trouvermembres()
         entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
-
-
-        
-
-    def gererprojets(self):
-        listeprojets=self.parent.getEvent()
-        entete=["Nom","Début","Fin", "Description"]
-        self.integretableau(listeprojets,entete)
+      
 
     def gerermodules(self):
         listemodules=self.parent.trouvermodules()
