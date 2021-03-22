@@ -23,16 +23,10 @@ class Controleur:
         self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
 
+    
+
     def telechargermodule(self,fichier):
-        leurl=self.urlserveur+"/telechargermodule"
-        params = {"fichier":fichier}
-        reptext=self.appelserveur(leurl,params)
-        rep=json.loads(reptext)
-        fichier1=open("./SaaS_modules/"+fichier,"w")
-        fichier1.write(rep)
-        fichier1.close()
-        usager=json.dumps([self.modele.nom,self.modele.compagnie])
-        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid
+        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.compagnie)
 
     def identifierusager(self,nom,mdp):
         reponse = self.connexion.identifierusager(nom, mdp)

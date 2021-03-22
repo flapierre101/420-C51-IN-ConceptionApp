@@ -36,8 +36,7 @@ class Vue():
         row = 1
 
         for i in self.listeprojets:
-            self.eventList.insert(row, i[0])
-            print(i)
+            self.eventList.insert(row, i[0])            
             row += 1
 
         listLabel = Label(self.listFrame, text="Liste des évènements")
@@ -128,8 +127,7 @@ class Vue():
         self.eventParam["Budget"] = self.eventInfo["Budget"].get()
         self.eventParam["Desc"] = self.eventInfo["Description"].get()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
-            print("REGEX FTW")
+        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):            
             self.parent.saveEvent(self.eventParam)
         else:
             self.showMessage("Veuillez entrer un budget valide")
@@ -156,26 +154,14 @@ class Controleur():
         self.vue.root.mainloop()
 
     def saveEvent(self, newEvent):
-        url = self.urlserveur + "/newEvent"
-        rep = self.appelserveur(url, newEvent)
-        print(rep)
-        reponseServeur = "Nouvel évènement enregistré"
+        reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
-
+        
     def getEvent(self):
-        url = self.urlserveur+"/getEvent"
-        params = {}
-        reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        return mondict
+        return self.connexion.getEvent()
 
-    def appelserveur(self,url,params):
-        query_string = urllib.parse.urlencode( params )
-        data = query_string.encode( "ascii" )
-        url = url + "?" + query_string
-        rep=urllib.request.urlopen(url , data)
-        reptext=rep.read()
-        return reptext
+    def appelserveur(self,route,params):
+        return self.connexion.appelserveur(route,params)
 
 
 
