@@ -33,14 +33,21 @@ class Dbclient():
     def fermerdb(self):
         self.conn.close()
 
-    def updateDB(self, tableName, col, val, id):
+    def updateEvent(self, updateData):
+
         sqlRequest = (
-            "Update"+tableName+
-            "Set" + col + "=" + val +
-            "Where id =" + id)
+            "Update Evenement"
+            "Set nom = ?,"
+            "Set date_debut = ?,"
+            "Set date_fin = ?,"
+            "Set budget = ?,"
+            "Set desc = ?"
+            "Where id = ?")
+
         try:
-            self.curs.execute(sqlRequest)
+            self.curs.execute(sqlRequest, updateData)
             self.conn.commit()
+            return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
 
@@ -105,16 +112,29 @@ class Dbman():
     def fermerdb(self):
         self.conn.close()
 
-    def updateDB(self, tableName, col, val, id):
-        sqlRequest = (
-            "Update"+tableName+
-            "Set" + col + "=" + val +
-            "Where id =" + id)
+    def updateForfaitClient(self, compagnie, forfait):
+        sqlRequest = ("update client set forfait = ? where nom = ?")
+        listData = [forfait, compagnie]
         try:
-            self.curs.execute(sqlRequest)
+            self.curs.execute(sqlRequest, listData)
             self.conn.commit()
+            return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
+
+
+
+
+    # def updateDB(self, tableName, col, val, id):
+    #     sqlRequest = (
+    #         "Update"+tableName+
+    #         "Set" + col + "=" + val +
+    #         "Where id =" + id)
+    #     try:
+    #         self.curs.execute(sqlRequest)
+    #         self.conn.commit()
+    #     except sqlite3.Error as er:
+    #         print(er)
 
 
 
@@ -209,25 +229,28 @@ def getOneEvent():
     else:
         return repr("Error")
 
-@app.route('/updateBDClient', methods = ["GET", "POST"])
-def updateBDClient():
+@app.route('/updateEvent', methods = ["GET", "POST"])
+def updateEvent():
+    updateData = []
     if request.method == "POST":
-        tableName = request.form["tableName"]
-        colonne = request.form["colonne"]
-        valeur = request.form["valeur"]
-        _id = request.form["_id"]
         db = Dbclient()
-        db.updateDB(tableName, colonne, valeur, _id)
+        updateData.append (request.form["Nom"])
+        updateData.append (request.form["Date_debut"])
+        updateData.append (request.form["Date_fin"])
+        updateData.append (request.form["Budget"])
+        updateData.append (request.form["Desc"])
+        updateData.append (request.form["ID"])
+        db.updateEvent(updateData)
 
-@app.route('/updateBDCorpo', methods = ["GET", "POST"])
-def updateBDCorpo():
-    if request.method == "POST":
-        tableName = request.form["tableName"]
-        colonne = request.form["colonne"]
-        valeur = request.form["valeur"]
-        _id = request.form["_id"]
-        db = Dbman()
-        db.updateDB(tableName, colonne, valeur, _id)
+# @app.route('/updateBDCorpo', methods = ["GET", "POST"])
+# def updateBDCorpo():
+#     if request.method == "POST":
+#         tableName = request.form["tableName"]
+#         colonne = request.form["colonne"]
+#         valeur = request.form["valeur"]
+#         _id = request.form["_id"]
+#         db = Dbman()
+#         db.updateDB(tableName, colonne, valeur, _id)
 
 @app.route('/newEvent', methods = ["GET", "POST"])
 def newEvent():
@@ -238,10 +261,10 @@ def newEvent():
         budget = request.form["Budget"]
         desc = request.form["Desc"]
         db = Dbclient()
-
-        test2 = db.newEvent(nom, date_debut, date_fin, budget, desc)
-        print(str(test2))
+        db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
+
+# A FAIRE route pour update forfait
 
 if __name__ == '__main__':
     #print(flask.__version__)

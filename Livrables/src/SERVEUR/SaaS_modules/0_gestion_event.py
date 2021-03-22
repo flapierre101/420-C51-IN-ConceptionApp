@@ -241,6 +241,10 @@ class Controleur():
     def getEvent(self):
         return self.connexion.getEvent()
 
+    def updateEvent(self, updateData):
+        reponseServeur = self.connexion.updateEvent(updateData)
+        self.vue.showMessage(reponseServeur)
+
     def appelserveur(self,route,params):
         return self.connexion.appelserveur(route,params)
 

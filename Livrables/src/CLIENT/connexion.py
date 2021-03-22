@@ -64,9 +64,13 @@ class Connexion:
 
     def saveEvent(self, newEvent):
         url = self.urlserveur + "/newEvent"
-        rep = self.appelserveur(url, newEvent)        
+        rep = self.appelserveur(url, newEvent)
         return "Nouvel évènement enregistré"
-        
+
+    def updateEvent(self, updateData):
+        url = self.urlserveur + "/updateEvent"
+        self.appelserveur(url, updateData)
+        return "Événement mis à jour !"
 
     def getEvent(self):
         url = self.urlserveur+"/getEvent"
