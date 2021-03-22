@@ -19,8 +19,8 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
-    def trouverprojets(self):
-        url = self.urlserveur+"/trouverprojets"
+    def getEvent(self):
+        url = self.urlserveur+"/getEvent"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
@@ -51,13 +51,8 @@ class Connexion:
 
         return json.loads(reptext)
 
-    def telechargermodule(self,fichier, usager, compagnie):
+    def telechargermodule(self,fichier):
         leurl=self.urlserveur+"/telechargermodule"
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
-        rep=json.loads(reptext)
-        fichier1=open("./SaaS_modules/"+fichier,"w")
-        fichier1.write(rep)
-        fichier1.close()
-        usager=json.dumps([usager,compagnie])
-        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid
+        return json.loads(reptext)

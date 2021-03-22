@@ -3,6 +3,7 @@ from tkinter.ttk import *
 from tkcalendar import *
 import urllib.request
 import urllib.parse
+from .. import Connexion
 from flask import json
 import datetime
 import sys
@@ -146,6 +147,7 @@ class Modele():
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
+        self.connexion = Connexion()
         self.urlserveur = sys.argv[1]
         self.vue = Vue(self)
         self.vue.root.mainloop()
