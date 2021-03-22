@@ -44,9 +44,11 @@ class Dbclient():
         except sqlite3.Error as er:
             print(er)
 
-    def getEventList(self):
-        sqlRequest = ("SELECT * FROM 'evenement'")
-        self.curs.execute(sqlRequest)
+    def getOneEvent(self, event):
+        sqlRequest = ("select nom, date_debut, date_fin, desc, id from 'evenement' where nom = ?")
+        param = []
+        param.append(event)
+        self.curs.execute(sqlRequest, param)
         return self.curs.fetchall()
 
     def newEvent(self, nom, date_debut, date_fin, budget, desc):
@@ -195,11 +197,12 @@ def requeteserveur():
     else:
         return repr("pas ok")
 
-@app.route('/getEvents', methods=["GET","POST"])
-def getEvents():
+@app.route('/getOneEvent', methods=["GET","POST"])
+def getOneEvent():
     if request.method == "POST":
+        nomEvent = request.form["nom"]
         db = Dbclient()
-        eventList = db.getEventList()
+        eventList = db.getOneEvent(nomEvent)
         db.fermerdb()
         return Response(json.dumps(eventList), mimetype='application/json')
 
