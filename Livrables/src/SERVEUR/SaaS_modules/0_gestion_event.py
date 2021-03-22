@@ -152,6 +152,7 @@ class Controleur():
         reponseServeur = "Nouvel évènement enregistré"
         self.vue.showMessage(reponseServeur)
 
+<<<<<<< Updated upstream
     def trouverprojets(self):
         url = self.urlserveur+"/trouverprojets"
         params = {}
@@ -172,6 +173,17 @@ class Controleur():
         rep=urllib.request.urlopen(url , data)
         reptext=rep.read()
         return reptext
+=======
+    def getEvent(self):
+        return self.connexion.getEvent()
+
+    def updateEvent(self, updateData):
+        reponseServeur = self.connexion.updateEvent(updateData)
+        self.vue.showMessage(reponseServeur)
+
+    def appelserveur(self,route,params):
+        return self.connexion.appelserveur(route,params)
+>>>>>>> Stashed changes
 
 
 
