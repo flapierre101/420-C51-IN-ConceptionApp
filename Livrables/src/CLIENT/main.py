@@ -2,6 +2,7 @@
 
 from vue import *
 from modele import *
+from connexion import *
 
 import urllib.request
 import urllib.parse
@@ -14,76 +15,40 @@ from subprocess import Popen
 ##################
 class Controleur:
     def __init__(self):
-        self.urlserveur="http://127.0.0.1:5000"
         #self.urlserveur= "http://jmdeschamps.pythonanywhere.com"
         self.modele=Modele(self)
+        self.connexion = Connexion()       
+        self.urlserveur= self.connexion.urlserveur 
         self.vue=Vue(self)
         self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
 
+    
+
     def telechargermodule(self,fichier):
-        leurl=self.urlserveur+"/telechargermodule"
-        params = {"fichier":fichier}
-        reptext=self.appelserveur(leurl,params)
-        rep=json.loads(reptext)
-        fichier1=open("./SaaS_modules/"+fichier,"w")
-        fichier1.write(rep)
-        fichier1.close()
-        usager=json.dumps([self.modele.nom,self.modele.compagnie])
-        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid
-
-    def testsimple(self):
-        leurl=self.urlserveur
-        r=urllib.request.urlopen(leurl)
-        rep=r.read()
-        dict=rep.decode('utf-8')
-        print("testserveurSIMPLE", dict)
-
-    def trouvermodules(self):
-        url = self.urlserveur+"/trouvermodules"
-        params = {}
-        reptext=self.appelserveur(url,params)
-
-        mondict=json.loads(reptext)
-        return mondict
-
-    def getEvent(self):
-        url = self.urlserveur+"/getEvent"
-        params = {}
-        reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        return mondict
-
-    def trouvermembres(self):
-        url = self.urlserveur+"/trouvermembres"
-        params = {}
-        reptext=self.appelserveur(url,params)
-
-        mondict=json.loads(reptext)
-        return mondict
+        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.compagnie)
 
     def identifierusager(self,nom,mdp):
-        url = self.urlserveur+"/identifierusager"
-        params = {"nom":nom,
-                  "mdp":mdp}
-        reptext=self.appelserveur(url,params)
-
-        mondict=json.loads(reptext)
-        if "inconnu" in mondict:
+        reponse = self.connexion.identifierusager(nom, mdp)
+        if "inconnu" in reponse:
             self.vue.avertirusager("Erreur","Mot de passe ou identifiant non reconnnu \n\nReesayer?")
         else:
-            self.modele.inscrireusager(mondict)
+            self.modele.inscrireusager(reponse)
             self.vue.creercadreprincipal(self.modele)
             self.vue.changercadre("principal")
 
+    def trouvermodules(self):
+        return self.connexion.trouvermodules()
+
+    def getEvent(self):
+        return self.connexion.getEvent()
+
+    def trouvermembres(self):
+        return self.connexion.trouvermembres()
+
     # fonction d'appel normalisee, utiliser par les methodes du controleur qui communiquent avec le serveur
-    def appelserveur(self,url,params):
-        query_string = urllib.parse.urlencode( params )
-        data = query_string.encode( "ascii" )
-        url = url + "?" + query_string
-        rep=urllib.request.urlopen(url , data)
-        reptext=rep.read()
-        return reptext
+    def appelserveur(self, url,params):
+        return self.connexion.appelserveur(url,params)
 
 if __name__ == '__main__':
     c=Controleur()
