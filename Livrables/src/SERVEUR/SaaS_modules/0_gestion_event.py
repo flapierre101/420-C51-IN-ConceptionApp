@@ -164,6 +164,12 @@ class Controleur():
         mondict=json.loads(reptext)
         return mondict
 
+    def getOneEvent(self, event):
+         url = self.urlserveur+"/getOneEvent"
+         param = {"nom":event}
+         repText = self.appelserveur(url, param)
+         return json.loads(repText)
+
     def appelserveur(self,url,params):
         query_string = urllib.parse.urlencode( params )
         data = query_string.encode( "ascii" )
