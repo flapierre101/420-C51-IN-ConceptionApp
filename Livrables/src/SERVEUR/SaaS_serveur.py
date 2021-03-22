@@ -18,7 +18,7 @@ class Dbclient():
         self.conn = sqlite3.connect(nomdb)
         self.curs = self.conn.cursor()
 
-    def trouverprojets(self):
+    def getEvent(self):
         sqlnom=("select nom, date_debut, date_fin, desc, id from 'evenement'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
@@ -59,9 +59,6 @@ class Dbclient():
         except sqlite3.Error as er:
             print(er)
 
-    def getEvent(self):
-        pass
-
     def getEventEcheancier(self):
         pass
 
@@ -76,8 +73,6 @@ class Dbclient():
 
     def getEcheancierLivrable(self):
         pass
-
-
 
 class Dbman():
     def __init__(self):
@@ -168,16 +163,13 @@ def identifierusager():
     else:
         return repr("pas ok")
 
-@app.route('/trouverprojets', methods=["GET","POST"])
-def trouverprojets():
+@app.route('/getEvent', methods=["GET","POST"])
+def getEvent():
     if request.method=="POST":
         db=Dbclient()
-        events=db.trouverprojets()
-        #db=Dbman()
-        #projets=db.trouvermembres()
+        events=db.getEvent()
         db.fermerdb()
         return Response(json.dumps(events), mimetype='application/json')
-        #return repr(usager)
     else:
         return repr("pas ok")
 
