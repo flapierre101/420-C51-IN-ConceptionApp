@@ -84,19 +84,18 @@ class Vue():
 
     def createDetailsFrame(self):
         self.root.geometry("300x300")
-        self.detailFrame = Frame(self.root)
-        self.infoFrame = Frame(self.detailFrame)
-        self.buttonFrame = Frame(self.detailFrame)
-        self.confirmationFrame = Frame(self.detailFrame)
+        self.eventFrame = Frame(self.root)
+        self.infoFrame = Frame(self.eventFrame)
+        self.buttonFrame = Frame(self.eventFrame)
+        self.confirmationFrame = Frame(self.eventFrame)
 
         self.createInfoDetailsFrame()
-        self.createDetailsButtonFrame()
 
-        title = Label(self.detailFrame, text="* Modifier un évènement *", font=("Arial", 14))
+        title = Label(self.eventFrame, text="* Modifier un évènement *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
-        self.detailFrame.pack()
+        self.eventFrame.pack()
         self.confirmationFrame.pack(pady=10)
 
     def createInfoDetailsFrame(self):
@@ -108,8 +107,8 @@ class Vue():
             entryLabel = Label(self.infoFrame, text=i)
 
             if "Nom" in i:
-                x = self.event["Nom"].values()
-                entry = Entry(self.infoFrame, text=x)
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.event["Nom"])
             elif "Date Début" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
@@ -119,9 +118,11 @@ class Vue():
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 entry.set_date(self.event["Date Fin"])
             elif "Budget" in i:
-                entry = Entry(self.infoFrame, text=self.event["Budget"])
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.event["Budget"])
             else:
-                entry = Entry(self.infoFrame, text=self.event["Description"])
+                entry = Entry(self.infoFrame)
+                entry.insert(0, self.event["Description"])
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
@@ -201,8 +202,6 @@ class Vue():
         selection = self.eventList.get(self.eventList.curselection())
 
         if selection != None:
-            print(selection)
-            print(self.listeprojets)
 
             for i in self.listeprojets:
                 if i[0] == selection:
@@ -214,6 +213,7 @@ class Vue():
                     self.event["ID"] = i[5]
                     print(self.event)
 
+            self.gestionFrame.destroy()
             self.createDetailsFrame()
             self.createDetailsButtonFrame()
         else:
