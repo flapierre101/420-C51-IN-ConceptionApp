@@ -19,7 +19,7 @@ class Dbclient():
         self.curs = self.conn.cursor()
 
     def getEvent(self):
-        sqlnom=("select nom, date_debut, date_fin, desc, id from 'evenement'")
+        sqlnom=("select nom, date_debut, date_fin, budget, desc, id from 'evenement'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info

@@ -141,7 +141,23 @@ class Vue():
 
     def eventDetails(self):
 
-        self.eventList.get(self.eventList.curselection())
+        selection = self.eventList.get(self.eventList.curselection())
+        self.event = []
+
+        if selection != None:
+            print(selection)
+            print(self.listeprojets)
+
+            for i in self.listeprojets:
+                if i[0] == selection:
+                    self.event = i
+                    print("AWWWWW YEAHHH")
+                    print(self.event)
+
+
+
+        else:
+            print("Veuillez sélectionner un évènement")
 
 
 class Modele():
