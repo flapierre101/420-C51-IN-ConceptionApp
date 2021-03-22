@@ -47,7 +47,7 @@ class Vue():
 
     def createButtonFrame(self):
         self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement")
+        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
         #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createEventButton.pack(fill=Y)
@@ -137,6 +137,11 @@ class Vue():
 
         self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
         self.messageLabel.pack()
+
+    def eventDetails(self):
+
+        self.eventList.get(self.eventList.curselection())
+
 
 class Modele():
     def __init__(self, parent):
