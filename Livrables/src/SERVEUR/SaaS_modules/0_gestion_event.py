@@ -9,6 +9,12 @@ import sys
 import re
 
 
+# à copier dans chaque nouveau module pour avoir la classe connexion
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# import ../connexion.py
+from connexion import *
+
 class Vue():
     def __init__(self, parent):
         self.parent = parent
@@ -33,7 +39,6 @@ class Vue():
 
         for i in self.listeprojets:
             self.eventList.insert(row, i[0])
-            print(i)
             row += 1
 
         listLabel = Label(self.listFrame, text="Liste des évènements")
@@ -125,7 +130,6 @@ class Vue():
         self.eventParam["Desc"] = self.eventInfo["Description"].get()
 
         if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
-            print("REGEX FTW")
             self.parent.saveEvent(self.eventParam)
         else:
             self.showMessage("Veuillez entrer un budget valide")
@@ -146,37 +150,20 @@ class Modele():
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
-        self.urlserveur = sys.argv[1]
+        self.connexion = Connexion()
+        self.urlserveur = self.connexion.urlserveur
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
     def saveEvent(self, newEvent):
-        url = self.urlserveur + "/newEvent"
-        rep = self.appelserveur(url, newEvent)
-        print(rep)
-        reponseServeur = "Nouvel évènement enregistré"
+        reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
 
     def getEvent(self):
-        url = self.urlserveur+"/getEvent"
-        params = {}
-        reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        return mondict
+        return self.connexion.getEvent()
 
-    def getOneEvent(self, event):
-         url = self.urlserveur+"/getOneEvent"
-         param = {"nom":event}
-         repText = self.appelserveur(url, param)
-         return json.loads(repText)
-
-    def appelserveur(self,url,params):
-        query_string = urllib.parse.urlencode( params )
-        data = query_string.encode( "ascii" )
-        url = url + "?" + query_string
-        rep=urllib.request.urlopen(url , data)
-        reptext=rep.read()
-        return reptext
+    def appelserveur(self,route,params):
+        return self.connexion.appelserveur(route,params)
 
 
 
