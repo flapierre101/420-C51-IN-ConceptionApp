@@ -6,6 +6,7 @@ import urllib.parse
 from flask import json
 import datetime
 import sys
+import re
 
 
 class Vue():
@@ -13,6 +14,7 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.eventInfo = {}
+        self.eventParam = {}
         self.messageLabel = None
         username = "Caroline"
         self.welcomeLabel = Label(self.root, text="Bienvenue " + username, font=("Arial", 14)).pack()
@@ -115,12 +117,18 @@ class Vue():
 
     def saveEvent(self):
         #TODO valider budget numbers only
-        nom = self.eventInfo["Nom"].get()
-        dateDebut = self.eventInfo["Date Début"].get_date()
-        dateFin = self.eventInfo["Date Fin"].get_date()
-        budget = self.eventInfo["Budget"].get()
-        description = self.eventInfo["Description"].get()
-        self.parent.saveEvent([nom, dateDebut, dateFin, budget, description])
+
+        self.eventParam["Nom"] = self.eventInfo["Nom"].get()
+        self.eventParam["Date_debut"] = self.eventInfo["Date Début"].get_date()
+        self.eventParam["Date_fin"] = self.eventInfo["Date Fin"].get_date()
+        self.eventParam["Budget"] = self.eventInfo["Budget"].get()
+        self.eventParam["Desc"] = self.eventInfo["Description"].get()
+
+        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
+            print("REGEX FTW")
+            self.parent.saveEvent(self.eventParam)
+        else:
+            self.showMessage("Veuillez entrer un budget valide")
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
@@ -135,9 +143,6 @@ class Modele():
     def __init__(self, parent):
         self.parent = parent
 
-    def saveEvent(self, newEvent):
-        pass
-
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
@@ -146,9 +151,9 @@ class Controleur():
         self.vue.root.mainloop()
 
     def saveEvent(self, newEvent):
-        #reponseServeur = self.modele.saveEvent(newEvent)
-        #self.vue.showMessage(responseServeur)
-        self.modele.saveEvent(newEvent)
+        url = self.urlserveur + "/newEvent"
+        rep = self.appelserveur(url, newEvent)
+        print(rep)
         reponseServeur = "Nouvel évènement enregistré"
         self.vue.showMessage(reponseServeur)
 

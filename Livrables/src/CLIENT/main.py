@@ -38,8 +38,8 @@ class Controleur:
     def trouvermodules(self):
         return self.connexion.trouvermodules()
 
-    def trouverprojets(self):
-        return self.connexion.trouverprojets()
+    def getEvent(self):
+        return self.connexion.getEvent()
 
     def trouvermembres(self):
         return self.connexion.trouvermembres()

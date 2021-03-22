@@ -6,6 +6,7 @@ import urllib.parse
 from flask import json
 import datetime
 import sys
+import re
 
 
 class Vue():
