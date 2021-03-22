@@ -79,8 +79,8 @@ class Controleur():
         self.vue.root.mainloop()
 
     def saveEvent(self, newEvent):
-
-        return self.modele.saveEvent(newEvent)
+        url = self.urlserveur + "/newEvent"
+        return self.appelserveur(url, newEvent)
 
     def appelserveur(self,url,params):
         query_string = urllib.parse.urlencode( params )
