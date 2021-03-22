@@ -1,12 +1,12 @@
 ## -*- Encoding: UTF-8 -*-
 import urllib.request
-import urllib.parse 
+import urllib.parse
 
 from tkinter import *
 from tkinter.simpledialog import *
 from tkinter import ttk
 
-import json 
+import json
 class Vue():
     def __init__(self,parent):
         self.parent=parent
