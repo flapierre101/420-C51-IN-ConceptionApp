@@ -226,7 +226,7 @@ def updateEvent():
         updateData.append (request.form["Date_fin"])
         updateData.append (request.form["Budget"])
         updateData.append (request.form["Desc"])
-        updateData.append (request.form["_id"])
+        updateData.append (request.form["ID"])
         db.updateEvent(updateData)
 
 # @app.route('/updateBDCorpo', methods = ["GET", "POST"])

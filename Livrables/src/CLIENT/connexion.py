@@ -68,9 +68,9 @@ class Connexion:
         return "Nouvel évènement enregistré"
 
     def updateEvent(self, updateData):
-        url = self.urlserveur + "/updateBDClient"
+        url = self.urlserveur + "/updateEvent"
         self.appelserveur(url, updateData)
-        return "Mise à jour effectué"
+        return "Événement mis à jour !"
 
     def getEvent(self):
         url = self.urlserveur+"/getEvent"
