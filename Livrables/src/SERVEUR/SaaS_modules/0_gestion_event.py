@@ -8,6 +8,8 @@ import datetime
 import sys
 import re
 
+
+# à copier dans chaque nouveau module pour avoir la classe connexion
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # import ../connexion.py
