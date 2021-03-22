@@ -35,9 +35,46 @@ Ce que j'ai fait :
 Ce que je compte faire
 -  Dany - Finir le login screen pour faire les liens avec notre base de données et ensuite pair programming. 
 - François - Tester les fonctions faites la semaine dernière et ajouter les routes et fonctions d'accès au données manquantes. 
-Caroline - Continuer le module gestion d'évènement. 
+- Caroline - Continuer le module gestion d'évènement. 
 
 Les problèmes rencontrés :
-Dany - Plus de temps de prévu pour maîtrisé l'outil SQLlite studio. Je n'ai pas pu commencer mes autres tâches comme prévu. 
-François - Reste à tester les fonctions créé le 8 mars
-Caroline - Le module création d'évènement devrait être lié au module gestion d'évènement. 
+- Dany - Plus de temps de prévu pour maîtrisé l'outil SQLlite studio. Je n'ai pas pu commencer mes autres tâches comme prévu. 
+- François - Reste à tester les fonctions créé le 8 mars
+- Caroline - Le module création d'évènement devrait être lié au module gestion d'évènement. 
+
+
+## 22 mars
+
+Ce que j'ai fait : 
+- François : Finaliser la fonction pour rajouter nouvel évènement. S'agissait du premier test et les autres ne sont pas complétée
+- Caroline : La liste des évènements est affichées. Création des évènements est complété, mais relié à la base de données. Intégration de tkcalendar!
+- Dany : Amélioraiton des tables et lien vers la BD complété pour accueuil et ensuite pair programming avec François et Caroline (en alternance) pour aider.
+
+Ce que je compte faire
+-  Dany : Ajouter les détails des forfaits dans l'accueuil, créer la classe connexion et lier le serveur dans python anywhere pour qu'on aille tous la même BD.
+- François : Pair-programmer avec Caroline pour accélérer la lien avec la BD et travailler 
+- Caroline : COmpléter le lien de gestion évènement avec la BD (nouvel évènement) et créer la fonctionnalité pour afficher et modifier les évènements. 
+
+Les problèmes rencontrés :
+- François : Plus de temps pour faire fonctionner les "insert" dans la base de données.  
+- Dany : Problème avec François pour insérer les données - nous avons trouvé la solution après de multiples essais. 
+- Caroline : Rien à signaler. La recherche de la documentation pour tkcalendar et de tkinter est ce qui prend le plus de temps. 
+
+
+
+## TEMPLATE
+
+Ce que j'ai fait : 
+- François :  
+- Dany : 
+- Caroline : 
+
+Ce que je compte faire
+- François :  
+- Dany : 
+- Caroline :  
+
+Les problèmes rencontrés :
+- François :  
+- Dany : 
+- Caroline : 
