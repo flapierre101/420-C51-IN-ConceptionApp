@@ -35,21 +35,23 @@ class Dbclient():
 
     def updateEvent(self, updateData):
         print("dans updateDAta ",updateData)
-        sqlRequest = (
-            "Update Evenement"
-            "Set nom = ?,"
-            "Set date_debut = ?,"
-            "Set date_fin = ?,"
-            "Set budget = ?,"
-            "Set desc = ?"
-            "Where id = ?")
+        sqlRequest = ('''
+            Update Evenement
+                Set
+                    nom = ?,
+                    date_debut = ?,
+                    date_fin = ?,
+                    budget = ?,
+                    desc = ?
+            Where id = ?''')
 
         try:
             self.curs.execute(sqlRequest, updateData)
             self.conn.commit()
             return "Evenement mis a jour !"
-        except:
-            return "Echec de la mise a jour"
+        except sqlite3.Error as er:
+            print(er)
+            return "Echec de la mise a jour !"
 
     def getOneEvent(self, event):
         sqlRequest = ("select nom, date_debut, date_fin, desc, id from 'evenement' where nom = ?")
@@ -231,7 +233,6 @@ def getOneEvent():
 
 @app.route('/updateEvent', methods = ["GET", "POST"])
 def updateEvent():
-    print("ici ln235 serveur")
     updateData = []
     if request.method == "POST":
         db = Dbclient()
@@ -241,7 +242,6 @@ def updateEvent():
         updateData.append (request.form["budget"])
         updateData.append (request.form["desc"])
         updateData.append (request.form["id"])
-        print("ln 243 serveur", updateData)
         return db.updateEvent(updateData)
 
 
@@ -258,11 +258,11 @@ def updateEvent():
 @app.route('/newEvent', methods = ["GET", "POST"])
 def newEvent():
     if request.method == "POST":
-        nom = request.form["Nom"]
-        date_debut = request.form["Date_debut"]
-        date_fin = request.form["Date_fin"]
-        budget = request.form["Budget"]
-        desc = request.form["Desc"]
+        nom = request.form["nom"]
+        date_debut = request.form["date_debut"]
+        date_fin = request.form["date_fin"]
+        budget = request.form["budget"]
+        desc = request.form["desc"]
         db = Dbclient()
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"

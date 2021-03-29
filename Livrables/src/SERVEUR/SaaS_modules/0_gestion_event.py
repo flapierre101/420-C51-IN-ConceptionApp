@@ -177,22 +177,29 @@ class Vue():
     def saveEvent(self):
         #TODO valider budget numbers only
 
-        self.eventParam["Nom"] = self.eventInfo["Nom"].get()
-        self.eventParam["Date_debut"] = self.eventInfo["Date Début"].get_date()
-        self.eventParam["Date_fin"] = self.eventInfo["Date Fin"].get_date()
-        self.eventParam["Budget"] = self.eventInfo["Budget"].get()
-        self.eventParam["Desc"] = self.eventInfo["Description"].get()
+        self.eventParam = self.getEntryData()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
+        if re.match(r"^[0-9.]*$", self.eventParam["budget"]):
             self.parent.saveEvent(self.eventParam)
 
         else:
             self.showMessage("Veuillez entrer un budget valide")
 
     def updateEvent(self):
-        self.event["budget"] = self.eventInfo["Budget"].get()
-        print("print ln 194", self.event["budget"])
-        self.parent.updateEvent(self.event)
+        self.eventParam = self.getEntryData()
+        self.eventParam["id"] = self.event["id"]
+        self.parent.updateEvent(self.eventParam)
+
+    def getEntryData(self):
+        param = {}
+        param["nom"] = self.eventInfo["Nom"].get()
+        param["date_debut"] = self.eventInfo["Date Début"].get_date()
+        param["date_fin"] = self.eventInfo["Date Fin"].get_date()
+        param["budget"] = self.eventInfo["Budget"].get()
+        param["desc"] = self.eventInfo["Description"].get()
+
+        return param
+
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
