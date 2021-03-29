@@ -68,6 +68,16 @@ class Connexion:
         rep = self.appelserveur(url, newEvent)
         return "Nouvel évènement enregistré"
 
+    def deleteEvent(self, eventID):
+        url = self.urlserveur + "/deleteEvent"
+        params = {"id":eventID}
+        rep = self.appelserveur(url, params)
+        rep = json.loads(rep)
+        if rep == "Success":
+            return "Évènement supprimé avec succès"
+        else:
+            return "Une erreur est survenue"
+
     def updateEvent(self, updateData):
         url = self.urlserveur + "/updateEvent"
         rep = self.appelserveur(url, updateData)
@@ -79,4 +89,12 @@ class Connexion:
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
+        return mondict
+
+    def changerForfait(self, forfait, compagnieID):
+        url = self.urlserveur+"/updateForfait"
+        params = {"forfait":forfait, "compagnieID": compagnieID}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        print(mondict)
         return mondict

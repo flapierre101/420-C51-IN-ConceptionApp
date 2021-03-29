@@ -132,8 +132,10 @@ class Vue():
     def createDetailsButtonFrame(self):
         self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
         self.updateEventButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
+        self.deleteEventButton.pack(side=RIGHT)
 
 
     def createInfoFrame(self):
@@ -205,6 +207,11 @@ class Vue():
         self.eventFrame.pack_forget()
         self.createModuleFrame()
 
+    def deleteEvent(self):
+        eventID = int(self.event["ID"])
+        print(eventID)
+        self.parent.deleteEvent(eventID)
+
     def showMessage(self, reponseServeur):
 
         self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
@@ -251,6 +258,12 @@ class Controleur():
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
+
+    def deleteEvent(self, eventID):
+        reponseServeur = self.connexion.deleteEvent(eventID)
+        self.vue.showMessage(reponseServeur)
+
+
 
     def getEvent(self):
         return self.connexion.getEvent()
