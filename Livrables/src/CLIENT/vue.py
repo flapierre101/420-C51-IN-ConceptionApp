@@ -276,6 +276,7 @@ class Vue():
         self.modulevisible = True;
         listemodules=self.parent.trouvermodules()
         self.dictlisteformatee = {}
+        # TO DO chercher info dans base de donnée
         compagnie = self.parent.getcompagnie()
         for module in listemodules:
             
