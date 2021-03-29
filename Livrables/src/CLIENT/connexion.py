@@ -1,7 +1,7 @@
 import urllib.request
 import urllib.parse
 import sys
-
+import os
 
 import json
 
@@ -56,6 +56,7 @@ class Connexion:
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
         rep=json.loads(reptext)
+        os.makedirs("./SaaS_modules/", exist_ok=True) # creation du dossier SaaS_module s'il n'existe pas
         fichier1=open("./SaaS_modules/"+fichier,"w")
         fichier1.write(rep)
         fichier1.close()

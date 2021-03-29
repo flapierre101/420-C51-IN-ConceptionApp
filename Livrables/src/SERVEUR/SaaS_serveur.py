@@ -234,13 +234,15 @@ def updateEvent():
     updateData = []
     if request.method == "POST":
         db = Dbclient()
-        updateData.append (request.form["Nom"])
-        updateData.append (request.form["Date_debut"])
-        updateData.append (request.form["Date_fin"])
-        updateData.append (request.form["Budget"])
-        updateData.append (request.form["Desc"])
-        updateData.append (request.form["ID"])
+        updateData.append (request.form["nom"])
+        updateData.append (request.form["date_debut"])
+        updateData.append (request.form["date_fin"])
+        updateData.append (request.form["budget"])
+        updateData.append (request.form["desc"])
+        updateData.append (request.form["id"])
+        print("ln 243 serveur", updateData)
         db.updateEvent(updateData)
+        return "updated!"
 
 # @app.route('/updateBDCorpo', methods = ["GET", "POST"])
 # def updateBDCorpo():
