@@ -4,6 +4,7 @@ Dany Viens
 
 
 # Journal des rencontres (SCRUMS) :
+# Sprint 1
 
 ## 1 mars
 
@@ -60,7 +61,26 @@ Les problèmes rencontrés :
 - Dany : Problème avec François pour insérer les données - nous avons trouvé la solution après de multiples essais. 
 - Caroline : Rien à signaler. La recherche de la documentation pour tkcalendar et de tkinter est ce qui prend le plus de temps. 
 
+# Sprint 2 
 
+## 29 mars 
+
+- Préparation du planning détaillé 
+
+Ce que j'ai fait : 
+- François :  
+- Dany : 
+- Caroline : 
+
+Ce que je compte faire
+- François :  
+- Dany : 
+- Caroline :  
+
+Les problèmes rencontrés :
+- François :  
+- Dany : 
+- Caroline : 
 
 ## TEMPLATE
 
