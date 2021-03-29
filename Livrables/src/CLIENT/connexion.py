@@ -70,8 +70,9 @@ class Connexion:
 
     def updateEvent(self, updateData):
         url = self.urlserveur + "/updateEvent"
-        self.appelserveur(url, updateData)
-        return "Événement mis à jour !"
+        rep = self.appelserveur(url, updateData)
+
+        return rep
 
     def getEvent(self):
         url = self.urlserveur+"/getEvent"

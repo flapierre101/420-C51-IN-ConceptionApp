@@ -34,7 +34,7 @@ class Dbclient():
         self.conn.close()
 
     def updateEvent(self, updateData):
-
+        print("dans updateDAta ",updateData)
         sqlRequest = (
             "Update Evenement"
             "Set nom = ?,"
@@ -47,9 +47,9 @@ class Dbclient():
         try:
             self.curs.execute(sqlRequest, updateData)
             self.conn.commit()
-            return self.curs.fetchall()
-        except sqlite3.Error as er:
-            print(er)
+            return "Evenement mis a jour !"
+        except:
+            return "Echec de la mise a jour"
 
     def getOneEvent(self, event):
         sqlRequest = ("select nom, date_debut, date_fin, desc, id from 'evenement' where nom = ?")
@@ -231,6 +231,7 @@ def getOneEvent():
 
 @app.route('/updateEvent', methods = ["GET", "POST"])
 def updateEvent():
+    print("ici ln235 serveur")
     updateData = []
     if request.method == "POST":
         db = Dbclient()
@@ -241,8 +242,8 @@ def updateEvent():
         updateData.append (request.form["desc"])
         updateData.append (request.form["id"])
         print("ln 243 serveur", updateData)
-        db.updateEvent(updateData)
-        return "updated!"
+        return db.updateEvent(updateData)
+
 
 # @app.route('/updateBDCorpo', methods = ["GET", "POST"])
 # def updateBDCorpo():
