@@ -88,7 +88,8 @@ class Vue():
         return self.cadresignup
 """
 
-    def gererforfait(self):             
+    def gererforfait(self):    
+        self.modulevisible = False;         
         self.creercadreforfait(self.parent.getcompagnie())
         self.changercadre("forfait")   
 
@@ -132,16 +133,16 @@ class Vue():
                                  font=("Arial",12),padx=10,pady=10,command=lambda: self.changercadre("principal")))
         if compagnie["forfait"] > 1:
             btnsaction.append(Button(self.cadrecontenu,text="Downgrade Gratuit",
-                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait("gratuit")))
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(1)))
         if compagnie["forfait"] > 2:
             btnsaction.append(Button(self.cadrecontenu,text="Downgrade Pro",
-                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait("pro")))
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(2)))
         if compagnie["forfait"] < 2:
             btnsaction.append(Button(self.cadrecontenu,text="Upgrader à PRO",
-                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait("pro")))
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(2)))
         if compagnie["forfait"] < 3:
             btnsaction.append(Button(self.cadrecontenu,text="Upgrader à Entreprise",
-                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait("entreprise")))
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(3)))
   
     
  
@@ -159,6 +160,7 @@ class Vue():
 
     def changerforfait(self, forfait):
         print("Bling bling money money "+ forfait)
+        
 
     def creercadreprincipal(self,usager):
         self.root.title("Production CDJ")
@@ -191,7 +193,10 @@ class Vue():
         self.cadrepied=Frame(self.cadreprincipal, width=600,height=80)
         self.cadrepied.pack()
 
+        #Sauvegarder l'usager
+        self.usager = usager
         self.creertableau()
+        self.modulevisible = False; 
         listemembres=self.parent.trouvermembres()
         entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
@@ -220,16 +225,17 @@ class Vue():
         f.columnconfigure(0, weight=1)
 
     def affichertelecharger(self,evt):
-        item = self.tableau.selection()
-        for i in item:
-            fichier=self.tableau.item(i, "values")[0]
-        self.parent.telechargermodule(fichier)
+        if self.modulevisible:
+            item = self.tableau.selection()
+            for i in item:
+                fichier= self.dictlisteformatee[self.tableau.item(i, "values")[0]]
+            self.parent.telechargermodule(fichier)
 
 
     def ecriretableau(self):
         for i in self.tableau.get_children():
-            self.tableau.delete(i)
-        for item in self.data:
+            self.tableau.delete(i)        
+        for item in self.data:                  
             self.tableau.insert('', 'end', values=item)
 
     def integretableau(self,listemembre,entete):
@@ -258,15 +264,31 @@ class Vue():
         #self.centrerfenetre()
 
     def gerermembres(self):
+        self.modulevisible = False;
         listemembres=self.parent.trouvermembres()
         entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
       
 
     def gerermodules(self):
+        self.modulevisible = True;
         listemodules=self.parent.trouvermodules()
+        self.dictlisteformatee = {}
+        compagnie = self.parent.getcompagnie()
+        for module in listemodules:
+            
+            forfaitrequis = module[:1]
+            if int(compagnie["forfait"])-1 >= int(forfaitrequis):
+                moduleformate = module[2:-3]
+                #moduleformate = moduleformate.replace("_", " ") 
+                moduleformate = moduleformate.capitalize()
+                #
+                #Creer un dictionnaire avec le nom réel du fichier sur le serveur, la clé étant le nom formaté : 
+                self.dictlisteformatee[moduleformate] = module               
+        
+
         entete=["modules disponibles"]
-        self.integretableau(listemodules,entete)
+        self.integretableau(self.dictlisteformatee.keys(),entete)
 
     def annulerlogin(self):
         self.root.destroy()
