@@ -159,7 +159,7 @@ class Vue():
         self.cadres["forfait"]=self.cadreforfait
 
     def changerforfait(self, forfait):
-        print("Bling bling money money "+ forfait)
+        rep = self.parent.changerForfait(forfait)
         
 
     def creercadreprincipal(self,usager):
@@ -235,7 +235,9 @@ class Vue():
     def ecriretableau(self):
         for i in self.tableau.get_children():
             self.tableau.delete(i)        
-        for item in self.data:                  
+        for item in self.data:    
+            if isinstance(item, str):
+                item = [item]              
             self.tableau.insert('', 'end', values=item)
 
     def integretableau(self,listemembre,entete):
@@ -280,7 +282,7 @@ class Vue():
             forfaitrequis = module[:1]
             if int(compagnie["forfait"])-1 >= int(forfaitrequis):
                 moduleformate = module[2:-3]
-                #moduleformate = moduleformate.replace("_", " ") 
+                moduleformate = moduleformate.replace("_", " ") 
                 moduleformate = moduleformate.capitalize()
                 #
                 #Creer un dictionnaire avec le nom réel du fichier sur le serveur, la clé étant le nom formaté : 

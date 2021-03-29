@@ -242,6 +242,21 @@ def updateEvent():
         updateData.append (request.form["ID"])
         db.updateEvent(updateData)
 
+@app.route('/updateForfait', methods=["GET","POST"])
+def updateForfait():
+    if request.method == "POST":
+        forfait = request.form["forfait"]
+        compagnieID = request.form["compagnieID"]
+        print("params reçus: ",forfait, compagnieID)
+        db = Dbclient()
+        #eventList = db.getOneEvent(nomEvent)
+        db.fermerdb()
+        #return Response(json.dumps(eventList), mimetype='application/json')
+        return "ok"
+
+    else:
+        return repr("Error")
+
 # @app.route('/updateBDCorpo', methods = ["GET", "POST"])
 # def updateBDCorpo():
 #     if request.method == "POST":

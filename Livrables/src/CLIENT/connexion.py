@@ -78,3 +78,11 @@ class Connexion:
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict
+
+    def changerForfait(self, forfait, compagnieID):
+        url = self.urlserveur+"/updateForfait"
+        params = {"forfait":forfait, "compagnieID": compagnieID}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        print(mondict)
+        return mondict
