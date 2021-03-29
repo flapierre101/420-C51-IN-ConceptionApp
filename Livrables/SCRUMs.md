@@ -72,7 +72,7 @@ Ce que j'ai fait :
 événement. -- UpdateEvent et newEvent
 - Dany :  Ajouter les détails des forfaits dans l'accueuil, créer la classe connexion. Mise à jour du document de gestion pour la fin du sprint 1. Section
 des détails des forfaits du SaaS
-- Caroline : compléter le lien de gestion évènement avec la BD (nouvel évènement) et créer la fonctionnalité (Détail de l'événement) pour afficher et modifier les évènements.
+- Caroline : Ajout d'un nouvel évènement avec insertion dans la BD. Fonctionnalité (Détail de l'événement) pour afficher et modifier les évènements.
 
 Ce que je compte faire
 - François : Terminé updateEvent pour qu'il modifie correctement la base de     données. Ajouter des try/except pour les succès et échec des requetes à la BD.
@@ -83,7 +83,7 @@ au module.
 Les problèmes rencontrés :
 - François : Les donnée modifiées ne change pas dans la base de données.
 - Dany : Manque de temps pour mise du projet sur "PythonAnyware"
-- Caroline : Plus de temps que prévue pour exécuter les tâches planifiées
+- Caroline : Plus de temps que prévue pour exécuter les tâches planifiées. Debuggage d'abord au niveau de la suppression dans la BD/call au serveur, puis dans la récupération du message de retour
 
 ## TEMPLATE
 
