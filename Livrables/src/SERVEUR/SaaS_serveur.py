@@ -68,6 +68,17 @@ class Dbclient():
         except sqlite3.Error as er:
             print(er)
 
+    def deleteEvent(self, eventID):
+        sqlRequest = "DELETE FROM 'evenement' where id = ?"
+        param = [eventID]
+        try:
+            self.curs.execute(sqlRequest, param);
+            self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
+
+
     def getEventEcheancier(self):
         pass
 
@@ -228,6 +239,20 @@ def getOneEvent():
 
     else:
         return repr("Error")
+
+@app.route('/deleteEvent',methods=["GET","POST"])
+def deleteEvent():
+    message = ""
+    if request.method == "POST":
+        id = request.form["id"]
+        db = Dbclient()
+        eventDeleted = db.deleteEvent(id)
+        db.fermerdb()
+        message = "Success"
+    else:
+        message = "Error"
+
+    return Response(json.dumps(message), mimetype='application/json')
 
 @app.route('/updateEvent', methods = ["GET", "POST"])
 def updateEvent():
