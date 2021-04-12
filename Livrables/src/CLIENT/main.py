@@ -48,6 +48,7 @@ class Controleur:
         return self.connexion.trouvermembres()
 
     def changerForfait(self, forfait):
+        self.modele.compagnie["forfait"] = forfait
         return self.connexion.changerForfait(forfait, self.modele.compagnie["id"])
 
     # fonction d'appel normalisee, utiliser par les methodes du controleur qui communiquent avec le serveur

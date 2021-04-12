@@ -126,7 +126,7 @@ class Dbman():
         self.conn.close()
 
     def updateForfaitClient(self, compagnie, forfait):
-        sqlRequest = ("update client set forfait = ? where nom = ?")
+        sqlRequest = ("update clients set forfait = ? where id = ?")
         listData = [forfait, compagnie]
         try:
             self.curs.execute(sqlRequest, listData)
@@ -276,11 +276,11 @@ def updateForfait():
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
         print("params reçus: ",forfait, compagnieID)
-        db = Dbclient()
-        #eventList = db.getOneEvent(nomEvent)
+        db = Dbman()
+        db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
         #return Response(json.dumps(eventList), mimetype='application/json')
-        return "ok"
+        return Response(json.dumps("ok"), mimetype='application/json')
 
     else:
         return repr("Error")
