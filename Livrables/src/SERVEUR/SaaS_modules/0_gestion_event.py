@@ -24,7 +24,7 @@ class Vue():
         self.eventParam = {}
         self.messageLabel = None
         username = "Caroline"
-        self.welcomeLabel = Label(self.root, text="Bienvenue " + username, font=("Arial", 14)).pack()
+        self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
 
@@ -254,6 +254,14 @@ class Controleur():
         self.urlserveur = self.connexion.urlserveur
         self.vue = Vue(self)
         self.vue.root.mainloop()
+
+    def getUsername(self):
+        self.username = sys.argv[2]
+        return self.username
+
+    def getUserRole(self):
+        self.userRole = sys.argv[1]
+        return self.userRole
 
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
