@@ -95,6 +95,5 @@ class Connexion:
         url = self.urlserveur+"/updateForfait"
         params = {"forfait":forfait, "compagnieID": compagnieID}
         reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        print(mondict)
+        mondict=json.loads(reptext)        
         return mondict
