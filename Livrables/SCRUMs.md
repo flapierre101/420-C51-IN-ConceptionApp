@@ -72,7 +72,7 @@ Ce que j'ai fait :
 événement. -- UpdateEvent et newEvent
 - Dany :  Ajouter les détails des forfaits dans l'accueuil, créer la classe connexion. Mise à jour du document de gestion pour la fin du sprint 1. Section
 des détails des forfaits du SaaS
-- Caroline : compléter le lien de gestion évènement avec la BD (nouvel évènement) et créer la fonctionnalité (Détail de l'événement) pour afficher et modifier les évènements.
+- Caroline : Ajout d'un nouvel évènement avec insertion dans la BD. Fonctionnalité (Détail de l'événement) pour afficher et modifier les évènements.
 
 Ce que je compte faire
 - François : Terminé updateEvent pour qu'il modifie correctement la base de     données. Ajouter des try/except pour les succès et échec des requetes à la BD.
@@ -83,7 +83,27 @@ au module.
 Les problèmes rencontrés :
 - François : Les donnée modifiées ne change pas dans la base de données.
 - Dany : Manque de temps pour mise du projet sur "PythonAnyware"
-- Caroline : Plus de temps que prévue pour exécuter les tâches planifiées
+- Caroline : Plus de temps que prévue pour exécuter les tâches planifiées. Debuggage d'abord au niveau de la suppression dans la BD/call au serveur, puis dans la récupération du message de retour
+
+
+## 12 avril
+
+Ce que j'ai fait :
+- François : Terminé updateEvent pour qu'il modifie correctement la base de données. Ajouter des try/except pour les succès et échec des requetes à la BD. Intégré updateEvent avec la vue. Routes updateForfait. Tests et débuggage.
+- Dany : Affichage des modules selon forfait, affichage sans numéro de forfait et .py dans la vue. Gestion des forfaits mais reste encore quelques correctifs
+- Caroline : Créé la requête, la route pour supprimer un événement et l'intégrer
+au module. Tests et débuggage. Manque encore quelques petits correctifs pour fonctionner à 100%. Commencer le module Gestion des utilisateurs
+
+Ce que je compte faire
+- François : Commencer le module gestion de clients, vérification si routes auront besoin d'être révisées ou précisées.
+- Dany : Finir la gestion des forfaits pour l'affichage dans la vue, actualiser l'info avec message de confirmation. Commencer module livrable en se basant sur Gestion Event. Changer l'écran d'accueil pour l'écran de modules
+- Caroline : Terminer/débugger la fonction Supprimer un évènement et l'intégrer au module.
+
+Les problèmes rencontrés :
+- François : Fonctionnement des retour des messages d'erreurs pas encore super clair, temps de débuggage
+- Dany : Bugs rencontrés mais pas eu le temps de débugger Gestion de forfait car en fin de cours
+- Caroline : Problème d'accès à la BD et format du message de retour en JSON, pas eu le temps de terminer le débuggage à 100%
+
 
 ## TEMPLATE
 
