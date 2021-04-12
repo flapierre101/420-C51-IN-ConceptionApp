@@ -166,7 +166,7 @@ class Vue():
 
     def createLibrableFrame(self):
         self.createLibrable = Button(
-            self.buttonFrame, text="Créer", command=self.savelivrable)
+            self.buttonFrame, text="Créer", command=self.saveLivrable)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.clearButton = Button(
@@ -216,7 +216,7 @@ class Vue():
         self.createModuleFrame()
 
     def deleteLivrable(self):
-        livrableID = int(self.livrable["ID"])
+        livrableID = int(self.livrable["id"])
         print(livrableID)
         self.parent.deleteLivrable(livrableID)
 
@@ -229,16 +229,15 @@ class Vue():
 
         selection = self.livrableList.get(self.livrableList.curselection())
 
+        print("ici", self.listeLivrables)
         if selection != None:
-
             for i in self.listeLivrables:
-                if i[0] == selection:
-                    self.livrable["nom"] = i[0]
-                    self.livrable["date_debut"] = i[1]
-                    self.livrable["date_fin"] = i[2]
-                    self.livrable["budget"] = i[3]
-                    self.livrable["desc"] = i[4]
-                    self.livrable["id"] = i[5]
+                if i[1] == selection:
+                    print(i)
+                    self.livrable["desc"] = i[1]
+                    self.livrable["echeancier"] = i[2]
+                    self.livrable["responsable"] = i[3]
+                    self.livrable["id"] = i[0]
                     print("print ln 218", self.livrable)
 
             self.gestionFrame.destroy()
