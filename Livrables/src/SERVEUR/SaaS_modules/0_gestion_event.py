@@ -10,10 +10,12 @@ import re
 
 
 # à copier dans chaque nouveau module pour avoir la classe connexion
-import os, sys
+import os
+import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # import ../connexion.py
 from connexion import *
+
 
 class Vue():
     def __init__(self, parent):
@@ -24,8 +26,10 @@ class Vue():
         self.eventParam = {}
         self.messageLabel = None
         username = "Caroline"
-        self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
-        self.title = Label(self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack()
+        self.welcomeLabel = Label(
+            self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
+        self.title = Label(
+            self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
 
     def createModuleFrame(self):
@@ -53,8 +57,10 @@ class Vue():
         self.gestionFrame.pack()
 
     def createButtonFrame(self):
-        self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
+        self.createEventButton = Button(
+            self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
+        self.eventDetailsButton = Button(
+            self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
         #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createEventButton.pack(fill=Y)
@@ -63,7 +69,6 @@ class Vue():
     def createNewEvent(self):
         self.gestionFrame.destroy()
         self.createEventFrame()
-
 
     def createEventFrame(self):
         self.root.geometry("325x325")
@@ -75,7 +80,8 @@ class Vue():
         self.createInfoFrame()
         self.createEventButtonFrame()
 
-        title = Label(self.eventFrame, text="* Créer un évènement *", font=("Arial", 14))
+        title = Label(self.eventFrame,
+                      text="* Créer un évènement *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
@@ -91,7 +97,8 @@ class Vue():
 
         self.createInfoDetailsFrame()
 
-        title = Label(self.eventFrame, text="* Modifier un évènement *", font=("Arial", 14))
+        title = Label(self.eventFrame,
+                      text="* Modifier un évènement *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
@@ -108,18 +115,18 @@ class Vue():
 
             if "Nom" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["nom"])
+                entry.insert(0, self.event["nom"])
             elif "Date Début" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 entry.set_date(self.event["date_debut"])
             elif "Date Fin" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 entry.set_date(self.event["date_fin"])
             elif "Budget" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["budget"])
+                entry.insert(0, self.event["budget"])
             else:
                 entry = Entry(self.infoFrame)
                 entry.insert(0, self.event["desc"])
@@ -130,13 +137,15 @@ class Vue():
             self.eventInfo[i] = entry
 
     def createDetailsButtonFrame(self):
-        self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
-        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
+        self.updateEventButton = Button(
+            self.buttonFrame, text="Modifier", command=self.updateEvent)
+        self.backButton = Button(
+            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.deleteEventButton = Button(
+            self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
         self.updateEventButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
         self.deleteEventButton.pack(side=RIGHT)
-
 
     def createInfoFrame(self):
         fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
@@ -148,7 +157,7 @@ class Vue():
 
             if "Date" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
             else:
                 entry = Entry(self.infoFrame)
 
@@ -157,11 +166,13 @@ class Vue():
             row += 1
             self.eventInfo[i] = entry
 
-
     def createEventButtonFrame(self):
-        self.createEventButton = Button(self.buttonFrame, text="Créer", command=self.saveEvent)
-        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.clearButton = Button(self.buttonFrame, text="Effacer", command=self.clearAllFields)
+        self.createEventButton = Button(
+            self.buttonFrame, text="Créer", command=self.saveEvent)
+        self.backButton = Button(
+            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.clearButton = Button(
+            self.buttonFrame, text="Effacer", command=self.clearAllFields)
         self.createEventButton.pack(side=LEFT)
         self.clearButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
@@ -177,7 +188,7 @@ class Vue():
             self.messageLabel.destroy()
 
     def saveEvent(self):
-        #TODO valider budget numbers only
+        # TODO valider budget numbers only
 
         self.eventParam = self.getEntryData()
 
@@ -202,13 +213,12 @@ class Vue():
 
         return param
 
-
     def backToMenu(self):
         self.eventFrame.pack_forget()
         self.createModuleFrame()
 
     def deleteEvent(self):
-        eventID = int(self.event["ID"])
+        eventID = int(self.event["id"])
         print(eventID)
         self.parent.deleteEvent(eventID)
 
@@ -233,7 +243,6 @@ class Vue():
                     self.event["id"] = i[5]
                     print("print ln 218", self.event)
 
-
             self.gestionFrame.destroy()
             self.createDetailsFrame()
             self.createDetailsButtonFrame()
@@ -241,11 +250,10 @@ class Vue():
             print("Veuillez sélectionner un évènement")
 
 
-
-
 class Modele():
     def __init__(self, parent):
         self.parent = parent
+
 
 class Controleur():
     def __init__(self):
@@ -271,8 +279,6 @@ class Controleur():
         reponseServeur = self.connexion.deleteEvent(eventID)
         self.vue.showMessage(reponseServeur)
 
-
-
     def getEvent(self):
         return self.connexion.getEvent()
 
@@ -280,9 +286,8 @@ class Controleur():
         reponseServeur = self.connexion.updateEvent(updateData)
         self.vue.showMessage(reponseServeur)
 
-    def appelserveur(self,route,params):
-        return self.connexion.appelserveur(route,params)
-
+    def appelserveur(self, route, params):
+        return self.connexion.appelserveur(route, params)
 
 
 if __name__ == '__main__':

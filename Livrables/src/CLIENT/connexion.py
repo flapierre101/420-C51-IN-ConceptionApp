@@ -51,7 +51,7 @@ class Connexion:
 
         return json.loads(reptext)
 
-    def telechargermodule(self,fichier, usager, droit, compagnie):
+    def telechargermodule(self,fichier, usager, droit, courriel, compagnie):
         leurl=self.urlserveur+"/telechargermodule"
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
@@ -61,16 +61,16 @@ class Connexion:
         fichier1.write(rep)
         fichier1.close()
         compagnie=json.dumps(compagnie)
-        Popen([sys.executable, "./SaaS_modules/"+fichier,droit,usager,compagnie],shell=1).pid
+        Popen([sys.executable, "./SaaS_modules/"+fichier,droit,usager, courriel, compagnie],shell=1).pid
 
-    def saveEvent(self, newEvent):
-        url = self.urlserveur + "/newEvent"
-        rep = self.appelserveur(url, newEvent)
+    def saveEvent(self, newLivrable):
+        url = self.urlserveur + "/newLivrable"
+        rep = self.appelserveur(url, newLivrable)
         return "Nouvel évènement enregistré"
 
-    def deleteEvent(self, eventID):
+    def deleteEvent(self, livrableID):
         url = self.urlserveur + "/deleteEvent"
-        params = {"id":eventID}
+        params = {"id":livrableID}
         rep = self.appelserveur(url, params)
         rep = json.loads(rep)
         if rep == "Success":
@@ -96,4 +96,32 @@ class Connexion:
         params = {"forfait":forfait, "compagnieID": compagnieID}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)        
+        return mondict
+
+
+    def saveLivrable(self, newLivrable):
+        url = self.urlserveur + "/newLivrable"
+        rep = self.appelserveur(url, newLivrable)
+        return "Nouveau livrable enregistré"
+
+    def deleteLivrable(self, livrableID):
+        url = self.urlserveur + "/deleteLivrable"
+        params = {"id":livrableID}
+        rep = self.appelserveur(url, params)
+        rep = json.loads(rep)
+        if rep == "Success":
+            return "Livrable supprimé avec succès"
+        else:
+            return "Une erreur est survenue"
+
+    def updateLivrable(self, updateData):
+        url = self.urlserveur + "/updateLivrable"
+        rep = self.appelserveur(url, updateData)
+        return rep
+
+    def getLivrable(self):
+        url = self.urlserveur+"/getLivrable"
+        params = {}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
         return mondict

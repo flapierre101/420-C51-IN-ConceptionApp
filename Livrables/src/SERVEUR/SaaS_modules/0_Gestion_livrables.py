@@ -19,32 +19,31 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
-        self.eventInfo = {}
-        self.event = {}
-        self.eventParam = {}
-        self.messageLabel = None
-        username = "Caroline"
-        self.welcomeLabel = Label(self.root, text="Bienvenue " + username, font=("Arial", 14)).pack()
-        self.title = Label(self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack()
+        self.livrableInfo = {}
+        self.livrable = {}
+        self.livrableParam = {}
+        self.messageLabel = None     
+        self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
+        self.title = Label(self.root, text="*** Gestion des livrables ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.listeprojets = self.parent.getEvent()
+        self.listeprojets = self.parent.getLivrable()
         self.root.geometry("325x325")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
-        self.eventList = Listbox(self.listFrame)
+        self.livrableList = Listbox(self.listFrame)
 
         row = 1
 
         for i in self.listeprojets:
-            self.eventList.insert(row, i[0])
+            self.livrableList.insert(row, i[0])
             row += 1
 
-        listLabel = Label(self.listFrame, text="Liste des évènements")
+        listLabel = Label(self.listFrame, text="Liste des livrables")
         listLabel.pack()
-        self.eventList.pack()
+        self.livrableList.pack()
 
         self.listFrame.pack(side=LEFT)
 
@@ -53,49 +52,49 @@ class Vue():
         self.gestionFrame.pack()
 
     def createButtonFrame(self):
-        self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
-        #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
+        self.createLibrable = Button(self.buttonFrame, text="Créer un livrable", command=self.createLivrable)
+        self.livrableDetailButton = Button(self.buttonFrame, text="Détail du livrable", command=self.livrableDetails)
+        
 
-        self.createEventButton.pack(fill=Y)
-        self.eventDetailsButton.pack(fill=Y)
+        self.createLibrable.pack(fill=Y)
+        self.livrableDetailButton.pack(fill=Y)
 
-    def createNewEvent(self):
+    def createLivrable(self):
         self.gestionFrame.destroy()
-        self.createEventFrame()
+        self.createLivrableFrame()
 
 
-    def createEventFrame(self):
+    def createLivrableFrame(self):
         self.root.geometry("325x325")
-        self.eventFrame = Frame(self.root)
-        self.infoFrame = Frame(self.eventFrame)
-        self.buttonFrame = Frame(self.eventFrame)
-        self.confirmationFrame = Frame(self.eventFrame)
+        self.livrableFrame = Frame(self.root)
+        self.infoFrame = Frame(self.livrableFrame)
+        self.buttonFrame = Frame(self.livrableFrame)
+        self.confirmationFrame = Frame(self.livrableFrame)
 
         self.createInfoFrame()
-        self.createEventButtonFrame()
+        self.createLibrableFrame()
 
-        title = Label(self.eventFrame, text="* Créer un évènement *", font=("Arial", 14))
+        title = Label(self.livrableFrame, text="* Créer un livrable *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
-        self.eventFrame.pack()
+        self.livrableFrame.pack()
         self.confirmationFrame.pack(pady=10)
 
     def createDetailsFrame(self):
         self.root.geometry("325x325")
-        self.eventFrame = Frame(self.root)
-        self.infoFrame = Frame(self.eventFrame)
-        self.buttonFrame = Frame(self.eventFrame)
-        self.confirmationFrame = Frame(self.eventFrame)
+        self.livrableFrame = Frame(self.root)
+        self.infoFrame = Frame(self.livrableFrame)
+        self.buttonFrame = Frame(self.livrableFrame)
+        self.confirmationFrame = Frame(self.livrableFrame)
 
         self.createInfoDetailsFrame()
 
-        title = Label(self.eventFrame, text="* Modifier un évènement *", font=("Arial", 14))
+        title = Label(self.livrableFrame, text="* Modifier un évènement *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
-        self.eventFrame.pack()
+        self.livrableFrame.pack()
         self.confirmationFrame.pack(pady=10)
 
     def createInfoDetailsFrame(self):
@@ -108,34 +107,34 @@ class Vue():
 
             if "Nom" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["nom"])
+                entry.insert(0,self.livrable["nom"])
             elif "Date Début" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.event["date_debut"])
+                entry.set_date(self.livrable["date_debut"])
             elif "Date Fin" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.event["date_fin"])
+                entry.set_date(self.livrable["date_fin"])
             elif "Budget" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["budget"])
+                entry.insert(0,self.livrable["budget"])
             else:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.event["desc"])
+                entry.insert(0, self.livrable["desc"])
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
-            self.eventInfo[i] = entry
+            self.livrableInfo[i] = entry
 
     def createDetailsButtonFrame(self):
-        self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
+        self.updatelivrableButton = Button(self.buttonFrame, text="Modifier", command=self.updatelivrable)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
-        self.updateEventButton.pack(side=LEFT)
+        self.deleteLivrableButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteLivrable)
+        self.updatelivrableButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
-        self.deleteEventButton.pack(side=RIGHT)
+        self.deleteLivrableButton.pack(side=RIGHT)
 
 
     def createInfoFrame(self):
@@ -155,83 +154,83 @@ class Vue():
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
-            self.eventInfo[i] = entry
+            self.livrableInfo[i] = entry
 
 
-    def createEventButtonFrame(self):
-        self.createEventButton = Button(self.buttonFrame, text="Créer", command=self.saveEvent)
+    def createLibrableFrame(self):
+        self.createLibrable = Button(self.buttonFrame, text="Créer", command=self.savelivrable)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.clearButton = Button(self.buttonFrame, text="Effacer", command=self.clearAllFields)
-        self.createEventButton.pack(side=LEFT)
+        self.createLibrable.pack(side=LEFT)
         self.clearButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
 
     def clearAllFields(self):
-        self.eventInfo["Nom"].delete(0, "end")
-        self.eventInfo["Date Début"].set_date(datetime.date.today())
-        self.eventInfo["Date Fin"].set_date(datetime.date.today())
-        self.eventInfo["Budget"].delete(0, "end")
-        self.eventInfo["Description"].delete(0, "end")
+        self.livrableInfo["Nom"].delete(0, "end")
+        self.livrableInfo["Date Début"].set_date(datetime.date.today())
+        self.livrableInfo["Date Fin"].set_date(datetime.date.today())
+        self.livrableInfo["Budget"].delete(0, "end")
+        self.livrableInfo["Description"].delete(0, "end")
 
         if self.messageLabel:
             self.messageLabel.destroy()
 
-    def saveEvent(self):
+    def saveLivrable(self):
         #TODO valider budget numbers only
 
-        self.eventParam = self.getEntryData()
+        self.livrableParam = self.getEntryData()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["budget"]):
-            self.parent.saveEvent(self.eventParam)
+        if re.match(r"^[0-9.]*$", self.livrableParam["budget"]):
+            self.parent.savelivrable(self.livrableParam)
 
         else:
             self.showMessage("Veuillez entrer un budget valide")
 
-    def updateEvent(self):
-        self.eventParam = self.getEntryData()
-        self.eventParam["id"] = self.event["id"]
-        self.parent.updateEvent(self.eventParam)
+    def updateLivrable(self):
+        self.livrableParam = self.getEntryData()
+        self.livrableParam["id"] = self.livrable["id"]
+        self.parent.updatelivrable(self.livrableParam)
 
     def getEntryData(self):
         param = {}
-        param["nom"] = self.eventInfo["Nom"].get()
-        param["date_debut"] = self.eventInfo["Date Début"].get_date()
-        param["date_fin"] = self.eventInfo["Date Fin"].get_date()
-        param["budget"] = self.eventInfo["Budget"].get()
-        param["desc"] = self.eventInfo["Description"].get()
+        param["nom"] = self.livrableInfo["Nom"].get()
+        param["date_debut"] = self.livrableInfo["Date Début"].get_date()
+        param["date_fin"] = self.livrableInfo["Date Fin"].get_date()
+        param["budget"] = self.livrableInfo["Budget"].get()
+        param["desc"] = self.livrableInfo["Description"].get()
 
         return param
 
 
     def backToMenu(self):
-        self.eventFrame.pack_forget()
+        self.livrableFrame.pack_forget()
         self.createModuleFrame()
 
-    def deleteEvent(self):
-        eventID = int(self.event["ID"])
-        print(eventID)
-        self.parent.deleteEvent(eventID)
+    def deleteLivrable(self):
+        livrableID = int(self.livrable["ID"])
+        print(livrableID)
+        self.parent.deleteLivrable(livrableID)
 
     def showMessage(self, reponseServeur):
 
         self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
         self.messageLabel.pack()
 
-    def eventDetails(self):
+    def livrableDetails(self):
 
-        selection = self.eventList.get(self.eventList.curselection())
+        selection = self.livrableList.get(self.livrableList.curselection())
 
         if selection != None:
 
             for i in self.listeprojets:
                 if i[0] == selection:
-                    self.event["nom"] = i[0]
-                    self.event["date_debut"] = i[1]
-                    self.event["date_fin"] = i[2]
-                    self.event["budget"] = i[3]
-                    self.event["desc"] = i[4]
-                    self.event["id"] = i[5]
-                    print("print ln 218", self.event)
+                    self.livrable["nom"] = i[0]
+                    self.livrable["date_debut"] = i[1]
+                    self.livrable["date_fin"] = i[2]
+                    self.livrable["budget"] = i[3]
+                    self.livrable["desc"] = i[4]
+                    self.livrable["id"] = i[5]
+                    print("print ln 218", self.livrable)
 
 
             self.gestionFrame.destroy()
@@ -255,21 +254,29 @@ class Controleur():
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
-    def saveEvent(self, newEvent):
-        reponseServeur = self.connexion.saveEvent(newEvent)
+    def getUsername(self):
+        self.username = sys.argv[2]
+        return self.username
+
+    def getUserRole(self):
+        self.userRole = sys.argv[1]
+        return self.userRole
+
+    def saveLivrable(self, newlivrable):
+        reponseServeur = self.connexion.saveLivrable(newlivrable)
         self.vue.showMessage(reponseServeur)
 
-    def deleteEvent(self, eventID):
-        reponseServeur = self.connexion.deleteEvent(eventID)
+    def deleteLivrable(self, livrableID):
+        reponseServeur = self.connexion.deleteLivrable(livrableID)
         self.vue.showMessage(reponseServeur)
 
 
 
-    def getEvent(self):
-        return self.connexion.getEvent()
+    def getLivrable(self):
+        return self.connexion.getLivrable()
 
-    def updateEvent(self, updateData):
-        reponseServeur = self.connexion.updateEvent(updateData)
+    def updatelivrable(self, updateData):
+        reponseServeur = self.connexion.updateLivrable(updateData)
         self.vue.showMessage(reponseServeur)
 
     def appelserveur(self,route,params):
