@@ -23,7 +23,8 @@ class Controleur:
         self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
 
-    
+    def getcompagnie(self):
+        return self.modele.compagnie
 
     def telechargermodule(self,fichier):
         self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.compagnie)
@@ -45,6 +46,9 @@ class Controleur:
 
     def trouvermembres(self):
         return self.connexion.trouvermembres()
+
+    def changerForfait(self, forfait):
+        return self.connexion.changerForfait(forfait, self.modele.compagnie["id"])
 
     # fonction d'appel normalisee, utiliser par les methodes du controleur qui communiquent avec le serveur
     def appelserveur(self, url,params):

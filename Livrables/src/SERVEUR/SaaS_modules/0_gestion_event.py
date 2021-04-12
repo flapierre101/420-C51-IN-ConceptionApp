@@ -20,6 +20,7 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.eventInfo = {}
+        self.event = {}
         self.eventParam = {}
         self.messageLabel = None
         username = "Caroline"
@@ -38,7 +39,7 @@ class Vue():
         row = 1
 
         for i in self.listeprojets:
-            self.eventList.insert(row, i[0])            
+            self.eventList.insert(row, i[0])
             row += 1
 
         listLabel = Label(self.listFrame, text="Liste des évènements")
@@ -53,7 +54,7 @@ class Vue():
 
     def createButtonFrame(self):
         self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement")
+        self.eventDetailsButton = Button(self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
         #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createEventButton.pack(fill=Y)
@@ -80,6 +81,61 @@ class Vue():
         self.buttonFrame.pack()
         self.eventFrame.pack()
         self.confirmationFrame.pack(pady=10)
+
+    def createDetailsFrame(self):
+        self.root.geometry("300x300")
+        self.eventFrame = Frame(self.root)
+        self.infoFrame = Frame(self.eventFrame)
+        self.buttonFrame = Frame(self.eventFrame)
+        self.confirmationFrame = Frame(self.eventFrame)
+
+        self.createInfoDetailsFrame()
+
+        title = Label(self.eventFrame, text="* Modifier un évènement *", font=("Arial", 14))
+        title.pack()
+        self.infoFrame.pack()
+        self.buttonFrame.pack()
+        self.eventFrame.pack()
+        self.confirmationFrame.pack(pady=10)
+
+    def createInfoDetailsFrame(self):
+        fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
+        row = 0
+
+        for i in fields:
+
+            entryLabel = Label(self.infoFrame, text=i)
+
+            if "Nom" in i:
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.event["nom"])
+            elif "Date Début" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                entry.set_date(self.event["date_debut"])
+            elif "Date Fin" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                entry.set_date(self.event["date_fin"])
+            elif "Budget" in i:
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.event["budget"])
+            else:
+                entry = Entry(self.infoFrame)
+                entry.insert(0, self.event["desc"])
+
+            entryLabel.grid(row=row, column=0, sticky=E + W)
+            entry.grid(row=row, column=1, sticky=E + W)
+            row += 1
+            self.eventInfo[i] = entry
+
+    def createDetailsButtonFrame(self):
+        self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
+        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
+        self.updateEventButton.pack(side=LEFT)
+        self.backButton.pack(side=RIGHT)
+        self.deleteEventButton.pack(side=RIGHT)
 
 
     def createInfoFrame(self):
@@ -123,25 +179,69 @@ class Vue():
     def saveEvent(self):
         #TODO valider budget numbers only
 
-        self.eventParam["Nom"] = self.eventInfo["Nom"].get()
-        self.eventParam["Date_debut"] = self.eventInfo["Date Début"].get_date()
-        self.eventParam["Date_fin"] = self.eventInfo["Date Fin"].get_date()
-        self.eventParam["Budget"] = self.eventInfo["Budget"].get()
-        self.eventParam["Desc"] = self.eventInfo["Description"].get()
+        self.eventParam = self.getEntryData()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):            
+        if re.match(r"^[0-9.]*$", self.eventParam["budget"]):
             self.parent.saveEvent(self.eventParam)
+
         else:
             self.showMessage("Veuillez entrer un budget valide")
+
+    def updateEvent(self):
+        self.eventParam = self.getEntryData()
+        self.eventParam["id"] = self.event["id"]
+        self.parent.updateEvent(self.eventParam)
+
+    def getEntryData(self):
+        param = {}
+        param["nom"] = self.eventInfo["Nom"].get()
+        param["date_debut"] = self.eventInfo["Date Début"].get_date()
+        param["date_fin"] = self.eventInfo["Date Fin"].get_date()
+        param["budget"] = self.eventInfo["Budget"].get()
+        param["desc"] = self.eventInfo["Description"].get()
+
+        return param
+
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
         self.createModuleFrame()
 
+    def deleteEvent(self):
+        eventID = int(self.event["ID"])
+        print(eventID)
+        self.parent.deleteEvent(eventID)
+
     def showMessage(self, reponseServeur):
 
         self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
         self.messageLabel.pack()
+
+    def eventDetails(self):
+
+        selection = self.eventList.get(self.eventList.curselection())
+
+        if selection != None:
+
+            for i in self.listeprojets:
+                if i[0] == selection:
+                    self.event["nom"] = i[0]
+                    self.event["date_debut"] = i[1]
+                    self.event["date_fin"] = i[2]
+                    self.event["budget"] = i[3]
+                    self.event["desc"] = i[4]
+                    self.event["id"] = i[5]
+                    print("print ln 218", self.event)
+
+
+            self.gestionFrame.destroy()
+            self.createDetailsFrame()
+            self.createDetailsButtonFrame()
+        else:
+            print("Veuillez sélectionner un évènement")
+
+
+
 
 class Modele():
     def __init__(self, parent):
@@ -158,9 +258,19 @@ class Controleur():
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
-        
+
+    def deleteEvent(self, eventID):
+        reponseServeur = self.connexion.deleteEvent(eventID)
+        self.vue.showMessage(reponseServeur)
+
+
+
     def getEvent(self):
         return self.connexion.getEvent()
+
+    def updateEvent(self, updateData):
+        reponseServeur = self.connexion.updateEvent(updateData)
+        self.vue.showMessage(reponseServeur)
 
     def appelserveur(self,route,params):
         return self.connexion.appelserveur(route,params)

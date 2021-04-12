@@ -1,7 +1,7 @@
 import urllib.request
 import urllib.parse
 import sys
-
+import os
 
 import json
 
@@ -56,6 +56,7 @@ class Connexion:
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
         rep=json.loads(reptext)
+        os.makedirs("./SaaS_modules/", exist_ok=True) # creation du dossier SaaS_module s'il n'existe pas
         fichier1=open("./SaaS_modules/"+fichier,"w")
         fichier1.write(rep)
         fichier1.close()
@@ -64,13 +65,36 @@ class Connexion:
 
     def saveEvent(self, newEvent):
         url = self.urlserveur + "/newEvent"
-        rep = self.appelserveur(url, newEvent)        
+        rep = self.appelserveur(url, newEvent)
         return "Nouvel évènement enregistré"
-        
+
+    def deleteEvent(self, eventID):
+        url = self.urlserveur + "/deleteEvent"
+        params = {"id":eventID}
+        rep = self.appelserveur(url, params)
+        rep = json.loads(rep)
+        if rep == "Success":
+            return "Évènement supprimé avec succès"
+        else:
+            return "Une erreur est survenue"
+
+    def updateEvent(self, updateData):
+        url = self.urlserveur + "/updateEvent"
+        rep = self.appelserveur(url, updateData)
+
+        return rep
 
     def getEvent(self):
         url = self.urlserveur+"/getEvent"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
+        return mondict
+
+    def changerForfait(self, forfait, compagnieID):
+        url = self.urlserveur+"/updateForfait"
+        params = {"forfait":forfait, "compagnieID": compagnieID}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        print(mondict)
         return mondict

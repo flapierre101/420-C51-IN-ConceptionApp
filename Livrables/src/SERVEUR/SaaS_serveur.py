@@ -19,7 +19,7 @@ class Dbclient():
         self.curs = self.conn.cursor()
 
     def getEvent(self):
-        sqlnom=("select nom, date_debut, date_fin, desc, id from 'evenement'")
+        sqlnom=("select nom, date_debut, date_fin, budget, desc, id from 'evenement'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
         return info
@@ -33,20 +33,31 @@ class Dbclient():
     def fermerdb(self):
         self.conn.close()
 
-    def updateDB(self, tableName, col, val, id):
-        sqlRequest = (
-            "Update"+tableName+
-            "Set" + col + "=" + val +
-            "Where id =" + id)
+    def updateEvent(self, updateData):
+        print("dans updateDAta ",updateData)
+        sqlRequest = ('''
+            Update Evenement
+                Set
+                    nom = ?,
+                    date_debut = ?,
+                    date_fin = ?,
+                    budget = ?,
+                    desc = ?
+            Where id = ?''')
+
         try:
-            self.curs.execute(sqlRequest)
+            self.curs.execute(sqlRequest, updateData)
             self.conn.commit()
+            return "Evenement mis a jour !"
         except sqlite3.Error as er:
             print(er)
+            return "Echec de la mise a jour !"
 
-    def getEventList(self):
-        sqlRequest = ("SELECT * FROM 'evenement'")
-        self.curs.execute(sqlRequest)
+    def getOneEvent(self, event):
+        sqlRequest = ("select nom, date_debut, date_fin, desc, id from 'evenement' where nom = ?")
+        param = []
+        param.append(event)
+        self.curs.execute(sqlRequest, param)
         return self.curs.fetchall()
 
     def newEvent(self, nom, date_debut, date_fin, budget, desc):
@@ -58,6 +69,17 @@ class Dbclient():
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
+
+    def deleteEvent(self, eventID):
+        sqlRequest = "DELETE FROM 'evenement' where id = ?"
+        param = [eventID]
+        try:
+            self.curs.execute(sqlRequest, param);
+            self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
+
 
     def getEventEcheancier(self):
         pass
@@ -103,16 +125,29 @@ class Dbman():
     def fermerdb(self):
         self.conn.close()
 
-    def updateDB(self, tableName, col, val, id):
-        sqlRequest = (
-            "Update"+tableName+
-            "Set" + col + "=" + val +
-            "Where id =" + id)
+    def updateForfaitClient(self, compagnie, forfait):
+        sqlRequest = ("update client set forfait = ? where nom = ?")
+        listData = [forfait, compagnie]
         try:
-            self.curs.execute(sqlRequest)
+            self.curs.execute(sqlRequest, listData)
             self.conn.commit()
+            return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
+
+
+
+
+    # def updateDB(self, tableName, col, val, id):
+    #     sqlRequest = (
+    #         "Update"+tableName+
+    #         "Set" + col + "=" + val +
+    #         "Where id =" + id)
+    #     try:
+    #         self.curs.execute(sqlRequest)
+    #         self.conn.commit()
+    #     except sqlite3.Error as er:
+    #         print(er)
 
 
 
@@ -195,50 +230,84 @@ def requeteserveur():
     else:
         return repr("pas ok")
 
-@app.route('/getEvents', methods=["GET","POST"])
-def getEvents():
+@app.route('/getOneEvent', methods=["GET","POST"])
+def getOneEvent():
     if request.method == "POST":
+        nomEvent = request.form["nom"]
         db = Dbclient()
-        eventList = db.getEventList()
+        eventList = db.getOneEvent(nomEvent)
         db.fermerdb()
         return Response(json.dumps(eventList), mimetype='application/json')
 
     else:
         return repr("Error")
 
-@app.route('/updateBDClient', methods = ["GET", "POST"])
-def updateBDClient():
+@app.route('/deleteEvent',methods=["GET","POST"])
+def deleteEvent():
+    message = ""
     if request.method == "POST":
-        tableName = request.form["tableName"]
-        colonne = request.form["colonne"]
-        valeur = request.form["valeur"]
-        _id = request.form["_id"]
+        id = request.form["id"]
         db = Dbclient()
-        db.updateDB(tableName, colonne, valeur, _id)
+        eventDeleted = db.deleteEvent(id)
+        db.fermerdb()
+        message = "Success"
+    else:
+        message = "Error"
 
-@app.route('/updateBDCorpo', methods = ["GET", "POST"])
-def updateBDCorpo():
+    return Response(json.dumps(message), mimetype='application/json')
+
+@app.route('/updateEvent', methods = ["GET", "POST"])
+def updateEvent():
+    updateData = []
     if request.method == "POST":
-        tableName = request.form["tableName"]
-        colonne = request.form["colonne"]
-        valeur = request.form["valeur"]
-        _id = request.form["_id"]
-        db = Dbman()
-        db.updateDB(tableName, colonne, valeur, _id)
+        db = Dbclient()
+        updateData.append (request.form["nom"])
+        updateData.append (request.form["date_debut"])
+        updateData.append (request.form["date_fin"])
+        updateData.append (request.form["budget"])
+        updateData.append (request.form["desc"])
+        updateData.append (request.form["id"])
+        return db.updateEvent(updateData)
+
+
+@app.route('/updateForfait', methods=["GET","POST"])
+def updateForfait():
+    if request.method == "POST":
+        forfait = request.form["forfait"]
+        compagnieID = request.form["compagnieID"]
+        print("params reçus: ",forfait, compagnieID)
+        db = Dbclient()
+        #eventList = db.getOneEvent(nomEvent)
+        db.fermerdb()
+        #return Response(json.dumps(eventList), mimetype='application/json')
+        return "ok"
+
+    else:
+        return repr("Error")
+
+# @app.route('/updateBDCorpo', methods = ["GET", "POST"])
+# def updateBDCorpo():
+#     if request.method == "POST":
+#         tableName = request.form["tableName"]
+#         colonne = request.form["colonne"]
+#         valeur = request.form["valeur"]
+#         _id = request.form["_id"]
+#         db = Dbman()
+#         db.updateDB(tableName, colonne, valeur, _id)
 
 @app.route('/newEvent', methods = ["GET", "POST"])
 def newEvent():
     if request.method == "POST":
-        nom = request.form["Nom"]
-        date_debut = request.form["Date_debut"]
-        date_fin = request.form["Date_fin"]
-        budget = request.form["Budget"]
-        desc = request.form["Desc"]
+        nom = request.form["nom"]
+        date_debut = request.form["date_debut"]
+        date_fin = request.form["date_fin"]
+        budget = request.form["budget"]
+        desc = request.form["desc"]
         db = Dbclient()
-
-        test2 = db.newEvent(nom, date_debut, date_fin, budget, desc)
-        print(str(test2))
+        db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
+
+# A FAIRE route pour update forfait
 
 if __name__ == '__main__':
     #print(flask.__version__)

@@ -16,13 +16,16 @@ class Vue():
     def changercadre(self,nomcadre):
         cadre=self.cadres[nomcadre]
         if self.cadreactif:
-            self.cadreactif.pack_forget()
+            #self.cadreactif.destroy()
+            self.cadreactif.pack_forget()  
         self.cadreactif=cadre
         self.cadreactif.pack()
 
     def creercadres(self):
         self.cadres["login"]=self.creercadrelogin()
-        self.cadres["enregistrement"]=self.creercadresignup()
+        #self.cadres["enregistrement"]=self.creercadresignup() # non implanté
+
+        
 
     def creercadrelogin(self):
         self.cadrelogin=Frame(self.cadreapp,width=800,height=400)
@@ -52,7 +55,11 @@ class Vue():
 
         return self.cadrelogin
 
-    def creercadresignup(self): # TODO PAS PRIORITAIRE
+    
+    # TODO - Interface pour enregistrer nouvel utilisateur - PAS PRIORITAIRE
+    """
+    def creercadresignup(self): 
+
         self.cadresignup=Frame(self.cadreapp,width=800,height=400)
 
         self.signuplabel=Label(self.cadresignup,text="Enregistrement pour Production CDJ",font=("Arial",18),
@@ -79,6 +86,81 @@ class Vue():
         #self.btnenregistrementsignup.grid(row=40,column=40,padx=10,pady=10)
 
         return self.cadresignup
+"""
+
+    def gererforfait(self):    
+        self.modulevisible = False;         
+        self.creercadreforfait(self.parent.getcompagnie())
+        self.changercadre("forfait")   
+
+
+    def creercadreforfait(self,compagnie):
+        self.root.title("Production CDJ")
+        self.cadreforfait=Frame(self.cadreapp,width=400,height=400)
+
+        self.cadretitre=Frame(self.cadreforfait,width=400,height=400)
+        
+        if compagnie["forfait"] == 1:
+            forfait = "Base"
+        elif compagnie["forfait"] == 2:
+            forfait = "Pro"
+        else:
+            forfait = "Entreprise"
+
+        self.forfaitlabel=Label(self.cadretitre,text="Le forfait actuel pour votre compagnie est : " + forfait,font=("Arial",14))
+        
+        self.forfaitlabel.pack()
+        self.cadretitre.pack(pady=40)
+
+      
+
+        self.cadrecontenu=Frame(self.cadreforfait, width=600,height=400)
+        text_widget = Text(self.cadrecontenu, height=28, width=60)
+        text_widget.pack()
+        text_widget.insert(END, "Les avantages de chacun des forfaits \n\nBase (Gratuit) : \n " + 
+            "- Gestion des évènements de base\n - Liste des employés\n - Gestion des échéanciers et livrables\n - Base de données pour vos clients (limite 500)" +
+            "\n\nPro (300$\\année)\n - Module de gestions des réunions \n - Template d'évènement \n - Base de données clients limite de 1500 clients" +
+            "\n\nEntreprise (600$\\année)\n - Nombre de clients illimités et rapport sur mesure\n - Module finance\n - Module gestion de la sous-traitance" +
+            "\n - Module campagne publicitaire\n - Module de gestion d'inventaire")
+    
+        text_widget.config(state=DISABLED)
+ 
+
+
+        btnsaction=[]
+        
+        btnsaction.append(Button(self.cadrecontenu,text="Retour",
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changercadre("principal")))
+        if compagnie["forfait"] > 1:
+            btnsaction.append(Button(self.cadrecontenu,text="Downgrade Gratuit",
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(1)))
+        if compagnie["forfait"] > 2:
+            btnsaction.append(Button(self.cadrecontenu,text="Downgrade Pro",
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(2)))
+        if compagnie["forfait"] < 2:
+            btnsaction.append(Button(self.cadrecontenu,text="Upgrader à PRO",
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(2)))
+        if compagnie["forfait"] < 3:
+            btnsaction.append(Button(self.cadrecontenu,text="Upgrader à Entreprise",
+                                 font=("Arial",12),padx=10,pady=10,command=lambda: self.changerforfait(3)))
+  
+    
+ 
+
+        for i in btnsaction:
+            i.pack(side=LEFT, pady=10,padx=10)
+
+
+     
+        self.cadrecontenu.pack()
+        self.cadrepied=Frame(self.cadreforfait, width=600,height=80)
+        self.cadrepied.pack()
+      
+        self.cadres["forfait"]=self.cadreforfait
+
+    def changerforfait(self, forfait):
+        rep = self.parent.changerForfait(forfait)
+        
 
     def creercadreprincipal(self,usager):
         self.root.title("Production CDJ")
@@ -99,8 +181,8 @@ class Vue():
         if usager.droit=="Admin":
             btnsaction.append(Button(self.cadrecommande,text="Gestion de membres",
                                      font=("Arial",12),padx=10,pady=10,command=self.gerermembres))
-        btnsaction.append(Button(self.cadrecommande,text="Gestion des projets",
-                                 font=("Arial",12),padx=10,pady=10,command=self.gererprojets))
+            btnsaction.append(Button(self.cadrecommande,text="Forfaits",
+                            font=("Arial",12),padx=10,pady=10,command=self.gererforfait)),
         btnsaction.append(Button(self.cadrecommande,text="Modules",
                                  font=("Arial",12),padx=10,pady=10,command=self.gerermodules))
         for i in btnsaction:
@@ -111,7 +193,13 @@ class Vue():
         self.cadrepied=Frame(self.cadreprincipal, width=600,height=80)
         self.cadrepied.pack()
 
+        #Sauvegarder l'usager
+        self.usager = usager
         self.creertableau()
+        self.modulevisible = False; 
+        listemembres=self.parent.trouvermembres()
+        entete=["Nom", "courriel","Rôle","Droit d'accès"]
+        self.integretableau(listemembres,entete)
         self.cadres["principal"]=self.cadreprincipal
 
     def creertableau(self):
@@ -137,16 +225,19 @@ class Vue():
         f.columnconfigure(0, weight=1)
 
     def affichertelecharger(self,evt):
-        item = self.tableau.selection()
-        for i in item:
-            fichier=self.tableau.item(i, "values")[0]
-        self.parent.telechargermodule(fichier)
+        if self.modulevisible:
+            item = self.tableau.selection()
+            for i in item:
+                fichier= self.dictlisteformatee[self.tableau.item(i, "values")[0]]
+            self.parent.telechargermodule(fichier)
 
 
     def ecriretableau(self):
         for i in self.tableau.get_children():
-            self.tableau.delete(i)
-        for item in self.data:
+            self.tableau.delete(i)        
+        for item in self.data:    
+            if isinstance(item, str):
+                item = [item]              
             self.tableau.insert('', 'end', values=item)
 
     def integretableau(self,listemembre,entete):
@@ -175,19 +266,32 @@ class Vue():
         #self.centrerfenetre()
 
     def gerermembres(self):
+        self.modulevisible = False;
         listemembres=self.parent.trouvermembres()
         entete=["Nom", "courriel","Rôle","Droit d'accès"]
         self.integretableau(listemembres,entete)
-
-    def gererprojets(self):
-        listeprojets=self.parent.getEvent()
-        entete=["Nom","Début","Fin", "Description"]
-        self.integretableau(listeprojets,entete)
+      
 
     def gerermodules(self):
+        self.modulevisible = True;
         listemodules=self.parent.trouvermodules()
+        self.dictlisteformatee = {}
+        # TO DO chercher info dans base de donnée
+        compagnie = self.parent.getcompagnie()
+        for module in listemodules:
+            
+            forfaitrequis = module[:1]
+            if int(compagnie["forfait"])-1 >= int(forfaitrequis):
+                moduleformate = module[2:-3]
+                moduleformate = moduleformate.replace("_", " ") 
+                moduleformate = moduleformate.capitalize()
+                #
+                #Creer un dictionnaire avec le nom réel du fichier sur le serveur, la clé étant le nom formaté : 
+                self.dictlisteformatee[moduleformate] = module               
+        
+
         entete=["modules disponibles"]
-        self.integretableau(listemodules,entete)
+        self.integretableau(self.dictlisteformatee.keys(),entete)
 
     def annulerlogin(self):
         self.root.destroy()
