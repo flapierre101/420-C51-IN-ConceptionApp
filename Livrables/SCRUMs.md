@@ -96,7 +96,7 @@ au module. Tests et débuggage. Manque encore quelques petits correctifs pour fo
 
 Ce que je compte faire
 - François : Commencer le module gestion de clients, vérification si routes auront besoin d'être révisées ou précisées.
-- Dany : Finir la gestion des forfaits pour l'affichage dans la vue, actualiser l'info avec message de confirmation. Commencer module livrable en se basant sur Gestion Event
+- Dany : Finir la gestion des forfaits pour l'affichage dans la vue, actualiser l'info avec message de confirmation. Commencer module livrable en se basant sur Gestion Event. Changer l'écran d'accueil pour l'écran de modules
 - Caroline : Terminer/débugger la fonction Supprimer un évènement et l'intégrer au module.
 
 Les problèmes rencontrés :
