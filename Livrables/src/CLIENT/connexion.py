@@ -51,7 +51,7 @@ class Connexion:
 
         return json.loads(reptext)
 
-    def telechargermodule(self,fichier, usager, compagnie):
+    def telechargermodule(self,fichier, usager, droit, compagnie):
         leurl=self.urlserveur+"/telechargermodule"
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
@@ -60,8 +60,8 @@ class Connexion:
         fichier1=open("./SaaS_modules/"+fichier,"w")
         fichier1.write(rep)
         fichier1.close()
-        usager=json.dumps([usager, compagnie])
-        Popen([sys.executable, "./SaaS_modules/"+fichier,self.urlserveur,usager],shell=1).pid
+        compagnie=json.dumps(compagnie)
+        Popen([sys.executable, "./SaaS_modules/"+fichier,droit,usager,compagnie],shell=1).pid
 
     def saveEvent(self, newEvent):
         url = self.urlserveur + "/newEvent"

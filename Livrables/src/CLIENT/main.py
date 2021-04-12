@@ -27,7 +27,7 @@ class Controleur:
         return self.modele.compagnie
 
     def telechargermodule(self,fichier):
-        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.compagnie)
+        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.droit, self.modele.compagnie)
 
     def identifierusager(self,nom,mdp):
         reponse = self.connexion.identifierusager(nom, mdp)
