@@ -276,8 +276,8 @@ def updateForfait():
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
         print("params reçus: ",forfait, compagnieID)
-        db = Dbclient()
-        #eventList = db.getOneEvent(nomEvent)
+        db = Dbman()
+        db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
         #return Response(json.dumps(eventList), mimetype='application/json')
         return "ok"
@@ -307,7 +307,7 @@ def newEvent():
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
 
-# A FAIRE route pour update forfait
+
 
 if __name__ == '__main__':
     #print(flask.__version__)
