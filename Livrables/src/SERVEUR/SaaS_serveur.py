@@ -34,22 +34,24 @@ class Dbclient():
         self.conn.close()
 
     def updateEvent(self, updateData):
-
-        sqlRequest = (
-            "Update Evenement"
-            "Set nom = ?,"
-            "Set date_debut = ?,"
-            "Set date_fin = ?,"
-            "Set budget = ?,"
-            "Set desc = ?"
-            "Where id = ?")
+        print("dans updateDAta ",updateData)
+        sqlRequest = ('''
+            Update Evenement
+                Set
+                    nom = ?,
+                    date_debut = ?,
+                    date_fin = ?,
+                    budget = ?,
+                    desc = ?
+            Where id = ?''')
 
         try:
             self.curs.execute(sqlRequest, updateData)
             self.conn.commit()
-            return self.curs.fetchall()
+            return "Evenement mis a jour !"
         except sqlite3.Error as er:
             print(er)
+            return "Echec de la mise a jour !"
 
     def getOneEvent(self, event):
         sqlRequest = ("select nom, date_debut, date_fin, desc, id from 'evenement' where nom = ?")
@@ -259,13 +261,14 @@ def updateEvent():
     updateData = []
     if request.method == "POST":
         db = Dbclient()
-        updateData.append (request.form["Nom"])
-        updateData.append (request.form["Date_debut"])
-        updateData.append (request.form["Date_fin"])
-        updateData.append (request.form["Budget"])
-        updateData.append (request.form["Desc"])
-        updateData.append (request.form["ID"])
-        db.updateEvent(updateData)
+        updateData.append (request.form["nom"])
+        updateData.append (request.form["date_debut"])
+        updateData.append (request.form["date_fin"])
+        updateData.append (request.form["budget"])
+        updateData.append (request.form["desc"])
+        updateData.append (request.form["id"])
+        return db.updateEvent(updateData)
+
 
 @app.route('/updateForfait', methods=["GET","POST"])
 def updateForfait():
@@ -295,11 +298,11 @@ def updateForfait():
 @app.route('/newEvent', methods = ["GET", "POST"])
 def newEvent():
     if request.method == "POST":
-        nom = request.form["Nom"]
-        date_debut = request.form["Date_debut"]
-        date_fin = request.form["Date_fin"]
-        budget = request.form["Budget"]
-        desc = request.form["Desc"]
+        nom = request.form["nom"]
+        date_debut = request.form["date_debut"]
+        date_fin = request.form["date_fin"]
+        budget = request.form["budget"]
+        desc = request.form["desc"]
         db = Dbclient()
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"

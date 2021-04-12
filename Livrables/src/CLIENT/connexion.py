@@ -3,7 +3,6 @@ import urllib.parse
 import sys
 import os
 
-
 import json
 
 from subprocess import Popen
@@ -57,7 +56,7 @@ class Connexion:
         params = {"fichier":fichier}
         reptext=self.appelserveur(leurl,params)
         rep=json.loads(reptext)
-        os.makedirs("./SaaS_modules/", exist_ok=True)  # creation du dossier SaaS_module s'il n'existe pas
+        os.makedirs("./SaaS_modules/", exist_ok=True) # creation du dossier SaaS_module s'il n'existe pas
         fichier1=open("./SaaS_modules/"+fichier,"w")
         fichier1.write(rep)
         fichier1.close()
@@ -81,8 +80,9 @@ class Connexion:
 
     def updateEvent(self, updateData):
         url = self.urlserveur + "/updateEvent"
-        self.appelserveur(url, updateData)
-        return "Événement mis à jour !"
+        rep = self.appelserveur(url, updateData)
+
+        return rep
 
     def getEvent(self):
         url = self.urlserveur+"/getEvent"

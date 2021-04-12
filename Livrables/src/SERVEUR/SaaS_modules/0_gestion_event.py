@@ -108,21 +108,21 @@ class Vue():
 
             if "Nom" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["Nom"])
+                entry.insert(0,self.event["nom"])
             elif "Date Début" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.event["Date Début"])
+                entry.set_date(self.event["date_debut"])
             elif "Date Fin" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.event["Date Fin"])
+                entry.set_date(self.event["date_fin"])
             elif "Budget" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0,self.event["Budget"])
+                entry.insert(0,self.event["budget"])
             else:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.event["Description"])
+                entry.insert(0, self.event["desc"])
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
@@ -130,7 +130,7 @@ class Vue():
             self.eventInfo[i] = entry
 
     def createDetailsButtonFrame(self):
-        self.updateEventButton = Button(self.buttonFrame, text="Modifier")
+        self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
         self.updateEventButton.pack(side=LEFT)
@@ -179,16 +179,29 @@ class Vue():
     def saveEvent(self):
         #TODO valider budget numbers only
 
-        self.eventParam["Nom"] = self.eventInfo["Nom"].get()
-        self.eventParam["Date_debut"] = self.eventInfo["Date Début"].get_date()
-        self.eventParam["Date_fin"] = self.eventInfo["Date Fin"].get_date()
-        self.eventParam["Budget"] = self.eventInfo["Budget"].get()
-        self.eventParam["Desc"] = self.eventInfo["Description"].get()
+        self.eventParam = self.getEntryData()
 
-        if re.match(r"^[0-9.]*$", self.eventParam["Budget"]):
+        if re.match(r"^[0-9.]*$", self.eventParam["budget"]):
             self.parent.saveEvent(self.eventParam)
+
         else:
             self.showMessage("Veuillez entrer un budget valide")
+
+    def updateEvent(self):
+        self.eventParam = self.getEntryData()
+        self.eventParam["id"] = self.event["id"]
+        self.parent.updateEvent(self.eventParam)
+
+    def getEntryData(self):
+        param = {}
+        param["nom"] = self.eventInfo["Nom"].get()
+        param["date_debut"] = self.eventInfo["Date Début"].get_date()
+        param["date_fin"] = self.eventInfo["Date Fin"].get_date()
+        param["budget"] = self.eventInfo["Budget"].get()
+        param["desc"] = self.eventInfo["Description"].get()
+
+        return param
+
 
     def backToMenu(self):
         self.eventFrame.pack_forget()
@@ -212,13 +225,14 @@ class Vue():
 
             for i in self.listeprojets:
                 if i[0] == selection:
-                    self.event["Nom"] = i[0]
-                    self.event["Date Début"] = i[1]
-                    self.event["Date Fin"] = i[2]
-                    self.event["Budget"] = i[3]
-                    self.event["Description"] = i[4]
-                    self.event["ID"] = i[5]
-                    print(self.event)
+                    self.event["nom"] = i[0]
+                    self.event["date_debut"] = i[1]
+                    self.event["date_fin"] = i[2]
+                    self.event["budget"] = i[3]
+                    self.event["desc"] = i[4]
+                    self.event["id"] = i[5]
+                    print("print ln 218", self.event)
+
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()
