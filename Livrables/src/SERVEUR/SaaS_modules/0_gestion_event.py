@@ -31,7 +31,7 @@ class Vue():
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
         self.listeprojets = self.parent.getEvent()
-        self.root.geometry("300x300")
+        self.root.geometry("325x325")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
         self.eventList = Listbox(self.listFrame)
@@ -66,7 +66,7 @@ class Vue():
 
 
     def createEventFrame(self):
-        self.root.geometry("300x300")
+        self.root.geometry("325x325")
         self.eventFrame = Frame(self.root)
         self.infoFrame = Frame(self.eventFrame)
         self.buttonFrame = Frame(self.eventFrame)
@@ -83,7 +83,7 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
 
     def createDetailsFrame(self):
-        self.root.geometry("300x300")
+        self.root.geometry("325x325")
         self.eventFrame = Frame(self.root)
         self.infoFrame = Frame(self.eventFrame)
         self.buttonFrame = Frame(self.eventFrame)
