@@ -95,7 +95,7 @@ class Connexion:
         url = self.urlserveur+"/updateForfait"
         params = {"forfait":forfait, "compagnieID": compagnieID}
         reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)        
+        mondict=json.loads(reptext)
         return mondict
 
 
@@ -121,6 +121,35 @@ class Connexion:
 
     def getLivrable(self):
         url = self.urlserveur+"/getLivrable"
+        params = {}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        print(mondict)
+        return mondict
+
+    def save_client(self, newclient):
+        url = self.urlserveur + "/newclient"
+        rep = self.appelserveur(url, newclient)
+        return "Nouveau Client enregistré"
+
+    def delete_client(self, clientID):
+        url = self.urlserveur + "/deleteClient"
+        params = {"id":clientID}
+        rep = self.appelserveur(url, params)
+        rep = json.loads(rep)
+        if rep == "Success":
+            return "Client supprimé avec succès"
+        else:
+            return "Une erreur est survenue"
+
+    def update_client(self, updateData):
+        url = self.urlserveur + "/updateClient"
+        rep = self.appelserveur(url, updateData)
+
+        return rep
+
+    def get_client(self):
+        url = self.urlserveur+"/getClient"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)

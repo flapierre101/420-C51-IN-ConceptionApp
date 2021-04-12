@@ -26,11 +26,6 @@ class Dbclient():
         info = self.curs.fetchall()
         return info
 
-    def trouverclients(self):
-        sqlnom = ("select compagnie, nom, courriel from 'client'")
-        self.curs.execute(sqlnom)
-        info = self.curs.fetchall()
-        return info
 
     def fermerdb(self):
         self.conn.close()
@@ -96,6 +91,25 @@ class Dbclient():
         pass
 
     def getEcheancierLivrable(self):
+        pass
+
+    ### Module Gestion Client
+    def deleteClient(self, clientID):
+        pass
+
+    def getClients(self):
+        sqlnom=("select compagnie, nom, courriel from 'client'")
+        self.curs.execute(sqlnom)
+        info=self.curs.fetchall()
+        return info
+
+    def getOneClient(self, client):
+        pass
+
+    def newClient(self, nom, email, tel, co, adr, rue, ville):
+        pass
+
+    def deleteClient(self, eventID):
         pass
 
 
@@ -355,6 +369,8 @@ def getLivrable():
     else:
         return repr("pas ok")
 
+
+### TODO ROUTES CLIENTS
 
 if __name__ == '__main__':
     # print(flask.__version__)
