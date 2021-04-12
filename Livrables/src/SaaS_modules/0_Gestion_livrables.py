@@ -1,4 +1,3 @@
-
 from tkinter import *
 from tkinter.ttk import *
 from tkcalendar import *
@@ -11,8 +10,7 @@ import re
 
 
 # à copier dans chaque nouveau module pour avoir la classe connexion
-import os
-import sys
+import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # import ../connexion.py
 from connexion import *
@@ -24,25 +22,23 @@ class Vue():
         self.livrableInfo = {}
         self.livrable = {}
         self.livrableParam = {}
-        self.messageLabel = None
-        self.welcomeLabel = Label(
-            self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
-        self.title = Label(
-            self.root, text="*** Gestion des livrables ***", font=("Arial", 16)).pack()
+        self.messageLabel = None     
+        self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
+        self.title = Label(self.root, text="*** Gestion des livrables ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.listeLivrables = self.parent.getLivrable()
+        self.listeprojets = self.parent.getLivrable()
         self.root.geometry("325x325")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
-        self.livrableList = Listbox(self.listFrame, width=30)
+        self.livrableList = Listbox(self.listFrame)
 
         row = 1
 
-        for i in self.listeLivrables:
-            self.livrableList.insert(row, i[1])
+        for i in self.listeprojets:
+            self.livrableList.insert(row, i[0])
             row += 1
 
         listLabel = Label(self.listFrame, text="Liste des livrables")
@@ -56,10 +52,9 @@ class Vue():
         self.gestionFrame.pack()
 
     def createButtonFrame(self):
-        self.createLibrable = Button(
-            self.buttonFrame, text="Créer un livrable", command=self.createLivrable)
-        self.livrableDetailButton = Button(
-            self.buttonFrame, text="Détail du livrable", command=self.livrableDetails)
+        self.createLibrable = Button(self.buttonFrame, text="Créer un livrable", command=self.createLivrable)
+        self.livrableDetailButton = Button(self.buttonFrame, text="Détail du livrable", command=self.livrableDetails)
+        
 
         self.createLibrable.pack(fill=Y)
         self.livrableDetailButton.pack(fill=Y)
@@ -67,6 +62,7 @@ class Vue():
     def createLivrable(self):
         self.gestionFrame.destroy()
         self.createLivrableFrame()
+
 
     def createLivrableFrame(self):
         self.root.geometry("325x325")
@@ -78,8 +74,7 @@ class Vue():
         self.createInfoFrame()
         self.createLibrableFrame()
 
-        title = Label(self.livrableFrame,
-                      text="* Créer un livrable *", font=("Arial", 14))
+        title = Label(self.livrableFrame, text="* Créer un livrable *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
@@ -95,8 +90,7 @@ class Vue():
 
         self.createInfoDetailsFrame()
 
-        title = Label(self.livrableFrame,
-                      text="* Modifier un évènement *", font=("Arial", 14))
+        title = Label(self.livrableFrame, text="* Modifier un évènement *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
@@ -113,18 +107,18 @@ class Vue():
 
             if "Nom" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.livrable["nom"])
+                entry.insert(0,self.livrable["nom"])
             elif "Date Début" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 entry.set_date(self.livrable["date_debut"])
             elif "Date Fin" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 entry.set_date(self.livrable["date_fin"])
             elif "Budget" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.livrable["budget"])
+                entry.insert(0,self.livrable["budget"])
             else:
                 entry = Entry(self.infoFrame)
                 entry.insert(0, self.livrable["desc"])
@@ -135,15 +129,13 @@ class Vue():
             self.livrableInfo[i] = entry
 
     def createDetailsButtonFrame(self):
-        self.updatelivrableButton = Button(
-            self.buttonFrame, text="Modifier", command=self.updatelivrable)
-        self.backButton = Button(
-            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.deleteLivrableButton = Button(
-            self.buttonFrame, text="Supprimer l'évènement", command=self.deleteLivrable)
+        self.updatelivrableButton = Button(self.buttonFrame, text="Modifier", command=self.updatelivrable)
+        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.deleteLivrableButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteLivrable)
         self.updatelivrableButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
         self.deleteLivrableButton.pack(side=RIGHT)
+
 
     def createInfoFrame(self):
         fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
@@ -155,7 +147,7 @@ class Vue():
 
             if "Date" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
             else:
                 entry = Entry(self.infoFrame)
 
@@ -164,13 +156,11 @@ class Vue():
             row += 1
             self.livrableInfo[i] = entry
 
+
     def createLibrableFrame(self):
-        self.createLibrable = Button(
-            self.buttonFrame, text="Créer", command=self.savelivrable)
-        self.backButton = Button(
-            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.clearButton = Button(
-            self.buttonFrame, text="Effacer", command=self.clearAllFields)
+        self.createLibrable = Button(self.buttonFrame, text="Créer", command=self.savelivrable)
+        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.clearButton = Button(self.buttonFrame, text="Effacer", command=self.clearAllFields)
         self.createLibrable.pack(side=LEFT)
         self.clearButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
@@ -211,6 +201,7 @@ class Vue():
 
         return param
 
+
     def backToMenu(self):
         self.livrableFrame.pack_forget()
         self.createModuleFrame()
@@ -231,7 +222,7 @@ class Vue():
 
         if selection != None:
 
-            for i in self.listeLivrables:
+            for i in self.listeprojets:
                 if i[0] == selection:
                     self.livrable["nom"] = i[0]
                     self.livrable["date_debut"] = i[1]
@@ -241,6 +232,7 @@ class Vue():
                     self.livrable["id"] = i[5]
                     print("print ln 218", self.livrable)
 
+
             self.gestionFrame.destroy()
             self.createDetailsFrame()
             self.createDetailsButtonFrame()
@@ -248,34 +240,28 @@ class Vue():
             print("Veuillez sélectionner un évènement")
 
 
+
+
 class Modele():
     def __init__(self, parent):
         self.parent = parent
-
-    def inscrireUser(self, args):
-        self.user = {}
-        self.username = args[2]
-        self.userRole = args[1]
-        self.courriel = args[3]
-
 
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
-        self.modele.inscrireUser(sys.argv)
         self.vue = Vue(self)
         self.vue.root.mainloop()
+        print(sys.argv)
 
     def getUsername(self):
-        return self.modele.username
+        self.username = sys.argv[2]
+        return self.username
 
     def getUserRole(self):
-        return self.modele.userRole
-
-    def getUserRole(self):
-        return self.modele.courriel
+        self.userRole = sys.argv[1]
+        return self.userRole
 
     def saveLivrable(self, newlivrable):
         reponseServeur = self.connexion.saveLivrable(newlivrable)
@@ -285,15 +271,18 @@ class Controleur():
         reponseServeur = self.connexion.deleteLivrable(livrableID)
         self.vue.showMessage(reponseServeur)
 
+
+
     def getLivrable(self):
-        return self.connexion.getLivrable(self.modele.courriel)
+        return self.connexion.getLivrable()
 
     def updatelivrable(self, updateData):
         reponseServeur = self.connexion.updateLivrable(updateData)
         self.vue.showMessage(reponseServeur)
 
-    def appelserveur(self, route, params):
-        return self.connexion.appelserveur(route, params)
+    def appelserveur(self,route,params):
+        return self.connexion.appelserveur(route,params)
+
 
 
 if __name__ == '__main__':

@@ -98,6 +98,18 @@ class Dbclient():
     def getEcheancierLivrable(self):
         pass
 
+    def getLivrablesUser(self, courriel):
+        sqlnom = ( "select * from 'personnels' where courriel=:courriel")
+        self.curs.execute(sqlnom, {'courriel': courriel})
+        usager = self.curs.fetchall()
+        if usager:
+            sqlnom = ("select * from 'livrables' where responsable=:qui")
+            self.curs.execute(sqlnom, {'qui': usager[0][0]})
+            livrables = self.curs.fetchall()
+            return livrables
+
+        return "Rien"
+
 
 class Dbman():
     def __init__(self):
@@ -348,10 +360,11 @@ def updateLivrable():
 @app.route('/getLivrable', methods=["GET", "POST"])
 def getLivrable():
     if request.method == "POST":
-        db = Dbclient()
-        events = db.getEvent()
+        courriel = request.form["courriel"]
+        db = Dbclient()        
+        livrables = db.getLivrablesUser(courriel)
         db.fermerdb()
-        return Response(json.dumps(events), mimetype='application/json')
+        return Response(json.dumps(livrables), mimetype='application/json')
     else:
         return repr("pas ok")
 

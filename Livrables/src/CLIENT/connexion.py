@@ -119,9 +119,9 @@ class Connexion:
         rep = self.appelserveur(url, updateData)
         return rep
 
-    def getLivrable(self):
+    def getLivrable(self, courriel):
         url = self.urlserveur+"/getLivrable"
-        params = {}
+        params = {"courriel" : courriel}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict
