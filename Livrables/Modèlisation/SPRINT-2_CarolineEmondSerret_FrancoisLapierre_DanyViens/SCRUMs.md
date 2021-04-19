@@ -1,0 +1,140 @@
+Caroline Emond-Serret
+François Lapierre
+Dany Viens
+
+
+# Journal des rencontres (SCRUMS) :
+# Sprint 1
+
+## 1 mars
+
+- Pas de scrum formel pour le début du sprit. Nous avons revisité la plannification globale après avoir analysé le code fourni en exemple.
+- Nous avons élaboré la plannification détaillée pour le sprint 1
+- Deux tables ont été créée pour la base de données.
+
+
+## 8 mars
+
+Ce que j'ai fait :
+Plannification détaillée du Sprint 1 pour tous lors de la dernière rencontre.
+
+Ce que je compte faire aujourd'hui :
+- Dany : complété la création des tables pour la base de données et commencer et compléter "ajouter usager"
+- François : Création des nouvelles route pour préparer l'accès aux données (côté serveur)
+- Caroline : Finir plannif détaillé création d'évènement et débuter la création du module création d'évènement.
+
+Les problèmes rencontrés :
+Premier sprint - donc pas de problème
+
+## 15 mars
+
+Ce que j'ai fait :
+- Dany : La création des tables de la base de données et modification des liens menant vers l'ancienne base de donnée.
+- François : Création des routes pour l'accès aux données des nouvelles tables et les fonctions dans le DBServeur et DBClient selon les besoins initiaux évoqués par l'équipe.
+- Caroline : Possibilité de créer un nouvel évènement. Elle a débuté le module principal gestion d'évènement.
+
+Ce que je compte faire
+-  Dany - Finir le login screen pour faire les liens avec notre base de données et ensuite pair programming.
+- François - Tester les fonctions faites la semaine dernière et ajouter les routes et fonctions d'accès au données manquantes.
+- Caroline - Continuer le module gestion d'évènement.
+
+Les problèmes rencontrés :
+- Dany - Plus de temps de prévu pour maîtrisé l'outil SQLlite studio. Je n'ai pas pu commencer mes autres tâches comme prévu.
+- François - Reste à tester les fonctions créé le 8 mars
+- Caroline - Le module création d'évènement devrait être lié au module gestion d'évènement.
+
+
+## 22 mars
+
+Ce que j'ai fait :
+- François : Finaliser la fonction pour rajouter nouvel évènement. S'agissait du premier test et les autres ne sont pas complétée
+- Caroline : La liste des évènements est affichées. Création des évènements est complété, mais relié à la base de données. Intégration de tkcalendar!
+- Dany : Amélioraiton des tables et lien vers la BD complété pour accueuil et ensuite pair programming avec François et Caroline (en alternance) pour aider.
+
+Ce que je compte faire
+-  Dany : Ajouter les détails des forfaits dans l'accueuil, créer la classe connexion et lier le serveur dans python anywhere pour qu'on aille tous la même BD.
+- François : Pair-programmer avec Caroline pour accélérer la lien avec la BD et travailler
+- Caroline : Compléter le lien de gestion évènement avec la BD (nouvel évènement) et créer la fonctionnalité pour afficher et modifier les évènements.
+
+Les problèmes rencontrés :
+- François : Plus de temps pour faire fonctionner les "insert" dans la base de données.
+- Dany : Problème avec François pour insérer les données - nous avons trouvé la solution après de multiples essais.
+- Caroline : Rien à signaler. La recherche de la documentation pour tkcalendar et de tkinter est ce qui prend le plus de temps.
+
+# Sprint 2
+
+## 29 mars
+
+- Préparation du planning détaillé
+
+Ce que j'ai fait :
+- François :  Travail sur les dernières méthode et route pour le module Gestion
+événement. -- UpdateEvent et newEvent
+- Dany :  Ajouter les détails des forfaits dans l'accueuil, créer la classe connexion. Mise à jour du document de gestion pour la fin du sprint 1. Section
+des détails des forfaits du SaaS
+- Caroline : Ajout d'un nouvel évènement avec insertion dans la BD. Fonctionnalité (Détail de l'événement) pour afficher et modifier les évènements.
+
+Ce que je compte faire
+- François : Terminé updateEvent pour qu'il modifie correctement la base de     données. Ajouter des try/except pour les succès et échec des requetes à la BD.
+- Dany : Gestion du modules pour un meilleur affichage et entamé la gestion des forfaits.
+- Caroline : Crée la requête, la route pour supprimer un événement et l'intégrer
+au module.
+
+Les problèmes rencontrés :
+- François : Les donnée modifiées ne change pas dans la base de données.
+- Dany : Manque de temps pour mise du projet sur "PythonAnyware"
+- Caroline : Plus de temps que prévue pour exécuter les tâches planifiées. Debuggage d'abord au niveau de la suppression dans la BD/call au serveur, puis dans la récupération du message de retour
+
+
+## 12 avril
+
+Ce que j'ai fait :
+- François : Terminé updateEvent pour qu'il modifie correctement la base de données. Ajouter des try/except pour les succès et échec des requetes à la BD. Intégré updateEvent avec la vue. Routes updateForfait. Tests et débuggage.
+- Dany : Affichage des modules selon forfait, affichage sans numéro de forfait et .py dans la vue. Gestion des forfaits mais reste encore quelques correctifs
+- Caroline : Créé la requête, la route pour supprimer un événement et l'intégrer
+au module. Tests et débuggage. Manque encore quelques petits correctifs pour fonctionner à 100%. Commencer le module Gestion des utilisateurs
+
+Ce que je compte faire
+- François : Commencer le module gestion de clients, vérification si routes auront besoin d'être révisées ou précisées.
+- Dany : Finir la gestion des forfaits pour l'affichage dans la vue, actualiser l'info avec message de confirmation. Commencer module livrable en se basant sur Gestion Event. Changer l'écran d'accueil pour l'écran de modules
+- Caroline : Terminer/débugger la fonction Supprimer un évènement et l'intégrer au module.
+
+Les problèmes rencontrés :
+- François : Fonctionnement des retour des messages d'erreurs pas encore super clair, temps de débuggage
+- Dany : Bugs rencontrés mais pas eu le temps de débugger Gestion de forfait car en fin de cours
+- Caroline : Problème d'accès à la BD et format du message de retour en JSON, pas eu le temps de terminer le débuggage à 100%
+
+
+## 19 avril 
+Ce que j'ai fait : 
+- François : Vue, Controler et Modele du Module Client - ébauche des routes. 
+- Dany : Gestion des forfaits complétés, message informatif apparaît. Début du module livrable et insertation de données dans la base de données pour visualisation. 
+- Caroline :  Fonction supression évènement fonctionne. Début du module gestion des utilisateurs, niveau vue. 
+
+Ce que je compte faire
+- François :  Finir module client : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
+- Dany : Terminer l'affichage du module échéancier, avancer la création des routes et réserver du temps pour débugage en prévision du 2e release.
+- Caroline :  Finir module utilisateurs : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
+
+Les problèmes rencontrés :
+- François : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation. 
+- Dany : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation (BIS). 
+- Caroline : Également, le temps d'adaptation pour réutiliser le code était plus long que prévu. 
+
+
+## TEMPLATE
+
+Ce que j'ai fait :
+- François :
+- Dany :
+- Caroline :
+
+Ce que je compte faire
+- François :
+- Dany :
+- Caroline :
+
+Les problèmes rencontrés :
+- François :
+- Dany :
+- Caroline :
