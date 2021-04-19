@@ -44,22 +44,8 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 
 ## Fonctionnement module général
 
-- Introduction
-
-
-- Général
-
-
-- Détaillé
-
-- Avertissements - problèmes connus
-
-- Fonctionnalités non implémentées
-
-## Fonctionnement module gestion d'événement
-
 - Introduction :
-    - Ceci est le module d'introduction pour les clients. 
+    - Ceci est le module d'introduction pour les clients.
     - Un client doit d'abord s'authentifier à l'aide de son courriel et mot de passe
 - Général
     - Selon le niveau de permission que l'utilisateur possède, il sera possible de consulter :
@@ -69,10 +55,10 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 
 
 - Détaillé
-    - Forfait : 
+    - Forfait :
         - Il est possible de choisir entre trois forfaits différents de cet écran. L'information est enregistrée automatiquemment. Des conditions s'appliquent, une facture pourrait vous être envoyée dans les cinq jours ouvrables.
         - Trois types de forfaits :
-            - Gratuit, Pro, Entreprise 
+            - Gratuit, Pro, Entreprise
     - Écran "Modules"
         - La liste affiche seulement les modules approprié pour le forfait
 
@@ -82,42 +68,64 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 - Fonctionnalités non implémentées
     - Changer le visuel
 
-## Fonctionnement module gestion de client
+## Fonctionnement module gestion d'événement
 
-- Introduction
-
+- Introduction: Module central permettant la gestion d'événements. Ce module permettra d'associer des éléments de d'autres modules afin de planifier un événement du début à la fin.
 
 - Général
-
+    - Affiche la liste des événements en cours
+    - Permet la création d'un nouvel événement
+    - Permet de consulter les détails d'un événements et de le modifier.
 
 - Détaillé
+    -
 
 - Avertissements - problèmes connus
+    - Verification des permissions d'utilisateurs
+
+- Fonctionnalités non implémentées et à venir:
+    - Une interface permettant de lié des livrables, des clients, des utilisateurs/employés, des échéanciers, etc... Ainsi voir tous les éléments d'un événement au même endroit.
+
+
+## Fonctionnement module gestion de client
+
+- Introduction: Module permettant de faire la gestion des clients de la compagnie.
+
+- Général
+    - affichage de la liste des clients
+    - ajout de nouveau clients
+    - supression de client existant
+    - À venir: modification d'une client existant
+
+- Avertissements - problèmes connus
+    - Disposition du UI temporaire. Rafinement à venir
 
 - Fonctionnalités non implémentées
+    - Modification des informations d'un client.
+    - Faire une recherche afin de trouver un client
 
 ## Fonctionnement module gestion de livrables
 
-### 
+###
     Gestion des livrables devant être complété dans l'évènement
 
 
 - Général
     - L'écran principal affiche la liste des livrables et non complété assignés à l'employé connecté
     - Peut obtenir les détails du livrable en choisant un item dans la liste et en appuyant sur le bouton "Detail"
-        - Donne la description, l'état, le propriétaire, l'échéancier associé et la date limite de l'échéancier. 
-    
+        - Donne la description, l'état, le propriétaire, l'échéancier associé et la date limite de l'échéancier.
+
 - Détaillé
     - Possibilité d'afficher les livrables complété ou non complété.
     - Dans l'écran "Détail du livrable", il est possible d'indiquer que le livrable est complété.
 
 - Avertissements - problèmes connus
-    - Si l'on ne choisit pas de livrables avant de cliquer sur "detail", le logiciel affichera une erreur. 
+    - Si l'on ne choisit pas de livrables avant de cliquer sur "detail", le logiciel affichera une erreur.
 
 - Fonctionnalités non implémentées
     - Afficher le détail de l'échéancier ou de l'évènement associé au livrable
     - Créer un nouveau livrable
-        -Drop-down menu pour l'évènement et l'échéancier associé. 
+        -Drop-down menu pour l'évènement et l'échéancier associé.
     - Afficher les livrables par évènement.
 
 ## Fonctionnement module gestion d'utilisateur
@@ -133,12 +141,3 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 - Avertissements - problèmes connus
 
 - Fonctionnalités non implémentées
-
-## Contrôles
-
-
-
-##
-
-
-##
