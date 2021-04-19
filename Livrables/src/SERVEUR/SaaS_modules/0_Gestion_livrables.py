@@ -144,7 +144,9 @@ class Vue():
         pass
 
     def completeLivrable(self):
-        pass
+        valeur = 0 if self.listeComplete == 1 else 1
+        self.parent.completeLivrable(self.livrable["id"], valeur)
+        self.backToMenu()
 
     def backToMenu(self):
         self.livrableFrame.pack_forget()
@@ -222,6 +224,9 @@ class Controleur():
 
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
+
+    def completeLivrable(self, id, valeur):
+        self.connexion.completeLivrable(id, valeur)
 
 
 if __name__ == '__main__':

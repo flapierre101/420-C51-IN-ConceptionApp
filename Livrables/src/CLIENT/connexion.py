@@ -114,9 +114,11 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def updateLivrable(self, updateData):
-        url = self.urlserveur + "/updateLivrable"
-        rep = self.appelserveur(url, updateData)
+    def completeLivrable(self, id, valeur):
+        url = self.urlserveur + "/completeLivrable"
+        params = { "valeur" : valeur,
+                    "id" : id}
+        rep = self.appelserveur(url, params)
         return rep
 
     def getLivrables(self, courriel, complete):
