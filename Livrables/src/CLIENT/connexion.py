@@ -91,6 +91,13 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
+    def getRoles(self, compagnie):
+        url = self.urlserveur + "/getRoles"
+        params = {"compagnie": compagnie}
+        reptext = self.appelserveur(url, params)
+        mondict = json.loads(reptext)
+        return mondict
+
     def changerForfait(self, forfait, compagnieID):
         url = self.urlserveur+"/updateForfait"
         params = {"forfait":forfait, "compagnieID": compagnieID}
