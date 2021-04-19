@@ -104,14 +104,19 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 
 ## Fonctionnement module gestion d'utilisateur
 
-- Introduction
+- Introduction: Module permettant de faire la gestion des utilisateurs
 
 
 - Général
-
-
-- Détaillé
+    - Affichage de la liste des utilisateurs courants avec leurs rôles et courriels
+    - Ajouter un nouvel utilisateur
+    - Modifier un utilisateur existant
+    - Ajouter un nouveau rôle
 
 - Avertissements - problèmes connus
+    -Fonction/route pour aller chercher les rôles existants n'est pas encore fonctionnel
+    
 
 - Fonctionnalités non implémentées
+    -Reste à valider si utilisateur est Admin et si non, retirer certains éléments et fonctionalités
+    -Modification d'un utilisateur et  ajout de rôle pas encore fait
