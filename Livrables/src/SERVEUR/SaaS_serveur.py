@@ -87,11 +87,43 @@ class Dbclient():
     def getFournisseurList(self):
         pass
 
-    def newFournisseur(self):
-        pass
+    def completeLivrable(self, id, valeur):                
+        sqlRequest = ('''
+            Update livrables
+                Set
+                    complete =:valeur
+            Where id=:id''')
+        try:
+            self.curs.execute(sqlRequest, {'id': id, 'valeur':valeur})
+            self.conn.commit()
+            return "Evenement mis a jour !"
+        except sqlite3.Error as er:
+            print(er)
+            return "Echec de la mise a jour !"
 
-    def getEcheancierLivrable(self):
-        pass
+    def populate(self, table, id):
+        sqlnom = ( "select * from " + table + " where id=:id")        
+        self.curs.execute(sqlnom, {'id': id, 'table': table})
+        rep = self.curs.fetchall()
+        if not rep:
+            rep = "Erreur"
+        else:
+            rep = rep[0]
+
+        return rep
+
+    def getLivrablesUser(self, courriel, complete):
+        sqlnom = ( "select * from 'personnels' where courriel=:courriel")
+        self.curs.execute(sqlnom, {'courriel': courriel})
+        usager = self.curs.fetchall()
+        if usager:
+            sqlnom = ("select * from 'livrables' where responsable=:qui and complete=:complete")
+            self.curs.execute(sqlnom, {'qui': usager[0][0], 'complete':complete})
+            livrables = self.curs.fetchall()
+            return livrables
+
+
+        return "Rien"
 
     ### Module Gestion Client
     def deleteClient(self, clientID):
@@ -367,21 +399,40 @@ def deleteLivrable():
         return repr("Error")
 
 
-@app.route('/updateLivrable', methods=["GET", "POST"])
-def updateLivrable():
-    if request.method == "POST":
-        pass
+@app.route('/completeLivrable', methods=["GET", "POST"])
+def completeLivrable():
+    if request.method == "POST":        
+        valeur = request.form["valeur"]
+        id = request.form["id"]
+        db = Dbclient()        
+        resultat = db.completeLivrable(id, valeur)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
-        return repr("Error")
+        return repr("pas ok")
 
 
-@app.route('/getLivrable', methods=["GET", "POST"])
+@app.route('/getLivrables', methods=["GET", "POST"])
 def getLivrable():
     if request.method == "POST":
-        db = Dbclient()
-        events = db.getEvent()
+        courriel = request.form["courriel"]
+        complete = request.form["complete"]
+        db = Dbclient()        
+        livrables = db.getLivrablesUser(courriel, complete)
         db.fermerdb()
-        return Response(json.dumps(events), mimetype='application/json')
+        return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/populate', methods=["GET", "POST"])
+def populate():
+    if request.method == "POST":
+        table = request.form["table"]
+        id = request.form["id"]
+        db = Dbclient()        
+        resultat = db.populate(table, id)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
         return repr("pas ok")
 

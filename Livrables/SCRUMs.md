@@ -105,6 +105,23 @@ Les problèmes rencontrés :
 - Caroline : Problème d'accès à la BD et format du message de retour en JSON, pas eu le temps de terminer le débuggage à 100%
 
 
+## 19 avril 
+Ce que j'ai fait : 
+- François : Vue, Controler et Modele du Module Client - ébauche des routes. 
+- Dany : Gestion des forfaits complétés, message informatif apparaît. Début du module livrable et insertation de données dans la base de données pour visualisation. 
+- Caroline :  Fonction supression évènement fonctionne. Début du module gestion des utilisateurs, niveau vue. 
+
+Ce que je compte faire
+- François :  Finir module client : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
+- Dany : Terminer l'affichage du module échéancier, avancer la création des routes et réserver du temps pour débugage en prévision du 2e release.
+- Caroline :  Finir module utilisateurs : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
+
+Les problèmes rencontrés :
+- François : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation. 
+- Dany : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation (BIS). 
+- Caroline : Également, le temps d'adaptation pour réutiliser le code était plus long que prévu. 
+
+
 ## TEMPLATE
 
 Ce que j'ai fait :

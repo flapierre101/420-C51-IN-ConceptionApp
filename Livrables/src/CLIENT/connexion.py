@@ -114,14 +114,24 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def updateLivrable(self, updateData):
-        url = self.urlserveur + "/updateLivrable"
-        rep = self.appelserveur(url, updateData)
+    def completeLivrable(self, id, valeur):
+        url = self.urlserveur + "/completeLivrable"
+        params = { "valeur" : valeur,
+                    "id" : id}
+        rep = self.appelserveur(url, params)
         return rep
 
-    def getLivrable(self):
-        url = self.urlserveur+"/getLivrable"
-        params = {}
+    def getLivrables(self, courriel, complete):
+        url = self.urlserveur+"/getLivrables"
+        params = {"courriel" : courriel, "complete": complete}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
+    def populate(self, table, id):
+        url = self.urlserveur+"/populate"
+        params = { "table" : table,
+                    "id" : id}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         print(mondict)
