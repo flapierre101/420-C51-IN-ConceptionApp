@@ -27,14 +27,14 @@ class Controleur:
         return self.modele.compagnie
 
     def telechargermodule(self,fichier):
-        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.droit, self.modele.compagnie)
+        self.connexion.telechargermodule(fichier, self.modele.nom, self.modele.droit, self.modele.courriel, self.modele.compagnie)
 
-    def identifierusager(self,nom,mdp):
-        reponse = self.connexion.identifierusager(nom, mdp)
-        if "inconnu" in reponse:
+    def identifierusager(self,courriel,mdp):
+        reponse = self.connexion.identifierusager(courriel, mdp)
+        if "inconnu" in reponse:            
             self.vue.avertirusager("Erreur","Mot de passe ou identifiant non reconnnu \n\nReesayer?")
-        else:
-            self.modele.inscrireusager(reponse)
+        else:            
+            self.modele.inscrireusager(reponse, courriel)
             self.vue.creercadreprincipal(self.modele)
             self.vue.changercadre("principal")
 
