@@ -56,8 +56,9 @@ class Vue():
         self.gestionFrame.pack()
 
     def createDetailsButtonFrame(self):
+        text = "Compléter" if self.livrable["status"] == "Incomplet" else "À faire"
         self.updatelivrableButton = Button(
-            self.buttonFrame, text="Compléter", command=self.completeLivrable)
+            self.buttonFrame, text=text, command=self.completeLivrable)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.updatelivrableButton.pack(side=LEFT)
