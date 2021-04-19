@@ -39,8 +39,7 @@ class Vue():
         self.buttonFrame = Frame(self.gestionFrame)
         self.livrableList = Listbox(self.listFrame, width=30)
 
-        row = 1
-        print(self.listeLivrables)
+        row = 1        
         for i in self.listeLivrables:
             self.livrableList.insert(row, i[1])
             row += 1
@@ -170,8 +169,6 @@ class Vue():
 
     def clearAllFields(self):
         self.livrableInfo["Nom"].delete(0, "end")
-        self.livrableInfo["Date Début"].set_date(datetime.date.today())
-        self.livrableInfo["Date Fin"].set_date(datetime.date.today())
         self.livrableInfo["Budget"].delete(0, "end")
         self.livrableInfo["Description"].delete(0, "end")
 
@@ -210,7 +207,7 @@ class Vue():
 
     def deleteLivrable(self):
         livrableID = int(self.livrable["id"])
-        print(livrableID)
+        
         self.parent.deleteLivrable(livrableID)
 
     def showMessage(self, reponseServeur):
@@ -225,12 +222,12 @@ class Vue():
         if selection != None:            
             for i in self.listeLivrables:
                 if i[1] == selection:
-                    print(i)
+                    
                     self.livrable["desc"] = i[1]
                     self.livrable["echeancier"] = self.parent.getEcheancier(i[2])                    
                     self.livrable["responsable"] = self.parent.getUser(i[3])
                     self.livrable["id"] = i[0]
-                    print("print ln 218", self.livrable)
+                    
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()

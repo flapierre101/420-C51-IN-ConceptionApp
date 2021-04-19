@@ -96,8 +96,7 @@ class Dbclient():
         pass
 
     def populate(self, table, id):
-        sqlnom = ( "select * from " + table + " where id=:id")
-        print(sqlnom)
+        sqlnom = ( "select * from " + table + " where id=:id")        
         self.curs.execute(sqlnom, {'id': id, 'table': table})
         rep = self.curs.fetchall()
         if not rep:
@@ -114,6 +113,7 @@ class Dbclient():
             self.curs.execute(sqlnom, {'qui': usager[0][0]})
             livrables = self.curs.fetchall()
             return livrables
+
 
         return "Rien"
 
