@@ -101,16 +101,18 @@ class Dbclient():
         rep = self.curs.fetchall()
         if not rep:
             rep = "Erreur"
+        else:
+            rep = rep[0]
 
         return rep
 
-    def getLivrablesUser(self, courriel):
+    def getLivrablesUser(self, courriel, complete):
         sqlnom = ( "select * from 'personnels' where courriel=:courriel")
         self.curs.execute(sqlnom, {'courriel': courriel})
         usager = self.curs.fetchall()
         if usager:
-            sqlnom = ("select * from 'livrables' where responsable=:qui")
-            self.curs.execute(sqlnom, {'qui': usager[0][0]})
+            sqlnom = ("select * from 'livrables' where responsable=:qui and complete=:complete")
+            self.curs.execute(sqlnom, {'qui': usager[0][0], 'complete':complete})
             livrables = self.curs.fetchall()
             return livrables
 
@@ -368,8 +370,9 @@ def updateLivrable():
 def getLivrable():
     if request.method == "POST":
         courriel = request.form["courriel"]
+        complete = request.form["complete"]
         db = Dbclient()        
-        livrables = db.getLivrablesUser(courriel)
+        livrables = db.getLivrablesUser(courriel, complete)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
     else:
