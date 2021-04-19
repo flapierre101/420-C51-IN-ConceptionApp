@@ -95,8 +95,15 @@ class Dbclient():
     def newFournisseur(self):
         pass
 
-    def getEcheancierLivrable(self):
-        pass
+    def populate(self, table, id):
+        sqlnom = ( "select * from " + table + " where id=:id")
+        print(sqlnom)
+        self.curs.execute(sqlnom, {'id': id, 'table': table})
+        rep = self.curs.fetchall()
+        if not rep:
+            rep = "Erreur"
+
+        return rep
 
     def getLivrablesUser(self, courriel):
         sqlnom = ( "select * from 'personnels' where courriel=:courriel")
@@ -357,7 +364,7 @@ def updateLivrable():
         return repr("Error")
 
 
-@app.route('/getLivrable', methods=["GET", "POST"])
+@app.route('/getLivrables', methods=["GET", "POST"])
 def getLivrable():
     if request.method == "POST":
         courriel = request.form["courriel"]
@@ -365,6 +372,18 @@ def getLivrable():
         livrables = db.getLivrablesUser(courriel)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/populate', methods=["GET", "POST"])
+def populate():
+    if request.method == "POST":
+        table = request.form["table"]
+        id = request.form["id"]
+        db = Dbclient()        
+        resultat = db.populate(table, id)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
         return repr("pas ok")
 

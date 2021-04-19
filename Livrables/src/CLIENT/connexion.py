@@ -119,9 +119,17 @@ class Connexion:
         rep = self.appelserveur(url, updateData)
         return rep
 
-    def getLivrable(self, courriel):
-        url = self.urlserveur+"/getLivrable"
+    def getLivrables(self, courriel):
+        url = self.urlserveur+"/getLivrables"
         params = {"courriel" : courriel}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
+    def populate(self, table, id):
+        url = self.urlserveur+"/populate"
+        params = { "table" : table,
+                    "id" : id}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict

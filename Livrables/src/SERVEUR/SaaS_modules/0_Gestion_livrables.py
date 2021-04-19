@@ -33,14 +33,14 @@ class Vue():
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.listeLivrables = self.parent.getLivrable()
+        self.listeLivrables = self.parent.getLivrables()
         self.root.geometry("325x325")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
         self.livrableList = Listbox(self.listFrame, width=30)
 
         row = 1
-
+        print(self.listeLivrables)
         for i in self.listeLivrables:
             self.livrableList.insert(row, i[1])
             row += 1
@@ -104,7 +104,7 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
 
     def createInfoDetailsFrame(self):
-        fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
+        fields = ["Nom", "Budget", "Description"]
         row = 0
 
         for i in fields:
@@ -113,18 +113,11 @@ class Vue():
 
             if "Nom" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.livrable["nom"])
-            elif "Date Début" in i:
-                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.livrable["date_debut"])
-            elif "Date Fin" in i:
-                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.livrable["date_fin"])
+                entry.insert(0, self.livrable["desc"])
+
             elif "Budget" in i:
                 entry = Entry(self.infoFrame)
-                entry.insert(0, self.livrable["budget"])
+                entry.insert(0, self.livrable["desc"])
             else:
                 entry = Entry(self.infoFrame)
                 entry.insert(0, self.livrable["desc"])
@@ -136,11 +129,11 @@ class Vue():
 
     def createDetailsButtonFrame(self):
         self.updatelivrableButton = Button(
-            self.buttonFrame, text="Modifier", command=self.updatelivrable)
+            self.buttonFrame, text="Modifier", command=self.updateLivrable)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.deleteLivrableButton = Button(
-            self.buttonFrame, text="Supprimer l'évènement", command=self.deleteLivrable)
+            self.buttonFrame, text="Supprimer le livrable", command=self.deleteLivrable)
         self.updatelivrableButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
         self.deleteLivrableButton.pack(side=RIGHT)
@@ -228,15 +221,14 @@ class Vue():
     def livrableDetails(self):
 
         selection = self.livrableList.get(self.livrableList.curselection())
-
-        print("ici", self.listeLivrables)
-        if selection != None:
+        
+        if selection != None:            
             for i in self.listeLivrables:
                 if i[1] == selection:
                     print(i)
                     self.livrable["desc"] = i[1]
-                    self.livrable["echeancier"] = i[2]
-                    self.livrable["responsable"] = i[3]
+                    self.livrable["echeancier"] = self.parent.getEcheancier(i[2])                    
+                    self.livrable["responsable"] = self.parent.getUser(i[3])
                     self.livrable["id"] = i[0]
                     print("print ln 218", self.livrable)
 
@@ -284,12 +276,18 @@ class Controleur():
         reponseServeur = self.connexion.deleteLivrable(livrableID)
         self.vue.showMessage(reponseServeur)
 
-    def getLivrable(self):
-        return self.connexion.getLivrable(self.modele.courriel)
+    def getLivrables(self):
+        return self.connexion.getLivrables(self.modele.courriel)
 
     def updatelivrable(self, updateData):
         reponseServeur = self.connexion.updateLivrable(updateData)
         self.vue.showMessage(reponseServeur)
+
+    def getEcheancier(self, id):
+        return self.connexion.populate("echeancier", id)
+
+    def getUser(self, id):
+        return self.connexion.populate("personnels", id)
 
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
