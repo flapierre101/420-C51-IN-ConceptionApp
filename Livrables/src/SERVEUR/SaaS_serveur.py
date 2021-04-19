@@ -98,19 +98,35 @@ class Dbclient():
         pass
 
     def getClients(self):
-        sqlnom=("select compagnie, nom, courriel from 'client'")
+        sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
+        print(info)
         return info
 
     def getOneClient(self, client):
         pass
 
-    def newClient(self, nom, email, tel, co, adr, rue, ville):
-        pass
+    def saveClient(self, param):
+        # sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
+        sqlRequest = "INSERT INTO 'client' (nom, courriel, tel, compagnie, adresse, rue, ville) VALUES (?,?,?,?,?,?,?)"
+        try:
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
 
-    def deleteClient(self, eventID):
-        pass
+
+    def deleteClient(self, clientId):
+        sqlRequest = "DELETE FROM 'client' where idclient = ?"
+        param = [clientId]
+        try:
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
 
 
 class Dbman():
@@ -371,6 +387,43 @@ def getLivrable():
 
 
 ### TODO ROUTES CLIENTS
+@app.route('/getClients', methods=["GET", "POST"])
+def getClients():
+    db = Dbclient()
+    data = db.getClients()
+    db.fermerdb()
+    return Response(json.dumps(data), mimetype='application/json')
+
+@app.route('/save_client', methods=["GET", "POST"])
+def save_client():
+    param = []
+    if request.method == "POST":
+        if request.form["nom"] != '':
+            param.append(request.form["nom"])
+            param.append(request.form["courriel"])
+            param.append(request.form["telephone"])
+            param.append(request.form["compagnie"])
+            param.append(request.form["adresse"])
+            param.append(request.form["rue"])
+            param.append(request.form["ville"])
+            db = Dbclient()
+            db.saveClient(param)
+        else:
+            print('erreur')
+        return "testnewclient"
+
+@app.route('/deleteClient', methods=["GET", "POST"])
+def deleteClient():
+    if request.method == "POST":
+        id = request.form["id"]
+        db = Dbclient()
+        db.deleteClient(id)
+        db.fermerdb()
+        message = "Success"
+    else:
+        message = "Error"
+    return Response(json.dumps(message), mimetype='application/json')
+
 
 if __name__ == '__main__':
     # print(flask.__version__)

@@ -128,8 +128,8 @@ class Connexion:
         return mondict
 
     def save_client(self, newclient):
-        url = self.urlserveur + "/newclient"
-        rep = self.appelserveur(url, newclient)
+        url = self.urlserveur + "/save_client"
+        self.appelserveur(url, newclient)
         return "Nouveau Client enregistré"
 
     def delete_client(self, clientID):
@@ -137,6 +137,7 @@ class Connexion:
         params = {"id":clientID}
         rep = self.appelserveur(url, params)
         rep = json.loads(rep)
+        print(rep)
         if rep == "Success":
             return "Client supprimé avec succès"
         else:
@@ -148,8 +149,8 @@ class Connexion:
 
         return rep
 
-    def get_client(self):
-        url = self.urlserveur+"/getClient"
+    def getClients(self):
+        url = self.urlserveur+"/getClients"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
