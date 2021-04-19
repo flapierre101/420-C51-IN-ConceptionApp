@@ -100,11 +100,78 @@ class Dbclient():
     def getFournisseurList(self):
         pass
 
-    def newFournisseur(self):
+    def completeLivrable(self, id, valeur):                
+        sqlRequest = ('''
+            Update livrables
+                Set
+                    complete =:valeur
+            Where id=:id''')
+        try:
+            self.curs.execute(sqlRequest, {'id': id, 'valeur':valeur})
+            self.conn.commit()
+            return "Evenement mis a jour !"
+        except sqlite3.Error as er:
+            print(er)
+            return "Echec de la mise a jour !"
+
+    def populate(self, table, id):
+        sqlnom = ( "select * from " + table + " where id=:id")        
+        self.curs.execute(sqlnom, {'id': id, 'table': table})
+        rep = self.curs.fetchall()
+        if not rep:
+            rep = "Erreur"
+        else:
+            rep = rep[0]
+
+        return rep
+
+    def getLivrablesUser(self, courriel, complete):
+        sqlnom = ( "select * from 'personnels' where courriel=:courriel")
+        self.curs.execute(sqlnom, {'courriel': courriel})
+        usager = self.curs.fetchall()
+        if usager:
+            sqlnom = ("select * from 'livrables' where responsable=:qui and complete=:complete")
+            self.curs.execute(sqlnom, {'qui': usager[0][0], 'complete':complete})
+            livrables = self.curs.fetchall()
+            return livrables
+
+
+        return "Rien"
+
+    ### Module Gestion Client
+    def deleteClient(self, clientID):
         pass
 
-    def getEcheancierLivrable(self):
+    def getClients(self):
+        sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
+        self.curs.execute(sqlnom)
+        info=self.curs.fetchall()
+        print(info)
+        return info
+
+    def getOneClient(self, client):
         pass
+
+    def saveClient(self, param):
+        # sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
+        sqlRequest = "INSERT INTO 'client' (nom, courriel, tel, compagnie, adresse, rue, ville) VALUES (?,?,?,?,?,?,?)"
+        try:
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
+
+
+    def deleteClient(self, clientId):
+        sqlRequest = "DELETE FROM 'client' where idclient = ?"
+        param = [clientId]
+        try:
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
 
 
 class Dbman():
@@ -357,23 +424,81 @@ def deleteLivrable():
         return repr("Error")
 
 
-@app.route('/updateLivrable', methods=["GET", "POST"])
-def updateLivrable():
-    if request.method == "POST":
-        pass
-    else:
-        return repr("Error")
-
-
-@app.route('/getLivrable', methods=["GET", "POST"])
-def getLivrable():
-    if request.method == "POST":
-        db = Dbclient()
-        events = db.getEvent()
+@app.route('/completeLivrable', methods=["GET", "POST"])
+def completeLivrable():
+    if request.method == "POST":        
+        valeur = request.form["valeur"]
+        id = request.form["id"]
+        db = Dbclient()        
+        resultat = db.completeLivrable(id, valeur)
         db.fermerdb()
-        return Response(json.dumps(events), mimetype='application/json')
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
         return repr("pas ok")
+
+
+@app.route('/getLivrables', methods=["GET", "POST"])
+def getLivrable():
+    if request.method == "POST":
+        courriel = request.form["courriel"]
+        complete = request.form["complete"]
+        db = Dbclient()        
+        livrables = db.getLivrablesUser(courriel, complete)
+        db.fermerdb()
+        return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/populate', methods=["GET", "POST"])
+def populate():
+    if request.method == "POST":
+        table = request.form["table"]
+        id = request.form["id"]
+        db = Dbclient()        
+        resultat = db.populate(table, id)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+
+### TODO ROUTES CLIENTS
+@app.route('/getClients', methods=["GET", "POST"])
+def getClients():
+    db = Dbclient()
+    data = db.getClients()
+    db.fermerdb()
+    return Response(json.dumps(data), mimetype='application/json')
+
+@app.route('/save_client', methods=["GET", "POST"])
+def save_client():
+    param = []
+    if request.method == "POST":
+        if request.form["nom"] != '':
+            param.append(request.form["nom"])
+            param.append(request.form["courriel"])
+            param.append(request.form["telephone"])
+            param.append(request.form["compagnie"])
+            param.append(request.form["adresse"])
+            param.append(request.form["rue"])
+            param.append(request.form["ville"])
+            db = Dbclient()
+            db.saveClient(param)
+        else:
+            print('erreur')
+        return "testnewclient"
+
+@app.route('/deleteClient', methods=["GET", "POST"])
+def deleteClient():
+    if request.method == "POST":
+        id = request.form["id"]
+        db = Dbclient()
+        db.deleteClient(id)
+        db.fermerdb()
+        message = "Success"
+    else:
+        message = "Error"
+    return Response(json.dumps(message), mimetype='application/json')
 
 
 if __name__ == '__main__':

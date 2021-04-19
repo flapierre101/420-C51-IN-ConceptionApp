@@ -106,7 +106,6 @@ Les problèmes rencontrés :
 
 
 ## 19 avril 
-
 Ce que j'ai fait : 
 - François : Vue, Controler et Modele du Module Client - ébauche des routes. 
 - Dany : Gestion des forfaits complétés, message informatif apparaît. Début du module livrable et insertation de données dans la base de données pour visualisation. 

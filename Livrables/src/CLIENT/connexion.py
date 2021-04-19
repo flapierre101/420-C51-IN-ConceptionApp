@@ -102,7 +102,7 @@ class Connexion:
         url = self.urlserveur+"/updateForfait"
         params = {"forfait":forfait, "compagnieID": compagnieID}
         reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)        
+        mondict=json.loads(reptext)
         return mondict
 
 
@@ -121,13 +121,53 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def updateLivrable(self, updateData):
-        url = self.urlserveur + "/updateLivrable"
-        rep = self.appelserveur(url, updateData)
+    def completeLivrable(self, id, valeur):
+        url = self.urlserveur + "/completeLivrable"
+        params = { "valeur" : valeur,
+                    "id" : id}
+        rep = self.appelserveur(url, params)
         return rep
 
-    def getLivrable(self):
-        url = self.urlserveur+"/getLivrable"
+    def getLivrables(self, courriel, complete):
+        url = self.urlserveur+"/getLivrables"
+        params = {"courriel" : courriel, "complete": complete}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
+    def populate(self, table, id):
+        url = self.urlserveur+"/populate"
+        params = { "table" : table,
+                    "id" : id}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        print(mondict)
+        return mondict
+
+    def save_client(self, newclient):
+        url = self.urlserveur + "/save_client"
+        self.appelserveur(url, newclient)
+        return "Nouveau Client enregistré"
+
+    def delete_client(self, clientID):
+        url = self.urlserveur + "/deleteClient"
+        params = {"id":clientID}
+        rep = self.appelserveur(url, params)
+        rep = json.loads(rep)
+        print(rep)
+        if rep == "Success":
+            return "Client supprimé avec succès"
+        else:
+            return "Une erreur est survenue"
+
+    def update_client(self, updateData):
+        url = self.urlserveur + "/updateClient"
+        rep = self.appelserveur(url, updateData)
+
+        return rep
+
+    def getClients(self):
+        url = self.urlserveur+"/getClients"
         params = {}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)

@@ -219,7 +219,6 @@ class Vue():
 
     def deleteEvent(self):
         eventID = int(self.event["id"])
-        print(eventID)
         self.parent.deleteEvent(eventID)
 
     def showMessage(self, reponseServeur):
