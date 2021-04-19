@@ -14,6 +14,32 @@ Indications sommaires d'usage
 Avertissements -(IE : ce qui ne fonctionnement pas)
 
 
+# Introduction
+
+### 
+    Nous avons choisi d'implanter un logiciel de gestion d'évènement : festival, musique, spectacle, etc.
+
+
+    L'objectif du logiciel est d'offrir différents modules permettent de gérer la préparation à un évènement, mais également d'aider à gérer les clients participants à l'évènement.
+
+
+    Listes des modules souhaités : gestion évènement, gestion des employés
+
+
+## Modèle d'affaire
+
+### 
+    Nous avons choisi d'utiliser un modèle d'affaire de type "Freemium"
+
+    Le modèle freemium permet aux utilisateurs d'utiliser gratuitement les fonctions de base d'un logiciel, puis de payer pour des "mises à niveau" du paquet de bases. Il s'agit d'une tactique populaire pour les entreprises qui débutent et qui tentent d'attirer les utilisateurs vers leur logiciel ou service.
+
+    - Le modèle d'affaires comporte trois niveaux de forfait : 
+        - Base, pro et entreprise
+        - Chaque forfait donne accès à différents modules ou des fonctionnalités plus avancées
+    - Est basé sur un montant annuel X pour les clients.
+    
+
+
 # Étapes à suivre pour utilisation:
 
 ## Fonctionnement module général
