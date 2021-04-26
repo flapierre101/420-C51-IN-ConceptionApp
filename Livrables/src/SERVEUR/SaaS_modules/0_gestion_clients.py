@@ -242,6 +242,7 @@ class Controleur():
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
 
+#TODO AJOUT DE CMPTE DU NB DE CLIENTS DANS LA BD
 
 if __name__ == '__main__':
     c = Controleur()
