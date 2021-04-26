@@ -23,6 +23,7 @@ class Vue():
         self.root = Tk()
         self.livrableInfo = {}
         self.livrable = {}
+        self.root.title("Production CDJ - Livrables")
         self.livrableParam = {}
         self.messageLabel = None
         self.welcomeLabel = Label(

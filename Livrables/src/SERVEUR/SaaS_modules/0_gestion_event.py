@@ -23,6 +23,7 @@ class Vue():
         self.root = Tk()
         self.eventInfo = {}
         self.event = {}
+        self.root.title("Production CDJ - Évènements")
         self.eventParam = {}
         self.messageLabel = None
         username = "Caroline"

@@ -18,6 +18,7 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.userInfo = {}
+        self.root.title("Production CDJ - Utilisateurs")
         self.user = {}
         self.userParam = {}
         self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
