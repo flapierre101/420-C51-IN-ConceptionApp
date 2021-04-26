@@ -122,6 +122,32 @@ Les problèmes rencontrés :
 - Caroline : Également, le temps d'adaptation pour réutiliser le code était plus long que prévu. 
 
 
+
+## 26 avril
+
+- Préparation du planning détaillé
+    Retard dans l'implentation complète des modules suivants :
+    - Livrables, échéanciers, utilisateurs, clients et réunions.
+- Le module réunion n'a pas été entammé, il sera enlevé du sprint 3 considérant les autres tâches à compléter. 
+- Le module finance aura le même sort
+- Le focus devra être d'ajouter des features aux modules existants et de faire des liens entre les fonctionnalités de chacun des modules. 
+- Nous avions planifié de ne pas tout pouvoir finir dans le Sprint 2.
+
+Ce que j'ai fait :
+- François : Finir la documentation - et avancement dans le module client. 
+- Dany :  Bonifier le readme, connexion du module livrable avec la BD, possibiliter de cocher un livrable comme complété
+- Caroline : Debugage pour remise - la vue a été complétée pour le dropdown et le reste du module utilisateur - reste connexion à faire avec la BD
+
+Ce que je compte faire
+- François :
+- Dany :
+- Caroline :
+
+Les problèmes rencontrés :
+- François : Manque de temps pour implenter fonction : modifier client. 
+- Dany : Manque de temps pour entâmer module échéancier
+- Caroline : Difficulté à implanter un dropdown menu.
+
 ## TEMPLATE
 
 Ce que j'ai fait :
