@@ -448,6 +448,7 @@ def getLivrable():
     else:
         return repr("pas ok")
 
+# Sers à populer les données propres à un foreign key dans une table. 
 @app.route('/populate', methods=["GET", "POST"])
 def populate():
     if request.method == "POST":

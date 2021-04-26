@@ -18,6 +18,7 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.title("Production CDJ - Réunions")
         self.clientInfo = {}
         self.welcomeLabel = Label(self.root, text="Bienvenue ", font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack()
