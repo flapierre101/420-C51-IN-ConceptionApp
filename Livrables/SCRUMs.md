@@ -139,9 +139,9 @@ Ce que j'ai fait :
 - Caroline : Debugage pour remise - la vue a été complétée pour le dropdown et le reste du module utilisateur - reste connexion à faire avec la BD
 
 Ce que je compte faire
-- François :
-- Dany :
-- Caroline :
+- François : Finir les modifications dans le module client conformément aux objectifs du sprint 2
+- Dany : Créer des modules "template" pour les modules qui ne seront pas implantés formellement. Ajout des notes dans livrable et possibilité d'ajouter un livrable avec dropdown. 
+- Caroline : Finir les modifications dans le module utilisateurs, conformément aux objectifs du sprint 2
 
 Les problèmes rencontrés :
 - François : Manque de temps pour implenter fonction : modifier client. 
