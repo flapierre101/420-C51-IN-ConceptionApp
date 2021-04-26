@@ -68,6 +68,11 @@ class Connexion:
         rep = self.appelserveur(url, newLivrable)
         return "Nouvel évènement enregistré"
 
+    def saveUser(self, newUser):
+        url = self.urlserveur + "/newUser"
+        rep = self.appelserveur(url, newUser)
+        return "Nouvel évènement enregistré"
+
     def deleteEvent(self, livrableID):
         url = self.urlserveur + "/deleteEvent"
         params = {"id":livrableID}
@@ -91,10 +96,10 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
-    def getRoles(self, compagnie):
+    def getRoles(self):
         url = self.urlserveur + "/getRoles"
-        params = {"compagnie": compagnie}
-        reptext = self.appelserveur(url, params)
+        params = {}
+        reptext = self.appelserveur(url,params)
         mondict = json.loads(reptext)
         return mondict
 
