@@ -1,6 +1,7 @@
 
 from tkinter import *
 from tkinter.ttk import *
+from tkinter import scrolledtext
 from tkcalendar import *
 import urllib.request
 import urllib.parse
@@ -60,9 +61,12 @@ class Vue():
         text = "Compléter" if self.livrable["status"] == "Incomplet" else "À faire"
         self.updatelivrableButton = Button(
             self.buttonFrame, text=text, command=self.completeLivrable)
+        self.updateNotes = Button(
+            self.buttonFrame, text="Enregistrer notes", command=self.updateLivrables)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.updatelivrableButton.pack(side=LEFT)
+        self.updateNotes.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
 
     def createButtonFrame(self):
@@ -100,21 +104,21 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
 
     def createInfoDetailsFrame(self):
-        fields = ["Description","État", "Propriétaire", "Échéancier associé", "Date Limite"]
+        fields = ["Titre","État", "Propriétaire", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
-
+        #print(self.parent.getUserRole())
         for i in fields:
 
             entryLabel = Label(self.infoFrame, text=i)
 
-            if "Description" in i:
+            if "Titre" in i:
                 entry = Entry(self.infoFrame)
                 entry.insert(0, self.livrable["desc"])
             elif "État" in i:
                 entry = Entry(self.infoFrame)
                 entry.insert(0, self.livrable["status"])
             elif "Propriétaire" in i:
-                entry = Entry(self.infoFrame, width=50)
+                entry = Entry(self.infoFrame, width=60)
                 entry.insert(0, self.livrable["responsable"][3] + " " + self.livrable["responsable"][2])
             elif "Échéancier associé" in i:
                 entry = Entry(self.infoFrame)
@@ -122,15 +126,29 @@ class Vue():
             elif "Date Limite" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.livrable["echeancier"][2])     
-                print(self.livrable["echeancier"][2])
+                entry.set_date(self.livrable["echeancier"][2])                     
+            elif "Notes" in i:                
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)                        
+                entry.insert(END, self.livrable["notes"])
                 
-            entry.config(state='disabled')
+
+            if not "Notes" in i:
+                entry.config(state='disabled')
+
+
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
             self.livrableInfo[i] = entry
+        text = self.livrableInfo["Notes"].get("1.0",END).strip()
+   
 
+
+    def updateLivrables(self):
+        params = {}
+        params["id"] = self.livrable["id"]
+        params["notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()        
+        self.parent.updateLivrable(params)
 
 
 
@@ -169,6 +187,7 @@ class Vue():
                     self.livrable["echeancier"] = self.parent.getEcheancier(i[2])                    
                     self.livrable["responsable"] = self.parent.getUser(i[3])
                     self.livrable["id"] = i[0]
+                    self.livrable["notes"] = i[5]
                     
 
             self.gestionFrame.destroy()
@@ -204,7 +223,7 @@ class Controleur():
     def getUserRole(self):
         return self.modele.userRole
 
-    def getUserRole(self):
+    def getUserEmail(self):
         return self.modele.courriel
 
     def saveLivrable(self, newlivrable):
@@ -229,6 +248,10 @@ class Controleur():
 
     def completeLivrable(self, id, valeur):
         self.connexion.completeLivrable(id, valeur)
+
+    def updateLivrable(self, params):
+        self.connexion.updateLivrable(params)
+  
 
 
 if __name__ == '__main__':

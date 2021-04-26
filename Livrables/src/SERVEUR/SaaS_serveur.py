@@ -100,6 +100,20 @@ class Dbclient():
     def getFournisseurList(self):
         pass
 
+    def updateLivrable(self, id, notes):                
+        sqlRequest = ('''
+            Update livrables
+                Set
+                    notes =:notes
+            Where id =:id''')
+        try:
+            self.curs.execute(sqlRequest, {'id': id, 'notes':notes})
+            self.conn.commit()
+            return "Evenement mis a jour !"
+        except sqlite3.Error as er:
+            print(er)
+            return "Echec de la mise a jour !"
+
     def completeLivrable(self, id, valeur):                
         sqlRequest = ('''
             Update livrables
@@ -444,6 +458,18 @@ def getLivrable():
         complete = request.form["complete"]
         db = Dbclient()        
         livrables = db.getLivrablesUser(courriel, complete)
+        db.fermerdb()
+        return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/updateLivrable', methods=["GET", "POST"])
+def updateLivrable():
+    if request.method == "POST":
+        id = request.form["id"]
+        notes = request.form["notes"]
+        db = Dbclient()        
+        livrables = db.updateLivrable(id, notes)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
     else:

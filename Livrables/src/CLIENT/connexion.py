@@ -141,7 +141,7 @@ class Connexion:
                     "id" : id}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
-        print(mondict)
+        #print(mondict)
         return mondict
 
     def save_client(self, newclient):
@@ -172,3 +172,9 @@ class Connexion:
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict
+
+    def updateLivrable(self, params):
+        url = self.urlserveur + "/updateLivrable"
+        rep = self.appelserveur(url, params)
+        print(rep)
+        
