@@ -67,29 +67,18 @@ class Vue():
         self.createAddButton.pack(fill=Y)
         self.createModifyButton.pack(fill=Y)
 
-    def getEntryData(self):
-        param = {}
-        item = self.userList.selection()
-
-        for i in item:
-            print(self.userList.item(i, "values"))
-
-        return param
-
     def createDropDownMenu(self):
-        company = self.parent.getCompany()
-        #self.roles = self.parent.getExistingRoles(company)
-        # TODO get correct sql request/table
-
         n = StringVar()
         rolesMenu = Combobox(self.infoFrame, width=27,
                                     textvariable=n)
 
-        # Adding combobox drop down list
-        rolesMenu['values'] = ('Admin','RH','Employé')
+        self.existingRoles = self.parent.getExistingRoles()
+
+        rolesMenu['values'] = self.existingRoles
+        rolesMenu.state(["readonly"])
 
         rolesMenu.grid(column=1, row=15)
-        rolesMenu.current(2)
+        rolesMenu.current(0)
         return rolesMenu
 
     def createNewUser(self):
@@ -132,6 +121,7 @@ class Vue():
                 entry.configure(state="disabled")
             elif "Rôle" in i:
                 entry = self.createDropDownMenu()
+
             else:
                 entry = Entry(self.infoFrame)
 
@@ -140,9 +130,22 @@ class Vue():
             row += 1
             self.userInfo[i] = entry
 
+    def getUserEntryData(self):
+        param = {}
+
+        param["compagnie"] = self.parent.getCompany()
+        param["defaultPassword"] = "AAAaaa111"
+        param["nom"] = self.userInfo["Nom"].get()
+        param["prenom"] = self.userInfo["Prénom"].get()
+        param["courriel"] = self.userInfo["Courriel"].get()
+        param["role"] = self.userInfo["Rôle"].get()
+        param["dateEmbauche"] = self.userInfo["Date d'embauche"].get_date()
+
+        self.parent.saveUSer(param)
+
 
     def createUserButtonFrame(self):
-        self.createUserButton = Button(self.buttonFrame, text="Créer", command=self.parent.saveUser)
+        self.createUserButton = Button(self.buttonFrame, text="Créer", command=self.getUserEntryData)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.clearButton = Button(self.buttonFrame, text="Effacer", command=self.clearAllFields)
         self.createUserButton.pack(side=LEFT)
@@ -187,9 +190,8 @@ class Controleur():
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
-    def getExistingRoles(self,company):
-        #return self.connexion.getRoles(company)
-        pass
+    def getExistingRoles(self):
+        return self.connexion.getRoles()
 
     def getUsername(self):
         self.username = sys.argv[2]
@@ -199,17 +201,21 @@ class Controleur():
         self.userRole = sys.argv[1]
         return self.userRole
 
+    def createNewRole(self, newRole):
+        pass
+
     def getCompany(self):
         companyInfo = []
         self.companyInfo = json.loads(sys.argv[4])
         self.company = self.companyInfo["nom"]
+        print(self.company)
         return self.company
 
     def getUsers(self):
         return self.connexion.trouvermembres()
 
     def saveUser(self, newUser):
-        #reponseServeur = self.connexion.saveEvent(newUser)
+        reponseServeur = self.connexion.saveEvent(newUser)
         #self.vue.showMessage(reponseServeur)
         pass
 

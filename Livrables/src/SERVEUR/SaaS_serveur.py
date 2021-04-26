@@ -26,14 +26,6 @@ class Dbclient():
         info = self.curs.fetchall()
         return info
 
-    def getRoles(self, compagnie):
-        sqlRequest = ("select distinct titre from 'membres' where compagnie = ?")
-        param = []
-        param.append(compagnie)
-        self.curs.execute(sqlRequest,param)
-        info = self.curs.fetchall()
-        return info
-
     def trouverclients(self):
         sqlnom = ("select compagnie, nom, courriel from 'client'")
         self.curs.execute(sqlnom)
@@ -194,6 +186,12 @@ class Dbman():
             return [usager, compagnie]
         return "inconnu"
 
+    def getRoles(self):
+        sqlRequest = "select distinct droit from 'utilisateurs'"
+        self.curs.execute(sqlRequest)
+        info = self.curs.fetchall()
+        return info
+
     def trouvermembres(self):
         sqlnom = (
             "select Prenom || ' ' || Nom as nomcomplet, courriel,role, droit from 'utilisateurs'")
@@ -294,9 +292,8 @@ def getEvent():
 @app.route('/getRoles', methods=["GET", "POST"])
 def getRoles():
     if request.method == "POST":
-        db = Dbclient()
-        compagnie = request.form["compagnie"]
-        roles = db.getRoles(compagnie)
+        db = Dbman()
+        roles = db.getRoles()
         db.fermerdb()
         return Response(json.dumps(roles), mimetype='application/json')
     else:
@@ -406,6 +403,8 @@ def newEvent():
         db = Dbclient()
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
+
+#@app.route('/newUser'), methods=["GET", "POST"]
 
 
 @app.route('/newLivrable', methods=["GET", "POST"])
