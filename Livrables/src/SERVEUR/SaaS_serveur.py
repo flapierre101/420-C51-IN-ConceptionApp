@@ -31,7 +31,6 @@ class Dbclient():
         self.conn.close()
 
     def updateEvent(self, updateData):
-        print("dans updateDAta ", updateData)
         sqlRequest = ('''
             Update Evenement
                 Set
@@ -87,7 +86,7 @@ class Dbclient():
     def getFournisseurList(self):
         pass
 
-    def completeLivrable(self, id, valeur):                
+    def completeLivrable(self, id, valeur):
         sqlRequest = ('''
             Update livrables
                 Set
@@ -102,7 +101,7 @@ class Dbclient():
             return "Echec de la mise a jour !"
 
     def populate(self, table, id):
-        sqlnom = ( "select * from " + table + " where id=:id")        
+        sqlnom = ( "select * from " + table + " where id=:id")
         self.curs.execute(sqlnom, {'id': id, 'table': table})
         rep = self.curs.fetchall()
         if not rep:
@@ -126,8 +125,6 @@ class Dbclient():
         return "Rien"
 
     ### Module Gestion Client
-    def deleteClient(self, clientID):
-        pass
 
     def getClients(self):
         sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
@@ -156,6 +153,26 @@ class Dbclient():
         try:
             self.curs.execute(sqlRequest, param)
             self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
+
+    def updateClient(self, updatedData):
+        sqlRequest = '''
+        UPDATE client
+            SET nom = ?,
+                courriel = ?,
+                tel = ?,
+                compagnie = ?,
+                adresse = ?,
+                rue = ?,
+                ville = ?
+            WHERE idclient = ?
+       '''
+        try:
+           self.curs.execute(sqlRequest, updatedData)
+           self.conn.commit()
+           return "Success"
 
         except sqlite3.Error as er:
             print(er)
@@ -321,7 +338,7 @@ def deleteEvent():
     if request.method == "POST":
         id = request.form["id"]
         db = Dbclient()
-        eventDeleted = db.deleteEvent(id)
+        db.deleteEvent(id)
         db.fermerdb()
         message = "Success"
     else:
@@ -359,15 +376,6 @@ def updateForfait():
     else:
         return repr("Error")
 
-# @app.route('/updateBDCorpo', methods = ["GET", "POST"])
-# def updateBDCorpo():
-#     if request.method == "POST":
-#         tableName = request.form["tableName"]
-#         colonne = request.form["colonne"]
-#         valeur = request.form["valeur"]
-#         _id = request.form["_id"]
-#         db = Dbman()
-#         db.updateDB(tableName, colonne, valeur, _id)
 
 
 @app.route('/newEvent', methods=["GET", "POST"])
@@ -401,10 +409,10 @@ def deleteLivrable():
 
 @app.route('/completeLivrable', methods=["GET", "POST"])
 def completeLivrable():
-    if request.method == "POST":        
+    if request.method == "POST":
         valeur = request.form["valeur"]
         id = request.form["id"]
-        db = Dbclient()        
+        db = Dbclient()
         resultat = db.completeLivrable(id, valeur)
         db.fermerdb()
         return Response(json.dumps(resultat), mimetype='application/json')
@@ -417,7 +425,7 @@ def getLivrable():
     if request.method == "POST":
         courriel = request.form["courriel"]
         complete = request.form["complete"]
-        db = Dbclient()        
+        db = Dbclient()
         livrables = db.getLivrablesUser(courriel, complete)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
@@ -429,7 +437,7 @@ def populate():
     if request.method == "POST":
         table = request.form["table"]
         id = request.form["id"]
-        db = Dbclient()        
+        db = Dbclient()
         resultat = db.populate(table, id)
         db.fermerdb()
         return Response(json.dumps(resultat), mimetype='application/json')
@@ -457,8 +465,13 @@ def save_client():
             param.append(request.form["adresse"])
             param.append(request.form["rue"])
             param.append(request.form["ville"])
-            db = Dbclient()
-            db.saveClient(param)
+            try:
+                db = Dbclient()
+                rep = db.saveClient(param)
+                return rep
+            except:
+                rep = "Erreur dans la route"
+                return rep
         else:
             print('erreur')
         return "testnewclient"
@@ -474,6 +487,31 @@ def deleteClient():
     else:
         message = "Error"
     return Response(json.dumps(message), mimetype='application/json')
+
+@app.route('/updateClient', methods=["GET", "POST"])
+def updateClient():
+    param = []
+    if request.method == "POST":
+        if request.form["idclient"] != '':
+            param.append(request.form["nom"])
+            param.append(request.form["courriel"])
+            param.append(request.form["telephone"])
+            param.append(request.form["compagnie"])
+            param.append(request.form["adresse"])
+            param.append(request.form["rue"])
+            param.append(request.form["ville"])
+            param.append(request.form["idclient"])
+            try:
+                db = Dbclient()
+                rep = db.updateClient(param)
+                
+                return rep
+            except:
+                rep = "Erreur dans la route"
+                return rep
+        else:
+            print('erreur')
+        return "testnewclient"
 
 
 if __name__ == '__main__':

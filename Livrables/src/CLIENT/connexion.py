@@ -153,9 +153,10 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def update_client(self, updateData):
+    def updateClient(self, updateData):
         url = self.urlserveur + "/updateClient"
         rep = self.appelserveur(url, updateData)
+        
 
         return rep
 
