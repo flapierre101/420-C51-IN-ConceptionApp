@@ -71,7 +71,12 @@ class Connexion:
     def saveUser(self, newUser):
         url = self.urlserveur + "/newUser"
         rep = self.appelserveur(url, newUser)
-        return "Nouvel évènement enregistré"
+        rep = json.loads(rep)
+
+        if rep == "Success":
+            return "Nouvel utilisateur créé avec succès"
+        else:
+            return "Une erreur est survenue"
 
     def deleteEvent(self, livrableID):
         url = self.urlserveur + "/deleteEvent"
@@ -102,6 +107,20 @@ class Connexion:
         reptext = self.appelserveur(url,params)
         mondict = json.loads(reptext)
         return mondict
+
+    def getPermissions(self):
+        url = self.urlserveur + "/getPermissions"
+        params = {}
+        reptext = self.appelserveur(url,params)
+        mondict = json.loads(reptext)
+        return mondict
+
+    def getCompanyID(self, compagnie):
+        url = self.urlserveur+"/getCompanyID"
+        params = {"compagnie":compagnie}
+        rep = self.appelserveur(url,params)
+        rep = json.loads(rep)
+        return rep
 
     def changerForfait(self, forfait, compagnieID):
         url = self.urlserveur+"/updateForfait"

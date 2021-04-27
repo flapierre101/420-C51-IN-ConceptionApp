@@ -59,7 +59,7 @@ class Vue():
         self.gestionFrame.pack()
 
     def createButtonFrame(self):
-        if self.parent.getUserRole() == "Admin":
+        if self.parent.getUserPermissions() == "Admin":
             self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
             self.createEventButton.pack(fill=Y)
 
@@ -141,7 +141,7 @@ class Vue():
 
     def createDetailsButtonFrame(self):
 
-        if self.parent.getUserRole() == "Admin":
+        if self.parent.getUserPermissions() == "Admin":
             self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
             self.updateEventButton.pack(side=LEFT)
             self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
