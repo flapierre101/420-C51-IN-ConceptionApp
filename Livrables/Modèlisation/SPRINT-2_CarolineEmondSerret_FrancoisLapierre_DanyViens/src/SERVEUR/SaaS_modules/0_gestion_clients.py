@@ -18,7 +18,6 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
-        self.root.title("Production CDJ - Réunions")
         self.clientInfo = {}
         self.welcomeLabel = Label(self.root, text="Bienvenue ", font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack()
@@ -54,22 +53,24 @@ class Vue():
         self.clientsTableau.heading("Rue",text="Rue")
         self.clientsTableau.heading("Ville",text="Ville")
 
+        print(self.listeclients[0][1])
         tempo = 'odd'
         for i in range(len(self.listeclients)):
             if tempo == 'odd':
                 self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tag='odd')
+                print(tempo)
                 tempo ='event'
             else:
+                print(tempo)
 
                 self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tag='event')
                 tempo ='odd'
 
-        # Not working ATM
+        #Not working ATM
         # self.clientsTableau.tag_configure('odd', background='Black', foreground='White')
         # self.clientsTableau.tag_configure('event', background='White', foreground='Black')
-
         listLabel = Label(self.listFrame, text="Liste des Clients")
-        listLabel.pack(side=TOP)
+        listLabel.pack()
         self.clientsTableau.pack(side=TOP)
 
         self.listFrame.pack(side=LEFT)
@@ -81,12 +82,12 @@ class Vue():
 
     def createButtonFrame(self):
         self.createClientButton = Button(self.buttonFrame, width=25, text="Nouveau Client", command=self.create_client)
-        self.clientDetailsButton = Button(self.buttonFrame, width=25, text="Modifier le Client", command=self.modifier_client)
+        self.clientDetailsButton = Button(self.buttonFrame, width=25, text="Modifier le Client")
         self.suppClientButton = Button(self.buttonFrame, width=25, text="Supprimer le Client", command=self.delete_client)
 
-        self.createClientButton.grid(column=0, row=0, pady=5, padx=5)
-        self.clientDetailsButton.grid(column=1, row=0, pady=5, padx=5)
-        self.suppClientButton.grid(column=2, row=0, pady=5, padx=5)
+        self.createClientButton.pack(fill=Y)
+        self.clientDetailsButton.pack(fill=Y)
+        self.suppClientButton.pack(fill=Y)
 
     def create_client(self):
         self.gestionFrame.destroy()
@@ -109,64 +110,33 @@ class Vue():
         self.clientFrame.pack()
         self.confirmationFrame.pack(pady=10)
 
-    def modifier_client(self):
-        # self.gestionFrame.destroy()
-        self.gestionFrame.pack_forget()
-        self.modif_client_frame()
+    def createInfoFrame(self):
+        fields = ["Nom", "Courriel", "Téléphone", "Compagnie", "Adresse", "Rue", "Ville"]
 
-    def modif_client_frame(self):
-        self.root.geometry("1000x800")
-        self.clientFrame = Frame(self.root)
-        self.infoFrame = Frame(self.clientFrame)
-        self.buttonFrame = Frame(self.clientFrame)
-        self.confirmationFrame = Frame(self.clientFrame)
-
-        itemsTableau = self.clientsTableau.selection()
-
-        self.createInfoFrame(self.clientsTableau.item(itemsTableau)['values'])
-        self.modifClientButtonFrame()
-
-        title = Label(self.clientFrame, text="* Modifier un Client *", font=("Arial", 14))
-        title.pack()
-        self.clientFrame.pack()
-        self.infoFrame.pack()
-        self.buttonFrame.pack()
-        self.confirmationFrame.pack(pady=10)
-
-    def createInfoFrame(self, selection=None):
-        fields = ["ID", "Nom", "Courriel", "Téléphone", "Compagnie", "Adresse", "Rue", "Ville"]
         for i in range (len(fields)):
             entryLabel = Label(self.infoFrame, text=fields[i], width=25)
 
             entry = Entry(self.infoFrame)
 
-            if selection is not None:
-                entry.insert(0,selection[i])
-                # entry.insert(0, "placeholder")
-            if fields[i] == "ID":
-                entry.configure(state=DISABLED)
-
             entryLabel.grid(row=i, column=0, sticky=E+W)
             entry.grid(row=i, column=1, sticky=E+W)
             self.clientInfo[fields[i]] = entry
 
-
     def createClientButtonFrame(self):
-        self.newClientButton = Button(self.buttonFrame, text="Ajouter", command=self.save_client)
+
+        self.newClientButton = Button(self.buttonFrame, text="Ajouter/Modifier", command=self.save_client)
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        # self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement")
         self.newClientButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
-
-    def modifClientButtonFrame(self):
-        self.updateClientButton = Button(self.buttonFrame, text="Modifier", command=self.update_client)
-        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.updateClientButton.pack(side=LEFT)
-        self.backButton.pack(side=RIGHT)
-
+        # self.deleteEventButton.pack(side=RIGHT)
 
     def backToMenu(self):
         self.clientFrame.pack_forget()
         self.createModuleFrame()
+
+    def modif_client_frame(self):
+        pass
 
     def clearAllFields(self):
         pass
@@ -178,9 +148,7 @@ class Vue():
 
 
     def update_client(self):
-        self.clientInfo = self.getEntryData()
-        self.parent.update_client(self.clientInfo)
-        self.backToMenu()
+        pass
 
     def getEntryData(self):
         param = {}
@@ -191,22 +159,28 @@ class Vue():
         param["adresse"] = self.clientInfo["Adresse"].get()
         param["rue"] = self.clientInfo["Rue"].get()
         param["ville"] = self.clientInfo["Ville"].get()
-        param["idclient"] = self.clientInfo["ID"].get()
+        print(param)
         return param
 
     def delete_client(self):
         clientId = ""
         for _id in self.clientsTableau.selection():
             clientId = self.clientsTableau.item(_id,"text")
+            print(clientId)
 
         self.parent.delete_client(clientId)
         self.gestionFrame.pack_forget()
         self.createModuleFrame()
 
 
+
     def showMessage(self, reponseServeur):
         self.messageLabel = Label(self.confirmationFrame, text=reponseServeur)
-        self.messageLabel.pack(side=BOTTOM)
+        self.messageLabel.pack()
+
+    def client_details(self):
+        pass
+
 
 
 class Modele():
@@ -234,16 +208,12 @@ class Controleur():
         reponseServeur = self.connexion.delete_client(clientId)
         self.vue.showMessage(reponseServeur)
 
-    def update_client(self, updatedData):
-        reponseServeur = self.connexion.updateClient(updatedData)
-        reponseServeur = str(reponseServeur)
-        print("***********************LA REPONSE:  ", type(reponseServeur))
-        self.vue.showMessage(reponseServeur)
+    def update_client(self):
+        pass
 
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
 
-#TODO AJOUT DE CMPTE DU NB DE CLIENTS DANS LA BD
 
 if __name__ == '__main__':
     c = Controleur()

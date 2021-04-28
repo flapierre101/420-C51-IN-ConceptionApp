@@ -68,16 +68,6 @@ class Connexion:
         rep = self.appelserveur(url, newLivrable)
         return "Nouvel évènement enregistré"
 
-    def saveUser(self, newUser):
-        url = self.urlserveur + "/newUser"
-        rep = self.appelserveur(url, newUser)
-        rep = json.loads(rep)
-
-        if rep == "Success":
-            return "Nouvel utilisateur créé avec succès"
-        else:
-            return "Une erreur est survenue"
-
     def deleteEvent(self, livrableID):
         url = self.urlserveur + "/deleteEvent"
         params = {"id":livrableID}
@@ -101,26 +91,12 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
-    def getRoles(self):
+    def getRoles(self, compagnie):
         url = self.urlserveur + "/getRoles"
-        params = {}
-        reptext = self.appelserveur(url,params)
+        params = {"compagnie": compagnie}
+        reptext = self.appelserveur(url, params)
         mondict = json.loads(reptext)
         return mondict
-
-    def getPermissions(self):
-        url = self.urlserveur + "/getPermissions"
-        params = {}
-        reptext = self.appelserveur(url,params)
-        mondict = json.loads(reptext)
-        return mondict
-
-    def getCompanyID(self, compagnie):
-        url = self.urlserveur+"/getCompanyID"
-        params = {"compagnie":compagnie}
-        rep = self.appelserveur(url,params)
-        rep = json.loads(rep)
-        return rep
 
     def changerForfait(self, forfait, compagnieID):
         url = self.urlserveur+"/updateForfait"
@@ -184,10 +160,9 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def updateClient(self, updateData):
+    def update_client(self, updateData):
         url = self.urlserveur + "/updateClient"
         rep = self.appelserveur(url, updateData)
-        
 
         return rep
 

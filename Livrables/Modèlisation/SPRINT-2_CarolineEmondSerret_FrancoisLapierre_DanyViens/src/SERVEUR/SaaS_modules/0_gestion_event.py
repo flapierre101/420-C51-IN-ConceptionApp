@@ -23,9 +23,9 @@ class Vue():
         self.root = Tk()
         self.eventInfo = {}
         self.event = {}
-        self.root.title("Production CDJ - Évènements")
         self.eventParam = {}
         self.messageLabel = None
+        username = "Caroline"
         self.welcomeLabel = Label(
             self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
         self.title = Label(
@@ -39,7 +39,6 @@ class Vue():
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
         self.eventList = Listbox(self.listFrame)
-        self.confirmationFrame = Frame(self.gestionFrame)
 
         row = 1
 
@@ -55,18 +54,16 @@ class Vue():
 
         self.createButtonFrame()
         self.buttonFrame.pack()
-        self.confirmationFrame.pack(pady=10)
         self.gestionFrame.pack()
 
     def createButtonFrame(self):
-        if self.parent.getUserPermissions() == "Admin":
-            self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-            self.createEventButton.pack(fill=Y)
-
+        self.createEventButton = Button(
+            self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
         self.eventDetailsButton = Button(
             self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
         #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
+        self.createEventButton.pack(fill=Y)
         self.eventDetailsButton.pack(fill=Y)
 
     def createNewEvent(self):
@@ -140,16 +137,15 @@ class Vue():
             self.eventInfo[i] = entry
 
     def createDetailsButtonFrame(self):
-
-        if self.parent.getUserPermissions() == "Admin":
-            self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
-            self.updateEventButton.pack(side=LEFT)
-            self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
-            self.deleteEventButton.pack(side=RIGHT)
-
-        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.updateEventButton = Button(
+            self.buttonFrame, text="Modifier", command=self.updateEvent)
+        self.backButton = Button(
+            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.deleteEventButton = Button(
+            self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
+        self.updateEventButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
-
+        self.deleteEventButton.pack(side=RIGHT)
 
     def createInfoFrame(self):
         fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
@@ -232,8 +228,9 @@ class Vue():
 
     def eventDetails(self):
 
-        try:
-            selection = self.eventList.get(self.eventList.curselection())
+        selection = self.eventList.get(self.eventList.curselection())
+
+        if selection != None:
 
             for i in self.listeprojets:
                 if i[0] == selection:
@@ -248,9 +245,8 @@ class Vue():
             self.gestionFrame.destroy()
             self.createDetailsFrame()
             self.createDetailsButtonFrame()
-
-        except:
-            self.showMessage(" Svp choisir un évènement")
+        else:
+            print("Veuillez sélectionner un évènement")
 
 
 class Modele():
