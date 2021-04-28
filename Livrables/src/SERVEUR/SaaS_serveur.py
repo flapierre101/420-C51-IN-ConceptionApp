@@ -445,7 +445,7 @@ def populate():
         return repr("pas ok")
 
 
-### TODO ROUTES CLIENTS
+### ROUTES CLIENTS
 @app.route('/getClients', methods=["GET", "POST"])
 def getClients():
     db = Dbclient()
@@ -504,7 +504,7 @@ def updateClient():
             try:
                 db = Dbclient()
                 rep = db.updateClient(param)
-                
+
                 return rep
             except:
                 rep = "Erreur dans la route"
