@@ -201,10 +201,34 @@ class Dbman():
         return "inconnu"
 
     def getRoles(self):
-        sqlRequest = "select distinct droit from 'utilisateurs'"
+        sqlRequest = ("select distinct role from 'utilisateurs'")
         self.curs.execute(sqlRequest)
         info = self.curs.fetchall()
         return info
+
+    def getPermissions(self):
+        sqlRequest = ("select distinct droit from 'utilisateurs'")
+        self.curs.execute(sqlRequest)
+        info = self.curs.fetchall()
+        return info
+
+    def getCompanyID(self,company):
+        sqlRequest = ("select id from clients where nom = ?")
+        param = [company]
+        self.curs.execute(sqlRequest,param)
+        id = self.curs.fetchall()
+        return id
+
+    def newUser(self, compagnie,password,nom,prenom,courriel,role,droit):
+        sqlRequest = ("INSERT INTO 'utilisateurs'(compagnie, password, nom, prenom, courriel, role, droit) VALUES (?,?,?,?,?,?,?)")
+        try:
+            param = [compagnie,password,nom,prenom,courriel,role,droit]
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
+
 
     def trouvermembres(self):
         sqlnom = (
@@ -313,6 +337,27 @@ def getRoles():
     else:
         return repr("Erreur")
 
+@app.route('/getPermissions', methods=["GET", "POST"])
+def getPermissions():
+    if request.method == "POST":
+        db = Dbman()
+        permissions = db.getPermissions()
+        db.fermerdb()
+        return Response(json.dumps(permissions), mimetype='application/json')
+    else:
+        return repr("Erreur")
+
+@app.route('/getCompanyID', methods=["GET", "POST"])
+def getCompanyID():
+    if request.method == "POST":
+        db = Dbman()
+        compagnie = request.form["compagnie"]
+        id = db.getCompanyID(compagnie)
+        db.fermerdb()
+        return Response(json.dumps(id), mimetype='application/json')
+    else:
+        return repr("Erreur")
+
 
 @app.route('/trouvermembres', methods=["GET", "POST"])
 def trouvermembres():
@@ -418,7 +463,25 @@ def newEvent():
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
 
-#@app.route('/newUser'), methods=["GET", "POST"]
+@app.route('/newUser', methods=["GET", "POST"])
+def newUser():
+    message = ""
+    if request.method == "POST":
+
+        try:
+            compagnie = request.form["compagnie"]
+            password = request.form["defaultPassword"]
+            nom = request.form["nom"]
+            prenom = request.form["prenom"]
+            courriel = request.form["courriel"]
+            role = request.form["role"]
+            droit = request.form["droit"]
+            db = Dbman()
+            rep = db.newUser(compagnie,password,nom,prenom,courriel,role,droit)
+            message = "Success"
+        except:
+            message = "Erreur"
+        return Response(json.dumps(message), mimetype='application/json')
 
 
 @app.route('/newLivrable', methods=["GET", "POST"])
