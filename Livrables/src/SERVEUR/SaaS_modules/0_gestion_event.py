@@ -58,6 +58,7 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
         self.gestionFrame.pack()
 
+
     def createButtonFrame(self):
         if self.parent.getUserPermissions() == "Admin":
             self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)

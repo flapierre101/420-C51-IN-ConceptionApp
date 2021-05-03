@@ -74,7 +74,17 @@ class Connexion:
         rep = json.loads(rep)
 
         if rep == "Success":
-            return "Nouvel utilisateur créé avec succès"
+            return "Success"
+        else:
+            return "Une erreur est survenue"
+
+    def saveEmployee(self, newEmployee):
+        url = self.urlserveur + "/newEmployee"
+        rep = self.appelserveur(url, newEmployee)
+        rep = json.loads(rep)
+
+        if rep == "Success":
+            return "Success"
         else:
             return "Une erreur est survenue"
 
@@ -101,6 +111,14 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
+    def getDate(self, email):
+        url = self.urlserveur+"/getDate"
+        params = {}
+        params = {"email":email}
+        rep = self.appelserveur(url,params)
+        rep = json.loads(rep)
+        return rep
+
     def getRoles(self):
         url = self.urlserveur + "/getRoles"
         params = {}
@@ -120,6 +138,15 @@ class Connexion:
         params = {"compagnie":compagnie}
         rep = self.appelserveur(url,params)
         rep = json.loads(rep)
+        return rep
+
+    def getUser(self, email):
+        url = self.urlserveur+"/getUser"
+        params = {}
+        params = {"email":email}
+        rep = self.appelserveur(url,params)
+        rep = json.loads(rep)
+        print("CONNEXION JSON: ", rep)
         return rep
 
     def changerForfait(self, forfait, compagnieID):
