@@ -24,7 +24,6 @@ class Vue():
         self.welcomeLabel = Label(self.root, text="Bienvenue ", font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
-        self.maxClientLabel = Label(self.root, text="Client: "+str(len(self.listeclients))+"/"+str(self.maxClient) , font=("Arial", 12)).pack()
         # self.confirmationFrame = None
 
     def createModuleFrame(self):
@@ -35,6 +34,7 @@ class Vue():
         self.clientsTableau = Treeview(self.gestionFrame, show = 'headings')
         self.confirmationFrame = Frame(self.gestionFrame)
         self.listeclients = self.parent.getClients()
+        self.maxClientLabel = Label(self.gestionFrame, text="Client: "+str(len(self.listeclients))+"/"+str(self.maxClient) , font=("Arial", 12)).pack()
 
 
         self.clientsTableau["column"] = ("ID", "Nom", "Courriel", "Téléphone", "Compagnie", "Adresse", "Rue", "Ville")
