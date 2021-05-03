@@ -187,7 +187,7 @@ class Connexion:
     def updateClient(self, updateData):
         url = self.urlserveur + "/updateClient"
         rep = self.appelserveur(url, updateData)
-        
+
 
         return rep
 
@@ -202,3 +202,9 @@ class Connexion:
         url = self.urlserveur + "/updateLivrable"
         rep = self.appelserveur(url, params)
         print(rep)
+        
+    def getMaxClient(self, coData):
+        url = self.urlserveur+"/getMaxClient"
+        params = {"coData": coData}
+        repInt=self.appelserveur(url,params)
+        return json.loads(repInt)
