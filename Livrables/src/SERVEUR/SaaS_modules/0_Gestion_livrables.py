@@ -72,6 +72,8 @@ class Vue():
     def createButtonFrame(self):
         self.livrableDetailButton = Button(
             self.buttonFrame, text="Détail du livrable", command=self.livrableDetails)
+
+        self.createAddButton = Button(self.buttonFrame, text="Ajouter un livrable",command=self.createNewLivrable)
         if self.listeComplete == 0:            
             self.showcompletebtn = Button(
                 self.buttonFrame, text="Afficher livrables completés", command=self.invertLivrableList)
@@ -79,6 +81,7 @@ class Vue():
             self.showcompletebtn = Button(
                 self.buttonFrame, text="Afficher livrables incomplets", command=self.invertLivrableList)
         self.livrableDetailButton.pack(fill=Y)
+        self.createAddButton .pack(fill=Y)
         self.showcompletebtn.pack(fill=Y)
 
     def invertLivrableList(self):
@@ -141,8 +144,63 @@ class Vue():
             row += 1
             self.livrableInfo[i] = entry
         text = self.livrableInfo["Notes"].get("1.0",END).strip()
-   
 
+    def createNewLivrable(self):
+        self.gestionFrame.destroy()
+        self.addLivrableFrame()
+    
+    def addLivrableFrame(self):
+        self.root.geometry("325x325")
+        self.livrableFrame = Frame(self.root)
+        self.infoFrame = Frame(self.userFrame)
+        self.buttonFrame = Frame(self.userFrame)
+        self.confirmationFrame = Frame(self.userFrame)
+
+        self.createLivrableFrame()
+        self.createLivrableButtonFrame()
+
+        title = Label(self.livrableFrame,
+                      text="* Créer un livrable *", font=("Arial", 14))
+        title.pack()
+        self.infoFrame.pack()
+        self.buttonFrame.pack()
+        self.livrableFrame.pack()
+        self.confirmationFrame.pack(pady=10)
+   
+    def createLivrableFrame(self):
+        fields = ["Titre","État", "Propriétaire", "Échéancier associé", "Date Limite", "Notes"]
+        row = 0
+        #print(self.parent.getUserRole())
+        for i in fields:
+
+            entryLabel = Label(self.infoFrame, text=i)
+
+            if "Titre" in i:
+                entry = Entry(self.infoFrame)
+            elif "État" in i:
+                entry = Entry(self.infoFrame)
+            elif "Propriétaire" in i:
+                entry = Entry(self.infoFrame, width=60)
+            elif "Échéancier associé" in i:
+                entry = Entry(self.infoFrame)
+            elif "Date Limite" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')                    
+            elif "Notes" in i:                
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)                        
+                
+
+            entryLabel.grid(row=row, column=0, sticky=E + W)
+            entry.grid(row=row, column=1, sticky=E + W)
+            row += 1
+            self.livrableInfo[i] = entry
+
+    def createLivrableButtonFrame(self):
+        self.createUserButton = Button(self.buttonFrame, text="Créer", command=self.saveLivrable)
+        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.createUserButton.pack(side=LEFT)
+        self.clearButton.pack(side=LEFT)
+        self.backButton.pack(side=RIGHT)
 
     def updateLivrables(self):
         params = {}
@@ -153,9 +211,9 @@ class Vue():
 
 
     def clearAllFields(self):
-        self.livrableInfo["Nom"].delete(0, "end")
-        self.livrableInfo["Budget"].delete(0, "end")
-        self.livrableInfo["Description"].delete(0, "end")
+        self.livrableInfo["Titre"].delete(0, "end")
+        self.livrableInfo["État"].delete(0, "end")
+        self.livrableInfo["Propriétaire"].delete(0, "end")
 
         if self.messageLabel:
             self.messageLabel.destroy()

@@ -260,6 +260,9 @@ class Modele():
 
 class Controleur():
     def __init__(self):
+        print(sys.argv[4])
+        y = json.loads(sys.argv[4])
+        print(y["forfait"])
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
