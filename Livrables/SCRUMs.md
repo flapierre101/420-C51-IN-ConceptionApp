@@ -105,11 +105,11 @@ Les problèmes rencontrés :
 - Caroline : Problème d'accès à la BD et format du message de retour en JSON, pas eu le temps de terminer le débuggage à 100%
 
 
-## 19 avril 
-Ce que j'ai fait : 
-- François : Vue, Controler et Modele du Module Client - ébauche des routes. 
-- Dany : Gestion des forfaits complétés, message informatif apparaît. Début du module livrable et insertation de données dans la base de données pour visualisation. 
-- Caroline :  Fonction supression évènement fonctionne. Début du module gestion des utilisateurs, niveau vue. 
+## 19 avril
+Ce que j'ai fait :
+- François : Vue, Controler et Modele du Module Client - ébauche des routes.
+- Dany : Gestion des forfaits complétés, message informatif apparaît. Début du module livrable et insertation de données dans la base de données pour visualisation.
+- Caroline :  Fonction supression évènement fonctionne. Début du module gestion des utilisateurs, niveau vue.
 
 Ce que je compte faire
 - François :  Finir module client : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
@@ -117,9 +117,9 @@ Ce que je compte faire
 - Caroline :  Finir module utilisateurs : routes et requêtes de la BD - et associer les fonctions aux boutons et réserver du temps pour débugage en prévision du 2e release.
 
 Les problèmes rencontrés :
-- François : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation. 
-- Dany : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation (BIS). 
-- Caroline : Également, le temps d'adaptation pour réutiliser le code était plus long que prévu. 
+- François : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation.
+- Dany : La reprise du module gestion event comme template à prit plus de temps que prévu à être adapté à une autre utilisation (BIS).
+- Caroline : Également, le temps d'adaptation pour réutiliser le code était plus long que prévu.
 
 
 
@@ -128,25 +128,43 @@ Les problèmes rencontrés :
 - Préparation du planning détaillé
     Retard dans l'implentation complète des modules suivants :
     - Livrables, échéanciers, utilisateurs, clients et réunions.
-- Le module réunion n'a pas été entammé, il sera enlevé du sprint 3 considérant les autres tâches à compléter. 
+- Le module réunion n'a pas été entammé, il sera enlevé du sprint 3 considérant les autres tâches à compléter.
 - Le module finance aura le même sort
-- Le focus devra être d'ajouter des features aux modules existants et de faire des liens entre les fonctionnalités de chacun des modules. 
+- Le focus devra être d'ajouter des features aux modules existants et de faire des liens entre les fonctionnalités de chacun des modules.
 - Nous avions planifié de ne pas tout pouvoir finir dans le Sprint 2.
 
 Ce que j'ai fait :
-- François : Finir la documentation - et avancement dans le module client. 
+- François : Finir la documentation - et avancement dans le module client.
 - Dany :  Bonifier le readme, connexion du module livrable avec la BD, possibiliter de cocher un livrable comme complété
 - Caroline : Debugage pour remise - la vue a été complétée pour le dropdown et le reste du module utilisateur - reste connexion à faire avec la BD
 
 Ce que je compte faire
 - François : Finir les modifications dans le module client conformément aux objectifs du sprint 2
-- Dany : Créer des modules "template" pour les modules qui ne seront pas implantés formellement. Ajout des notes dans livrable et possibilité d'ajouter un livrable avec dropdown. 
+- Dany : Créer des modules "template" pour les modules qui ne seront pas implantés formellement. Ajout des notes dans livrable et possibilité d'ajouter un livrable avec dropdown.
 - Caroline : Finir les modifications dans le module utilisateurs, conformément aux objectifs du sprint 2
 
 Les problèmes rencontrés :
-- François : Manque de temps pour implenter fonction : modifier client. 
+- François : Manque de temps pour implenter fonction : modifier client.
 - Dany : Manque de temps pour entâmer module échéancier
 - Caroline : Difficulté à implanter un dropdown menu.
+
+## 3 mai
+
+Ce que j'ai fait :
+- François : Finition du module client. Modifier et check nb de clients selon forfait.
+- Dany : Ajout de notes dans Livrables et création de module "placeholder" pour module non-implémenté.
+- Caroline : Ajout dans la BD les utilisateur et un nouveau role avec un dropdown.
+
+Ce que je compte faire
+- François : Rapidement, mettre le max client sur le serveur. Prendre qql minutes pour l'affichage des messages. Pair programming avec coéquipier.
+- Dany : Ajout de livrables et ajout échéancier à partir du module event.
+- Caroline : Modifier des rôles employé. Verifier si de la supression d'un evenement supprime les enfants liés.
+
+Les problèmes rencontrés :
+- François : Affichage des messages ne fonctionne pas. Max clients doit être dans saas_serveur.
+- Dany : Complexcité de coordonné le module livrable et échéencier simultatément.
+- Caroline : Gestion du dropdown et changement/modifier les infos dans BD
+
 
 ## TEMPLATE
 
