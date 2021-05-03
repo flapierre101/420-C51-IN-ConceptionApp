@@ -276,6 +276,10 @@ class Controleur():
     def getUserRole(self):
         self.userRole = sys.argv[1]
         return self.userRole
+    
+    def getUserPermissions(self):
+        print(sys.argv)
+        return sys.argv[1]
 
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
