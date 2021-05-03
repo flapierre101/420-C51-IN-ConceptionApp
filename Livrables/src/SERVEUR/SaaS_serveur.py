@@ -144,6 +144,15 @@ class Dbclient():
 
         return "Rien"
 
+    def getEcheanciers(self, event):
+        sqlnom = ( "select desc, id, duedate from 'echeancier' where evenement=:event")
+        self.curs.execute(sqlnom, {'event': event})
+        echeanciers = self.curs.fetchall()
+        if echeanciers:
+            return echeanciers
+
+        return "Rien"
+
     ### Module Gestion Client
     def deleteClient(self, clientID):
         pass
@@ -522,6 +531,18 @@ def getLivrable():
         livrables = db.getLivrablesUser(courriel, complete)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/getEcheanciers', methods=["GET", "POST"])
+def getEcheanciers():
+    if request.method == "POST":
+        event = request.form["event"]
+
+        db = Dbclient()        
+        echanciers = db.getEcheanciers(event)
+        db.fermerdb()
+        return Response(json.dumps(echanciers), mimetype='application/json')
     else:
         return repr("pas ok")
 

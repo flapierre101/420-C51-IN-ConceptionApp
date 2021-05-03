@@ -19,13 +19,6 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
-    def getEvent(self):
-        url = self.urlserveur+"/getEvent"
-        params = {}
-        reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        return mondict
-
     def trouvermodules(self):
         url = self.urlserveur+"/trouvermodules"
         params = {}
@@ -159,6 +152,13 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
+    def getEcheanciers(self, idEvent):
+        url = self.urlserveur+"/getEcheanciers"
+        params = {"event" : idEvent}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
     def populate(self, table, id):
         url = self.urlserveur+"/populate"
         params = { "table" : table,
@@ -201,4 +201,3 @@ class Connexion:
         url = self.urlserveur + "/updateLivrable"
         rep = self.appelserveur(url, params)
         print(rep)
-        
