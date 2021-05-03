@@ -90,7 +90,11 @@ class Vue():
 
     def create_client(self):
         self.gestionFrame.destroy()
-        self.create_client_frame()
+        if self.parent.verif():
+            self.create_client_frame()
+
+        else:
+            self.showMessage("Vous avez atteind le votre maximum de client.")
 
     def create_client_frame(self):
         self.root.geometry("1000x800")
@@ -98,6 +102,7 @@ class Vue():
         self.infoFrame = Frame(self.clientFrame)
         self.buttonFrame = Frame(self.clientFrame)
         self.confirmationFrame = Frame(self.clientFrame)
+        self.showMessage(len(self.getClients()))
 
         self.createInfoFrame()
         self.createClientButtonFrame()
@@ -213,11 +218,22 @@ class Modele():
     def __init__(self, parent):
         self.parent = parent
 
+    def verif (self):
+        forfait = self.userInfo['forfait']
+        nbclient = len(self.getClients());
+        if forfait == 1 and nbclient <= 500 or forfait == 2 and nbclient <= 1500 or forfait == 3 and nbclient < 1:
+            return True
+        else:
+            return False
+
+
+
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
+        self.userInfo = json.loads(sys.argv[4])
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
@@ -242,6 +258,9 @@ class Controleur():
 
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
+
+    def verif(self):
+        return Modele.verif(self)
 
 #TODO AJOUT DE CMPTE DU NB DE CLIENTS DANS LA BD
 
