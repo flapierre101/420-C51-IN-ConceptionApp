@@ -11,7 +11,9 @@ import sqlite3
 app = Flask(__name__)
 
 app.secret_key = "qwerasdf1234"
-
+MAX_CLIENT_F1 = 5
+MAX_CLIENT_F2 = 500
+MAX_CLIENT_F3 = 1500
 
 class Dbclient():
     def __init__(self):
@@ -43,7 +45,6 @@ class Dbclient():
         self.conn.close()
 
     def updateEvent(self, updateData):
-        print("dans updateDAta ", updateData)
         sqlRequest = ('''
             Update Evenement
                 Set
@@ -109,7 +110,21 @@ class Dbclient():
     def getFournisseurList(self):
         pass
 
-    def completeLivrable(self, id, valeur):                
+    def updateLivrable(self, id, notes):
+        sqlRequest = ('''
+            Update livrables
+                Set
+                    notes =:notes
+            Where id =:id''')
+        try:
+            self.curs.execute(sqlRequest, {'id': id, 'notes':notes})
+            self.conn.commit()
+            return "Evenement mis a jour !"
+        except sqlite3.Error as er:
+            print(er)
+            return "Echec de la mise a jour !"
+
+    def completeLivrable(self, id, valeur):
         sqlRequest = ('''
             Update livrables
                 Set
@@ -124,7 +139,7 @@ class Dbclient():
             return "Echec de la mise a jour !"
 
     def populate(self, table, id):
-        sqlnom = ( "select * from " + table + " where id=:id")        
+        sqlnom = ( "select * from " + table + " where id=:id")
         self.curs.execute(sqlnom, {'id': id, 'table': table})
         rep = self.curs.fetchall()
         if not rep:
@@ -147,15 +162,22 @@ class Dbclient():
 
         return "Rien"
 
+    def getEcheanciers(self, event):
+        sqlnom = ( "select desc, id, duedate from 'echeancier' where evenement=:event")
+        self.curs.execute(sqlnom, {'event': event})
+        echeanciers = self.curs.fetchall()
+        if echeanciers:
+            return echeanciers
+
+        return "Rien"
+
     ### Module Gestion Client
-    def deleteClient(self, clientID):
-        pass
 
     def getClients(self):
         sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
-        print(info)
+        # print(info)
         return info
 
     def getOneClient(self, client):
@@ -170,6 +192,7 @@ class Dbclient():
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
+            return er
 
 
     def deleteClient(self, clientId):
@@ -178,6 +201,26 @@ class Dbclient():
         try:
             self.curs.execute(sqlRequest, param)
             self.conn.commit()
+
+        except sqlite3.Error as er:
+            print(er)
+
+    def updateClient(self, updatedData):
+        sqlRequest = '''
+        UPDATE client
+            SET nom = ?,
+                courriel = ?,
+                tel = ?,
+                compagnie = ?,
+                adresse = ?,
+                rue = ?,
+                ville = ?
+            WHERE idclient = ?
+       '''
+        try:
+           self.curs.execute(sqlRequest, updatedData)
+           self.conn.commit()
+           return "Success"
 
         except sqlite3.Error as er:
             print(er)
@@ -437,7 +480,7 @@ def deleteEvent():
     if request.method == "POST":
         id = request.form["id"]
         db = Dbclient()
-        eventDeleted = db.deleteEvent(id)
+        db.deleteEvent(id)
         db.fermerdb()
         message = "Success"
     else:
@@ -465,7 +508,7 @@ def updateForfait():
     if request.method == "POST":
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
-        print("params reçus: ", forfait, compagnieID)
+        # print("params reçus: ", forfait, compagnieID)
         db = Dbman()
         db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
@@ -475,15 +518,6 @@ def updateForfait():
     else:
         return repr("Error")
 
-# @app.route('/updateBDCorpo', methods = ["GET", "POST"])
-# def updateBDCorpo():
-#     if request.method == "POST":
-#         tableName = request.form["tableName"]
-#         colonne = request.form["colonne"]
-#         valeur = request.form["valeur"]
-#         _id = request.form["_id"]
-#         db = Dbman()
-#         db.updateDB(tableName, colonne, valeur, _id)
 
 
 @app.route('/newEvent', methods=["GET", "POST"])
@@ -559,10 +593,10 @@ def deleteLivrable():
 
 @app.route('/completeLivrable', methods=["GET", "POST"])
 def completeLivrable():
-    if request.method == "POST":        
+    if request.method == "POST":
         valeur = request.form["valeur"]
         id = request.form["id"]
-        db = Dbclient()        
+        db = Dbclient()
         resultat = db.completeLivrable(id, valeur)
         db.fermerdb()
         return Response(json.dumps(resultat), mimetype='application/json')
@@ -575,20 +609,44 @@ def getLivrable():
     if request.method == "POST":
         courriel = request.form["courriel"]
         complete = request.form["complete"]
-        db = Dbclient()        
+        db = Dbclient()
         livrables = db.getLivrablesUser(courriel, complete)
         db.fermerdb()
         return Response(json.dumps(livrables), mimetype='application/json')
     else:
         return repr("pas ok")
 
-# Sers à populer les données propres à un foreign key dans une table. 
+@app.route('/getEcheanciers', methods=["GET", "POST"])
+def getEcheanciers():
+    if request.method == "POST":
+        event = request.form["event"]
+
+        db = Dbclient()
+        echanciers = db.getEcheanciers(event)
+        db.fermerdb()
+        return Response(json.dumps(echanciers), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+@app.route('/updateLivrable', methods=["GET", "POST"])
+def updateLivrable():
+    if request.method == "POST":
+        id = request.form["id"]
+        notes = request.form["notes"]
+        db = Dbclient()
+        livrables = db.updateLivrable(id, notes)
+        db.fermerdb()
+        return Response(json.dumps(livrables), mimetype='application/json')
+    else:
+        return repr("pas ok")
+
+# Sers à populer les données propres à un foreign key dans une table.
 @app.route('/populate', methods=["GET", "POST"])
 def populate():
     if request.method == "POST":
         table = request.form["table"]
         id = request.form["id"]
-        db = Dbclient()        
+        db = Dbclient()
         resultat = db.populate(table, id)
         db.fermerdb()
         return Response(json.dumps(resultat), mimetype='application/json')
@@ -596,13 +654,19 @@ def populate():
         return repr("pas ok")
 
 
-### TODO ROUTES CLIENTS
+### ROUTES CLIENTS
 @app.route('/getClients', methods=["GET", "POST"])
 def getClients():
     db = Dbclient()
     data = db.getClients()
     db.fermerdb()
     return Response(json.dumps(data), mimetype='application/json')
+
+@app.route('/getMaxClient', methods=["GET", "POST"])
+def maxClient():
+    infoClient = request.form["coData"]
+    maxclientT = globals()["MAX_CLIENT_F" + infoClient]
+    return str(maxclientT)
 
 @app.route('/save_client', methods=["GET", "POST"])
 def save_client():
@@ -616,11 +680,15 @@ def save_client():
             param.append(request.form["adresse"])
             param.append(request.form["rue"])
             param.append(request.form["ville"])
-            db = Dbclient()
-            db.saveClient(param)
+            try:
+                db = Dbclient()
+                rep = db.saveClient(param)
+                return str(rep)
+            except:
+                rep = "Erreur dans la route"
+                return rep
         else:
-            print('erreur')
-        return "testnewclient"
+            return "Pas de ID"
 
 @app.route('/deleteClient', methods=["GET", "POST"])
 def deleteClient():
@@ -633,6 +701,30 @@ def deleteClient():
     else:
         message = "Error"
     return Response(json.dumps(message), mimetype='application/json')
+
+@app.route('/updateClient', methods=["GET", "POST"])
+def updateClient():
+    param = []
+    if request.method == "POST":
+        if request.form["idclient"] != '':
+            param.append(request.form["nom"])
+            param.append(request.form["courriel"])
+            param.append(request.form["telephone"])
+            param.append(request.form["compagnie"])
+            param.append(request.form["adresse"])
+            param.append(request.form["rue"])
+            param.append(request.form["ville"])
+            param.append(request.form["idclient"])
+            try:
+                db = Dbclient()
+                rep = db.updateClient(param)
+
+                return "Success" + str(rep)
+            except:
+                rep = "Erreur dans la route"
+                return rep
+        else:
+            return "Erreur"
 
 
 if __name__ == '__main__':

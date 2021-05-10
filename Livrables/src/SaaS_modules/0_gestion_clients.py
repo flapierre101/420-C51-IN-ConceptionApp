@@ -14,15 +14,12 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
-        self.style = Style()
-        self.style.theme_use("clam")
-        self.root.title("Production CDJ - Clients")
-        self.root.configure(background="lightgray")
+        self.root.title("Production CDJ - Réunions")
         self.clientInfo = {}
         self.listeclients = self.parent.getClients()
-        self.maxClient = self.parent.getMaxClient()
         self.welcomeLabel = Label(self.root, text="Bienvenue ", font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack()
+        self.maxClient = Label(self.root, text="Client: "+str(len(self.listeclients))+"/"+str(self.parent.getMaxClient()) , font=("Arial", 12)).pack()
         self.createModuleFrame()
         # self.confirmationFrame = None
 
@@ -33,8 +30,6 @@ class Vue():
         self.buttonFrame = Frame(self.gestionFrame)
         self.clientsTableau = Treeview(self.gestionFrame, show = 'headings')
         self.confirmationFrame = Frame(self.gestionFrame)
-        self.listeclients = self.parent.getClients()
-        self.maxClientLabel = Label(self.gestionFrame, text="Client: "+str(len(self.listeclients))+"/"+str(self.maxClient) , font=("Arial", 12)).pack()
 
 
         self.clientsTableau["column"] = ("ID", "Nom", "Courriel", "Téléphone", "Compagnie", "Adresse", "Rue", "Ville")
@@ -59,16 +54,19 @@ class Vue():
         tempo = 'odd'
         for i in range(len(self.listeclients)):
             if tempo == 'odd':
-                self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tags=("odd","1"))
+                self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tag='odd')
                 tempo ='event'
             else:
-                self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tags=("event","2"))
+
+                self.clientsTableau.insert('', 'end', text=self.listeclients[i][0], values=self.listeclients[i][0:], tag='event')
                 tempo ='odd'
 
         # Not working ATM
+        # self.clientsTableau.tag_configure('odd', background='Black', foreground='White')
+        # self.clientsTableau.tag_configure('event', background='White', foreground='Black')
 
-        self.clientsTableau.tag_configure("odd", background='Black', foreground='White')
-        self.clientsTableau.tag_configure("event", background='White', foreground='Black')
+        listLabel = Label(self.listFrame, text="Liste des Clients")
+        listLabel.pack(side=TOP)
         self.clientsTableau.pack(side=TOP)
 
         self.listFrame.pack(side=LEFT)
@@ -88,14 +86,12 @@ class Vue():
         self.suppClientButton.grid(column=2, row=0, pady=5, padx=5)
 
     def create_client(self):
-        if self.maxClient > len(self.listeclients):
-            self.gestionFrame.forget()
+        self.gestionFrame.destroy()
+        if self.parent.verif():
             self.create_client_frame()
 
         else:
             self.showMessage("Vous avez atteind le votre maximum de client.")
-
-
 
     def create_client_frame(self):
         self.root.geometry("1000x800")
@@ -103,6 +99,7 @@ class Vue():
         self.infoFrame = Frame(self.clientFrame)
         self.buttonFrame = Frame(self.clientFrame)
         self.confirmationFrame = Frame(self.clientFrame)
+        self.clientMinMax = Label(self.confirmationFrame, text=len(self.getClients()))
 
         self.createInfoFrame()
         self.createClientButtonFrame()
@@ -127,6 +124,7 @@ class Vue():
         self.confirmationFrame = Frame(self.clientFrame)
 
         itemsTableau = self.clientsTableau.selection()
+
         self.createInfoFrame(self.clientsTableau.item(itemsTableau)['values'])
         self.modifClientButtonFrame()
 
@@ -143,13 +141,10 @@ class Vue():
             entryLabel = Label(self.infoFrame, text=fields[i], width=25)
 
             entry = Entry(self.infoFrame)
+
             if selection is not None:
-                # pass
-                if len(selection) != 0:
-                    entry.insert(0,selection[i])
+                entry.insert(0,selection[i])
                 # entry.insert(0, "placeholder")
-                else:
-                    return self.showMessage("Selectionez un client à modifier")
             if fields[i] == "ID":
                 entry.configure(state=DISABLED)
 
@@ -174,6 +169,9 @@ class Vue():
     def backToMenu(self):
         self.clientFrame.pack_forget()
         self.createModuleFrame()
+
+    def clearAllFields(self):
+        pass
 
     def save_client(self):
         self.clientInfo = self.getEntryData()
@@ -217,14 +215,24 @@ class Modele():
     def __init__(self, parent):
         self.parent = parent
 
+    def verif (self):
+        forfait = self.userInfo['forfait']
+        nbclient = len(self.getClients());
+        if (forfait == 1 and nbclient <= 1) or (forfait == 2 and nbclient <= 1500) or (forfait == 3 and nbclient < 1):
+            return True
+        else:
+            return False
+
+
+
 class Controleur():
     def __init__(self):
         self.modele = Modele(self)
         self.connexion = Connexion()
+        self.urlserveur = self.connexion.urlserveur
         self.userInfo = json.loads(sys.argv[4])
         self.vue = Vue(self)
         self.vue.root.mainloop()
-        self.urlserveur = self.connexion.urlserveur
 
     def getClients(self):
         return self.connexion.getClients()
@@ -242,17 +250,21 @@ class Controleur():
     def update_client(self, updatedData):
         reponseServeur = self.connexion.updateClient(updatedData)
         reponseServeur = str(reponseServeur)
+        print("***********************LA REPONSE:  ", type(reponseServeur))
         self.vue.showMessage(reponseServeur)
 
     def appelserveur(self, route, params):
         return self.connexion.appelserveur(route, params)
 
     def getMaxClient(self):
-        return self.connexion.getMaxClient(self.userInfo['forfait'])
-        # self.vue.showMessage(reponseServeur)
+        reponseServeur = self.connexion.getMaxClient(self.userInfo['forfait'])
 
-    # def verif(self):
-    #     return Modele.verif(self)
+        self.vue.showMessage(reponseServeur)
+
+    def verif(self):
+        return Modele.verif(self)
+
+#TODO AJOUT DE CMPTE DU NB DE CLIENTS DANS LA BD
 
 if __name__ == '__main__':
     c = Controleur()

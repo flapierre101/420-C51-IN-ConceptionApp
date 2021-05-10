@@ -19,13 +19,6 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
-    def getEvent(self):
-        url = self.urlserveur+"/getEvent"
-        params = {}
-        reptext=self.appelserveur(url,params)
-        mondict=json.loads(reptext)
-        return mondict
-
     def trouvermodules(self):
         url = self.urlserveur+"/trouvermodules"
         params = {}
@@ -186,13 +179,20 @@ class Connexion:
         mondict=json.loads(reptext)
         return mondict
 
+    def getEcheanciers(self, idEvent):
+        url = self.urlserveur+"/getEcheanciers"
+        params = {"event" : idEvent}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
     def populate(self, table, id):
         url = self.urlserveur+"/populate"
         params = { "table" : table,
                     "id" : id}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
-        print(mondict)
+        #print(mondict)
         return mondict
 
     def save_client(self, newclient):
@@ -211,9 +211,10 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
-    def update_client(self, updateData):
+    def updateClient(self, updateData):
         url = self.urlserveur + "/updateClient"
         rep = self.appelserveur(url, updateData)
+
 
         return rep
 
@@ -223,3 +224,14 @@ class Connexion:
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict
+
+    def updateLivrable(self, params):
+        url = self.urlserveur + "/updateLivrable"
+        rep = self.appelserveur(url, params)
+        print(rep)
+        
+    def getMaxClient(self, coData):
+        url = self.urlserveur+"/getMaxClient"
+        params = {"coData": coData}
+        repInt=self.appelserveur(url,params)
+        return json.loads(repInt)
