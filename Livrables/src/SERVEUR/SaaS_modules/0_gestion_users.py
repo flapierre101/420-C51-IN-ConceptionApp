@@ -17,6 +17,14 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.userInfo = {}
         self.root.title("Production CDJ - Utilisateurs")
         self.user = {}
@@ -48,10 +56,19 @@ class Vue():
         self.userList.bind('<ButtonRelease-1>', self.getSelection)
 
         row = 1
-
+        tempo = 'odd'
         for i in self.listeEmployes:
-            self.userList.insert("",'end',values=(i[0],i[2],i[1]))
+            if tempo == 'odd':
+                self.userList.insert("",'end',values=(i[0],i[2],i[1]), tags=("odd","1"))
+                tempo ='event'
+            else:
+                self.userList.insert("",'end',values=(i[0],i[2],i[1]), tags=("event","2"))
+                tempo ='odd'
             row += 1
+
+        self.userList.tag_configure("odd", background='Gray', foreground='White')
+        self.userList.tag_configure("event", background='Lightgray', foreground='Black')
+
 
         listLabel = Label(self.listFrame, text="Liste des utilisateurs")
         listLabel.pack()

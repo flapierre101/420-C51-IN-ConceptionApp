@@ -143,6 +143,33 @@ class Dbclient():
             print(er)
             return "Echec de la mise a jour !"
 
+    def saveLivrable(self, titre, courriel, echeancierID, notes):
+        sqlnom = ( "select id from 'personnels' where courriel=:courriel")
+        self.curs.execute(sqlnom, {'courriel': courriel})
+        usager = self.curs.fetchall()
+        if usager:
+            params = [titre, echeancierID, usager[0][0], notes]
+            sqlRequest = ("INSERT INTO 'livrables'(desc, echeancier, responsable, notes) VALUES (?,?,?,?)")
+            try:
+                self.curs.execute(sqlRequest, params)
+                self.conn.commit()
+                return "Livrable ajouté !"
+            except sqlite3.Error as er:
+                print(er)
+        return "Echec de la mise a jour !"
+
+    def saveEcheancier(self, titre, dueDate, eventID, dateRappel, descrappel):
+
+        params = [titre, dueDate, eventID, dateRappel, descrappel]
+        sqlRequest = ("INSERT INTO 'echeancier'(desc, duedate, evenement, daterappel, descrappel) VALUES (?,?,?,?,?)")
+        try:
+            self.curs.execute(sqlRequest, params)
+            self.conn.commit()
+            return "Echeancier ajouté !"
+        except sqlite3.Error as er:
+            print(er)
+        return "Echec de la mise a jour !"
+
     def completeLivrable(self, id, valeur):
         sqlRequest = ('''
             Update livrables
@@ -196,7 +223,6 @@ class Dbclient():
         sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
-        # print(info)
         return info
 
     def getOneClient(self, client):
@@ -341,18 +367,6 @@ class Dbman():
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
-
-    # def updateDB(self, tableName, col, val, id):
-    #     sqlRequest = (
-    #         "Update"+tableName+
-    #         "Set" + col + "=" + val +
-    #         "Where id =" + id)
-    #     try:
-    #         self.curs.execute(sqlRequest)
-    #         self.conn.commit()
-    #     except sqlite3.Error as er:
-    #         print(er)
-
 
 def demanderclients():
     db = Dbclient()
@@ -545,7 +559,6 @@ def updateForfait():
     if request.method == "POST":
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
-        # print("params reçus: ", forfait, compagnieID)
         db = Dbman()
         db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
@@ -651,10 +664,36 @@ def updateUser():
 @app.route('/newLivrable', methods=["GET", "POST"])
 def newLivrable():
     if request.method == "POST":
-        pass
+
+        titre = request.form["Titre"]
+        courriel = request.form["Owner"]
+        echeancierID = request.form["Echeancier"]
+        notes = request.form["Notes"]
+
+        db = Dbclient()
+        resultat = db.saveLivrable(titre, courriel, echeancierID, notes)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
         return repr("Error")
 
+@app.route('/saveEcheancier', methods=["GET", "POST"])
+def saveEcheancier():
+    if request.method == "POST":
+
+
+        eventID = request.form["eventID"]
+        dueDate = request.form["dueDate"]
+        dateRappel = request.form["dateRappel"]
+        descrappel = request.form["descrappel"]
+        titre = request.form["titre"]
+
+        db = Dbclient()
+        resultat = db.saveEcheancier(titre, dueDate, eventID, dateRappel, descrappel)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
+    else:
+        return repr("Error")
 
 @app.route('/deleteLivrable', methods=["GET", "POST"])
 def deleteLivrable():
@@ -801,6 +840,5 @@ def updateClient():
 
 
 if __name__ == '__main__':
-    # print(flask.__version__)
     # app.run(debug=True)
     app.run(debug=True, host='127.0.0.1', port=5000)

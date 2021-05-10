@@ -166,19 +166,19 @@ Les problèmes rencontrés :
 - Caroline : Gestion du dropdown et changement/modifier les infos dans BD
 
 
-## TEMPLATE
+## 10 mai
 
 Ce que j'ai fait :
-- François :
-- Dany :
-- Caroline :
+- François : Terminer le module client, avec l'affichage des messages. Recherche pour style visuel.
+- Dany : Dropdown x 2 qui donnes des résultats dynamiquement
+- Caroline : Connection des informations des deux bases de données pour les afficher dans les dropdowns et les changer.
 
 Ce que je compte faire
-- François :
-- Dany :
-- Caroline :
+- François : travailler sur les styles et pair programming pour compléter les modules.
+- Dany : Complèter Module échéanciers et peut-être création de livrables.
+- Caroline : Finition des updates des utilisateurs dans la base de donnée. Finition du module
 
 Les problèmes rencontrés :
-- François :
-- Dany :
-- Caroline :
+- François : probleme d'accès à certaine infos. Problème réglé en cours de route.
+- Dany : Plus long que prévue dû à la porté de variable.
+- Caroline :  Plus long que prévue dû au nombre d'accès dans les base de données.
