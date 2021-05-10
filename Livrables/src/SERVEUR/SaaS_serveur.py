@@ -107,6 +107,23 @@ class Dbclient():
             print(er)
             return "Echec de la mise a jour !"
 
+    def saveLivrable(self, titre, courriel, echeancierID, notes):
+        sqlnom = ( "select id from 'personnels' where courriel=:courriel")
+        self.curs.execute(sqlnom, {'courriel': courriel})
+        usager = self.curs.fetchall()
+        print("je suis ici")
+        if usager:
+            print(usager)
+            params = [titre, echeancierID, usager[0][0], notes]
+            sqlRequest = ("INSERT INTO 'livrables'(desc, echeancier, responsable, notes) VALUES (?,?,?,?)")
+            try:
+                self.curs.execute(sqlRequest, params)
+                self.conn.commit()
+                return "Livrable ajouté !"
+            except sqlite3.Error as er:
+                print(er)
+        return "Echec de la mise a jour !"
+
     def completeLivrable(self, id, valeur):
         sqlRequest = ('''
             Update livrables
@@ -507,7 +524,16 @@ def newUser():
 @app.route('/newLivrable', methods=["GET", "POST"])
 def newLivrable():
     if request.method == "POST":
-        pass
+        
+        titre = request.form["Titre"] 
+        courriel = request.form["Owner"]       
+        echeancierID = request.form["Echeancier"] 
+        notes = request.form["Notes"] 
+        
+        db = Dbclient()
+        resultat = db.saveLivrable(titre, courriel, echeancierID, notes)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
     else:
         return repr("Error")
 
