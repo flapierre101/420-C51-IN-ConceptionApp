@@ -71,6 +71,26 @@ class Connexion:
         else:
             return "Une erreur est survenue"
 
+    def updateUser(self, user):
+        url = self.urlserveur + "/updateUser"
+        rep = self.appelserveur(url,user)
+        rep = json.loads(rep)
+
+        if rep == "Success":
+            return "Success"
+        else:
+            return "Une erreur est survenue"
+
+    def updateEmployee(self, employee):
+        url = self.urlserveur + "/updateEmployee"
+        rep = self.appelserveur(url, employee)
+        rep = json.loads(rep)
+
+        if rep == "Success":
+            return "Success"
+        else:
+            return "Une erreur est survenue"
+
     def saveEmployee(self, newEmployee):
         url = self.urlserveur + "/newEmployee"
         rep = self.appelserveur(url, newEmployee)
