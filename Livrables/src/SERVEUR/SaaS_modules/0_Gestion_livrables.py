@@ -113,7 +113,7 @@ class Vue():
     def createInfoDetailsFrame(self):
         fields = ["Titre","État", "Propriétaire", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
-        #print(self.parent.getUserRole())
+        
         for i in fields:
 
             entryLabel = Label(self.infoFrame, text=i)
@@ -182,7 +182,7 @@ class Vue():
     def createLivrableFrame(self):
         fields = ["Titre", "Propriétaire","Évènement associé", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
-        #print(self.parent.getUserRole())
+      
         for i in fields:
 
             entryLabel = Label(self.infoFrame, text=i)
@@ -362,7 +362,7 @@ class Controleur():
         self.modele.inscrireUser(sys.argv)
         self.vue = Vue(self)
         self.vue.root.mainloop()
-        print(sys.argv)
+        
 
     def getUsername(self):
         return self.modele.username

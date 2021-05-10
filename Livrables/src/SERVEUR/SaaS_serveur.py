@@ -124,6 +124,18 @@ class Dbclient():
                 print(er)
         return "Echec de la mise a jour !"
 
+    def saveEcheancier(self, titre, dueDate, eventID, dateRappel, descrappel):
+        
+        params = [titre, dueDate, eventID, dateRappel, descrappel]
+        sqlRequest = ("INSERT INTO 'echeancier'(desc, duedate, evenement, daterappel, descrappel) VALUES (?,?,?,?,?)")
+        try:
+            self.curs.execute(sqlRequest, params)
+            self.conn.commit()
+            return "Echeancier ajouté !"
+        except sqlite3.Error as er:
+            print(er)
+        return "Echec de la mise a jour !"
+
     def completeLivrable(self, id, valeur):
         sqlRequest = ('''
             Update livrables
@@ -537,6 +549,23 @@ def newLivrable():
     else:
         return repr("Error")
 
+@app.route('/saveEcheancier', methods=["GET", "POST"])
+def saveEcheancier():
+    if request.method == "POST":       
+
+
+        eventID = request.form["eventID"] 
+        dueDate = request.form["dueDate"] 
+        dateRappel = request.form["dateRappel"]       
+        descrappel = request.form["descrappel"] 
+        titre = request.form["titre"] 
+        
+        db = Dbclient()
+        resultat = db.saveEcheancier(titre, dueDate, eventID, dateRappel, descrappel)
+        db.fermerdb()
+        return Response(json.dumps(resultat), mimetype='application/json')
+    else:
+        return repr("Error")
 
 @app.route('/deleteLivrable', methods=["GET", "POST"])
 def deleteLivrable():
