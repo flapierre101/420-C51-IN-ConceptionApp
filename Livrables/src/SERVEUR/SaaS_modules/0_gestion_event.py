@@ -248,6 +248,7 @@ class Vue():
         params["descrappel"] = self.echeancierInfo["Description rappel"].get()
         params["titre"] = self.echeancierInfo["Titre"].get()
         self.parent.saveEcheancier(params)
+        self.backToMenu()
 
 
     def clearAllFields(self):
