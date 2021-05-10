@@ -50,8 +50,6 @@ class Vue():
         self.userList.heading("2",text="Titre")
         self.userList.heading("3",text="Courriel")
 
-        print(self.listeEmployes)
-
         row = 1
         tempo = 'odd'
         for i in self.listeEmployes:
@@ -180,8 +178,6 @@ class Vue():
         self.userParam["role"] = self.userInfo["Rôle"].get()
         self.userParam["droit"] = self.userInfo["Droits"].get()
 
-        print(self.userParam)
-
         # TODO create separate function and DB access to add new Employee to personnels table
         self.parent.saveUser(self.userParam)
 
@@ -268,7 +264,6 @@ class Controleur():
         companyInfo = []
         self.companyInfo = json.loads(sys.argv[4])
         self.company = self.companyInfo["nom"]
-        print(self.company)
         return self.company
 
     def getCompanyID(self, compagnie):
@@ -280,7 +275,6 @@ class Controleur():
         return self.connexion.trouvermembres()
 
     def saveUser(self, newUser):
-        print("saveUser Controlleur: ", newUser)
         reponseServeur = self.connexion.saveUser(newUser)
         self.vue.showMessage(reponseServeur)
 
