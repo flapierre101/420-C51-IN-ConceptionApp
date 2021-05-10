@@ -56,9 +56,9 @@ class Connexion:
         compagnie=json.dumps(compagnie)
         Popen([sys.executable, "./SaaS_modules/"+fichier,droit,usager, courriel, compagnie],shell=1).pid
 
-    def saveEvent(self, newLivrable):
-        url = self.urlserveur + "/newLivrable"
-        rep = self.appelserveur(url, newLivrable)
+    def saveEvent(self, event):
+        url = self.urlserveur + "/newEvent"
+        rep = self.appelserveur(url, event)
         return "Nouvel évènement enregistré"
 
     def saveUser(self, newUser):
