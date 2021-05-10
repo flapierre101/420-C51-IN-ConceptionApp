@@ -22,6 +22,14 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.livrableInfo = {}
         self.livrable = {}
         self.root.title("Production CDJ - Livrables")
@@ -43,7 +51,7 @@ class Vue():
         self.buttonFrame = Frame(self.gestionFrame)
         self.livrableList = Listbox(self.listFrame, width=30)
 
-        row = 1        
+        row = 1
         for i in self.listeLivrables:
             self.livrableList.insert(row, i[1])
             row += 1
@@ -52,11 +60,11 @@ class Vue():
         listLabel.pack()
         self.livrableList.pack()
 
-        self.listFrame.pack(side=LEFT)  
+        self.listFrame.pack(side=LEFT)
         self.livrableInfo = {}
         self.indexEventSelect = None
         self.indexEcheancierSelect = None
-        
+
         self.createButtonFrame()
         self.buttonFrame.pack()
         self.gestionFrame.pack()
@@ -78,10 +86,10 @@ class Vue():
             self.buttonFrame, text="Détail du livrable", command=self.livrableDetails)
 
         self.createAddButton = Button(self.buttonFrame, text="Ajouter un livrable",command=self.createNewLivrable)
-        if self.listeComplete == 0:            
+        if self.listeComplete == 0:
             self.showcompletebtn = Button(
                 self.buttonFrame, text="Afficher livrables completés", command=self.invertLivrableList)
-        else:            
+        else:
             self.showcompletebtn = Button(
                 self.buttonFrame, text="Afficher livrables incomplets", command=self.invertLivrableList)
         self.livrableDetailButton.pack(fill=Y)
@@ -133,11 +141,11 @@ class Vue():
             elif "Date Limite" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
-                entry.set_date(self.livrable["echeancier"][2])                     
-            elif "Notes" in i:                
-                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)                        
+                entry.set_date(self.livrable["echeancier"][2])
+            elif "Notes" in i:
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
                 entry.insert(END, self.livrable["notes"])
-                
+
 
             if not "Notes" in i:
                 entry.config(state='disabled')
@@ -152,7 +160,7 @@ class Vue():
     def createNewLivrable(self):
         self.gestionFrame.destroy()
         self.addLivrableFrame()
-    
+
     def addLivrableFrame(self):
         self.root.geometry("450x450")
         self.livrableFrame = Frame(self.root)
@@ -178,7 +186,7 @@ class Vue():
             self.createLivrableButton['state'] = DISABLED
         self.createLivrableButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
-   
+
     def createLivrableFrame(self):
         fields = ["Titre", "Propriétaire","Évènement associé", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
@@ -203,28 +211,28 @@ class Vue():
                         entry.current(self.indexEcheancierSelect)
                 else:
                     entry.config(state='disabled')
-            elif "Propriétaire" in i:                
+            elif "Propriétaire" in i:
                 entry = Entry(self.infoFrame, width=50)
                 entry.insert(0, self.parent.getUsername())
                 entry.config(state='disabled')
-            elif "Date Limite" in i:                       
+            elif "Date Limite" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')                    
+                foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 if self.indexEcheancierSelect != None:
                     echeanciers = self.parent.getEcheanciers(self.indexEventSelect+1)
                     print("Ici les échéanciers", echeanciers)
                     if echeanciers != "Rien":
                         for echeancier in echeanciers:                              # converts list of lists to list of strings
                             if self.livrableInfo["Échéancier associé"].get() == echeancier[0]:
-                                entry.set_date(echeancier[2])   
-                    
-                entry.config(state='disabled') 
-                                
-                    
+                                entry.set_date(echeancier[2])
 
-            elif "Notes" in i:                
-                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)                        
-                
+                entry.config(state='disabled')
+
+
+
+            elif "Notes" in i:
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
+
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
@@ -236,23 +244,23 @@ class Vue():
     def updateLivrables(self):
         params = {}
         params["id"] = self.livrable["id"]
-        params["notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()        
+        params["notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()
         self.parent.updateLivrable(params)
 
-    def createDropDownMenu(self, table):     
+    def createDropDownMenu(self, table):
         n = StringVar()
         dropdownMenu = Combobox(self.infoFrame, width=27, textvariable=n)
-        if table == "event":                               
+        if table == "event":
             choices = self.parent.getEvents()          # returns a list of lists
         if table == "echeancier":
             idEvent = 1 if self.indexEventSelect == None else self.indexEventSelect + 1
             choices = self.parent.getEcheanciers(idEvent)
-       
+
         self.existingChoice = []
         if choices == "Rien":
             self.dontcreate = True
-            self.existingChoice.append("Aucun échéancier")            
-        else:            
+            self.existingChoice.append("Aucun échéancier")
+        else:
             for choice in choices:                              # converts list of lists to list of strings
                 self.existingChoice.append(choice[0])          # avoids curly braces from appearing in drop down menu
 
@@ -261,15 +269,15 @@ class Vue():
 
         dropdownMenu.grid(column=1, row=15)
         if table == "event":
-            dropdownMenu.current(1)                    
-            dropdownMenu.bind("<<ComboboxSelected>>", self.comboEventSelection)  
+            dropdownMenu.current(1)
+            dropdownMenu.bind("<<ComboboxSelected>>", self.comboEventSelection)
         if table == "echeancier":
-            dropdownMenu.current(0) 
+            dropdownMenu.current(0)
             dropdownMenu.bind("<<ComboboxSelected>>", self.comboEcheancierSelection)
         return dropdownMenu
 
     def  comboEventSelection(self, event):
-        self.indexEventSelect = self.livrableInfo["Évènement associé"].current() 
+        self.indexEventSelect = self.livrableInfo["Évènement associé"].current()
         print(self.indexEventSelect)
         self.indexEcheancierSelect = None
         self.dontcreate = True
@@ -283,11 +291,11 @@ class Vue():
         self.indexEcheancierSelect = self.livrableInfo["Échéancier associé"].current()
         if self.livrableInfo["Échéancier associé"].get() != "Aucun échéancier":
             self.dontcreate = False
-        self.livrableFrame.pack_forget()        
+        self.livrableFrame.pack_forget()
         self.addLivrableFrame()
-     
 
-        
+
+
 
 
     def clearAllFields(self):
@@ -300,12 +308,12 @@ class Vue():
 
     def saveLivrable(self):
         self.params = {}
-   
+
         self.params["Titre"] = self.livrableInfo["Titre"].get()
         self.params["Owner"] = self.livrableInfo["Propriétaire"].get()
         self.params["Event"] = self.livrableInfo["Évènement associé"].get()
         self.params["Echeancier"] = self.livrableInfo["Échéancier associé"].get()
-        self.params["Notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()  
+        self.params["Notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()
 
         print(self.params)
 
@@ -324,17 +332,17 @@ class Vue():
 
     def livrableDetails(self):
         selection = self.livrableList.get(self.livrableList.curselection())
-        
-        if selection != None:            
+
+        if selection != None:
             for i in self.listeLivrables:
-                if i[1] == selection:     
-                    self.livrable["status"] = "Complété" if i[4] else "Incomplet"          
+                if i[1] == selection:
+                    self.livrable["status"] = "Complété" if i[4] else "Incomplet"
                     self.livrable["desc"] = i[1]
-                    self.livrable["echeancier"] = self.parent.getEcheancier(i[2])                    
+                    self.livrable["echeancier"] = self.parent.getEcheancier(i[2])
                     self.livrable["responsable"] = self.parent.getUser(i[3])
                     self.livrable["id"] = i[0]
                     self.livrable["notes"] = i[5]
-                    
+
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()
@@ -398,14 +406,14 @@ class Controleur():
 
     def updateLivrable(self, params):
         self.connexion.updateLivrable(params)
-    
+
     def getEvents(self):
         return self.connexion.getEvent()
 
     def getEcheanciers(self, idEvent):
         return self.connexion.getEcheanciers(idEvent)
 
-  
+
 
 
 if __name__ == '__main__':

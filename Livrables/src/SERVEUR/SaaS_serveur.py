@@ -459,7 +459,6 @@ def updateForfait():
     if request.method == "POST":
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
-        # print("params reçus: ", forfait, compagnieID)
         db = Dbman()
         db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
@@ -657,6 +656,5 @@ def updateClient():
 
 
 if __name__ == '__main__':
-    # print(flask.__version__)
     # app.run(debug=True)
     app.run(debug=True, host='127.0.0.1', port=5000)

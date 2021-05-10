@@ -7,6 +7,7 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+
         # le cadre qui va afficher ou non tous les autres
         self.cadreapp = Frame(self.root)
         self.cadres = {}
@@ -18,7 +19,7 @@ class Vue():
         cadre = self.cadres[nomcadre]
         if self.cadreactif:
             # self.cadreactif.destroy()
-            self.cadreactif.pack_forget()     
+            self.cadreactif.pack_forget()
         self.cadreactif = cadre
         self.cadreactif.pack()
         if (nomcadre == "principal"):
@@ -63,7 +64,7 @@ class Vue():
 
     # TODO - Interface pour enregistrer nouvel utilisateur - PAS PRIORITAIRE
     """
-    def creercadresignup(self): 
+    def creercadresignup(self):
 
         self.cadresignup=Frame(self.cadreapp,width=800,height=400)
 
@@ -162,6 +163,7 @@ class Vue():
 
     def creercadreprincipal(self, usager):
         self.root.title("Production CDJ")
+
         self.cadreprincipal = Frame(self.cadreapp, width=400, height=400)
 
         self.cadretitre = Frame(self.cadreapp, width=400, height=400)

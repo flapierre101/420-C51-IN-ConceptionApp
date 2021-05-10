@@ -21,6 +21,14 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.eventInfo = {}
         self.event = {}
         self.root.title("Production CDJ - Évènements")
@@ -243,7 +251,6 @@ class Vue():
                     self.event["budget"] = i[3]
                     self.event["desc"] = i[4]
                     self.event["id"] = i[5]
-                    print("print ln 218", self.event)
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()
@@ -260,9 +267,7 @@ class Modele():
 
 class Controleur():
     def __init__(self):
-        print(sys.argv[4])
         y = json.loads(sys.argv[4])
-        print(y["forfait"])
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
@@ -276,9 +281,8 @@ class Controleur():
     def getUserRole(self):
         self.userRole = sys.argv[1]
         return self.userRole
-    
+
     def getUserPermissions(self):
-        print(sys.argv)
         return sys.argv[1]
 
     def saveEvent(self, newEvent):
