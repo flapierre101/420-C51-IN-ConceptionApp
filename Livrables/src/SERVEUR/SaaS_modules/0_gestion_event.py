@@ -22,6 +22,14 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.eventInfo = {}
         self.echeancierInfo = {}
         self.event = {}
@@ -154,7 +162,7 @@ class Vue():
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.backButton.pack(side=RIGHT)
 
-    def addEcheancier(self):      
+    def addEcheancier(self):
         self.eventFrame.pack_forget()
         self.createAddEcheancierFrame()
         self.createEcheancierButtonFrame()
@@ -185,18 +193,18 @@ class Vue():
             entryLabel = Label(self.infoFrame, text=i)
 
             if "Titre" in i:
-                entry = Entry(self.infoFrame)                
+                entry = Entry(self.infoFrame)
             elif "Date d'échéance" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')                
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
             elif "Date rappel" in i:
                 entry = DateEntry(self.infoFrame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')                
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
             elif "Description rappel" in i:
-                entry = Entry(self.infoFrame)                
+                entry = Entry(self.infoFrame)
             else:
                 entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
-                
+
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
@@ -240,7 +248,7 @@ class Vue():
         self.createEcheancierButton.pack(side=LEFT)
 
     def saveEcheancier(self):
-        
+
         params = {}
         params["eventID"] = self.event["id"]
         params["dueDate"] = self.echeancierInfo["Date d'échéance"].get_date()
@@ -313,7 +321,6 @@ class Vue():
                     self.event["budget"] = i[3]
                     self.event["desc"] = i[4]
                     self.event["id"] = i[5]
-                    
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()
@@ -330,9 +337,9 @@ class Modele():
 
 class Controleur():
     def __init__(self):
-        
+
         y = json.loads(sys.argv[4])
-        
+
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
@@ -346,18 +353,17 @@ class Controleur():
     def getUserRole(self):
         self.userRole = sys.argv[1]
         return self.userRole
-    
+
     def getUserPermissions(self):
-        
         return sys.argv[1]
 
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
 
-    def saveEcheancier(self, params): 
+    def saveEcheancier(self, params):
         reponseServeur = self.connexion.saveEcheancier(params)
-        
+
 
     def deleteEvent(self, eventID):
         reponseServeur = self.connexion.deleteEvent(eventID)

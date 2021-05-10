@@ -111,9 +111,7 @@ class Dbclient():
         sqlnom = ( "select id from 'personnels' where courriel=:courriel")
         self.curs.execute(sqlnom, {'courriel': courriel})
         usager = self.curs.fetchall()
-        print("je suis ici")
         if usager:
-            print(usager)
             params = [titre, echeancierID, usager[0][0], notes]
             sqlRequest = ("INSERT INTO 'livrables'(desc, echeancier, responsable, notes) VALUES (?,?,?,?)")
             try:
@@ -125,7 +123,7 @@ class Dbclient():
         return "Echec de la mise a jour !"
 
     def saveEcheancier(self, titre, dueDate, eventID, dateRappel, descrappel):
-        
+
         params = [titre, dueDate, eventID, dateRappel, descrappel]
         sqlRequest = ("INSERT INTO 'echeancier'(desc, duedate, evenement, daterappel, descrappel) VALUES (?,?,?,?,?)")
         try:
@@ -189,7 +187,6 @@ class Dbclient():
         sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
         self.curs.execute(sqlnom)
         info=self.curs.fetchall()
-        # print(info)
         return info
 
     def getOneClient(self, client):
@@ -307,18 +304,6 @@ class Dbman():
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
-
-    # def updateDB(self, tableName, col, val, id):
-    #     sqlRequest = (
-    #         "Update"+tableName+
-    #         "Set" + col + "=" + val +
-    #         "Where id =" + id)
-    #     try:
-    #         self.curs.execute(sqlRequest)
-    #         self.conn.commit()
-    #     except sqlite3.Error as er:
-    #         print(er)
-
 
 def demanderclients():
     db = Dbclient()
@@ -488,7 +473,6 @@ def updateForfait():
     if request.method == "POST":
         forfait = request.form["forfait"]
         compagnieID = request.form["compagnieID"]
-        # print("params reçus: ", forfait, compagnieID)
         db = Dbman()
         db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
@@ -536,12 +520,12 @@ def newUser():
 @app.route('/newLivrable', methods=["GET", "POST"])
 def newLivrable():
     if request.method == "POST":
-        
-        titre = request.form["Titre"] 
-        courriel = request.form["Owner"]       
-        echeancierID = request.form["Echeancier"] 
-        notes = request.form["Notes"] 
-        
+
+        titre = request.form["Titre"]
+        courriel = request.form["Owner"]
+        echeancierID = request.form["Echeancier"]
+        notes = request.form["Notes"]
+
         db = Dbclient()
         resultat = db.saveLivrable(titre, courriel, echeancierID, notes)
         db.fermerdb()
@@ -551,15 +535,15 @@ def newLivrable():
 
 @app.route('/saveEcheancier', methods=["GET", "POST"])
 def saveEcheancier():
-    if request.method == "POST":       
+    if request.method == "POST":
 
 
-        eventID = request.form["eventID"] 
-        dueDate = request.form["dueDate"] 
-        dateRappel = request.form["dateRappel"]       
-        descrappel = request.form["descrappel"] 
-        titre = request.form["titre"] 
-        
+        eventID = request.form["eventID"]
+        dueDate = request.form["dueDate"]
+        dateRappel = request.form["dateRappel"]
+        descrappel = request.form["descrappel"]
+        titre = request.form["titre"]
+
         db = Dbclient()
         resultat = db.saveEcheancier(titre, dueDate, eventID, dateRappel, descrappel)
         db.fermerdb()
@@ -712,6 +696,5 @@ def updateClient():
 
 
 if __name__ == '__main__':
-    # print(flask.__version__)
     # app.run(debug=True)
     app.run(debug=True, host='127.0.0.1', port=5000)

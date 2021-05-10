@@ -17,6 +17,14 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.userInfo = {}
         self.root.title("Production CDJ - Utilisateurs")
         self.user = {}
@@ -42,13 +50,20 @@ class Vue():
         self.userList.heading("2",text="Titre")
         self.userList.heading("3",text="Courriel")
 
-        print(self.listeEmployes)
-
         row = 1
-
+        tempo = 'odd'
         for i in self.listeEmployes:
-            self.userList.insert("",'end',values=(i[0],i[2],i[1]))
+            if tempo == 'odd':
+                self.userList.insert("",'end',values=(i[0],i[2],i[1]), tags=("odd","1"))
+                tempo ='event'
+            else:
+                self.userList.insert("",'end',values=(i[0],i[2],i[1]), tags=("event","2"))
+                tempo ='odd'
             row += 1
+
+        self.userList.tag_configure("odd", background='Gray', foreground='White')
+        self.userList.tag_configure("event", background='Lightgray', foreground='Black')
+
 
         listLabel = Label(self.listFrame, text="Liste des utilisateurs")
         listLabel.pack()
@@ -163,8 +178,6 @@ class Vue():
         self.userParam["role"] = self.userInfo["Rôle"].get()
         self.userParam["droit"] = self.userInfo["Droits"].get()
 
-        print(self.userParam)
-
         # TODO create separate function and DB access to add new Employee to personnels table
         self.parent.saveUser(self.userParam)
 
@@ -251,7 +264,6 @@ class Controleur():
         companyInfo = []
         self.companyInfo = json.loads(sys.argv[4])
         self.company = self.companyInfo["nom"]
-        print(self.company)
         return self.company
 
     def getCompanyID(self, compagnie):
@@ -263,7 +275,6 @@ class Controleur():
         return self.connexion.trouvermembres()
 
     def saveUser(self, newUser):
-        print("saveUser Controlleur: ", newUser)
         reponseServeur = self.connexion.saveUser(newUser)
         self.vue.showMessage(reponseServeur)
 

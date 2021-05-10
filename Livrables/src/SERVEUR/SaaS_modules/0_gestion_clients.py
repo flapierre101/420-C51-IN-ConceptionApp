@@ -14,10 +14,15 @@ class Vue():
     def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
-        self.style = Style()
-        self.style.theme_use("clam")
+        self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        self.root.tk.call('package', 'require', 'awdark')
+        self.root.tk.call('package', 'require', 'awlight')
+        self.style = Style(self.root)
+        # self.style.theme_use("awlight")
+        # self.root.configure(bg='#e8e8e7')
+        self.style.theme_use("awdark")
+        self.root.configure(bg='#33393b')
         self.root.title("Production CDJ - Clients")
-        self.root.configure(background="lightgray")
         self.clientInfo = {}
         self.listeclients = self.parent.getClients()
         self.maxClient = self.parent.getMaxClient()
@@ -28,7 +33,7 @@ class Vue():
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
-        self.root.geometry("1000x800")
+        self.root.geometry("900x600")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
         self.clientsTableau = Treeview(self.gestionFrame, show = 'headings')
@@ -67,8 +72,8 @@ class Vue():
 
         # Not working ATM
 
-        self.clientsTableau.tag_configure("odd", background='Black', foreground='White')
-        self.clientsTableau.tag_configure("event", background='White', foreground='Black')
+        self.clientsTableau.tag_configure("odd", background='Gray', foreground='White')
+        self.clientsTableau.tag_configure("event", background='Lightgray', foreground='Black')
         self.clientsTableau.pack(side=TOP)
 
         self.listFrame.pack(side=LEFT)
