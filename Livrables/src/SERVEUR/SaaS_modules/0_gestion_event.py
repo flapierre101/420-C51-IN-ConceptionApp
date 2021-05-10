@@ -68,6 +68,7 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
         self.gestionFrame.pack()
 
+
     def createButtonFrame(self):
         if self.parent.getUserPermissions() == "Admin":
             self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
@@ -337,9 +338,7 @@ class Modele():
 
 class Controleur():
     def __init__(self):
-
         y = json.loads(sys.argv[4])
-
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur

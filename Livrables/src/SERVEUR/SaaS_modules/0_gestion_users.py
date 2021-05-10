@@ -28,7 +28,10 @@ class Vue():
         self.userInfo = {}
         self.root.title("Production CDJ - Utilisateurs")
         self.user = {}
+        self.courriel = None
         self.userParam = {}
+        self.modifyUser = False
+        self.userToModify = []
         self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion d'utilisateurs ***", font=("Arial", 16)).pack()
         self.createModuleFrame()
@@ -49,6 +52,8 @@ class Vue():
         self.userList.heading("1",text="Nom")
         self.userList.heading("2",text="Titre")
         self.userList.heading("3",text="Courriel")
+
+        self.userList.bind('<ButtonRelease-1>', self.getSelection)
 
         row = 1
         tempo = 'odd'
@@ -77,7 +82,7 @@ class Vue():
 
     def createButtonFrame(self):
         self.createAddButton = Button(self.buttonFrame, text="Ajouter un employé",command=self.createNewUser)
-        self.createModifyButton = Button(self.buttonFrame, text="Modifier un employé")
+        self.createModifyButton = Button(self.buttonFrame, text="Modifier un employé",command=self.createModifyUser)
         # self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createAddButton.pack(fill=Y)
@@ -85,7 +90,7 @@ class Vue():
 
     def createRolesDropDownMenu(self):
         n = StringVar()
-        rolesMenu = Combobox(self.infoFrame, width=27,
+        self.rolesMenu = Combobox(self.infoFrame, width=27,
                                     textvariable=n)
 
         roles = self.parent.getExistingRoles()          # returns a list of lists
@@ -94,30 +99,71 @@ class Vue():
         for role in roles:                              # converts list of lists to list of strings
             self.existingRoles.append(role[0])          # avoids curly braces from appearing in drop down menu
 
-        rolesMenu['values'] = self.existingRoles
-        rolesMenu.state(["readonly"])
+        self.rolesMenu['values'] = self.existingRoles
+        self.rolesMenu.state(["readonly"])
 
-        rolesMenu.grid(column=1, row=15)
-        rolesMenu.current(0)
-        return rolesMenu
+        self.rolesMenu.grid(column=1, row=15)
+        self.rolesMenu.current(0)
+        return self.rolesMenu
 
     def createPermissionsDropDownMenu(self):
         n = StringVar()
-        permissionsMenu = Combobox(self.infoFrame, width=27,
+        self.permissionsMenu = Combobox(self.infoFrame, width=27,
                                     textvariable=n)
 
         self.permissions = self.parent.getExistingPermissions()
+        self.droits = []
 
-        permissionsMenu['values'] = self.permissions
-        permissionsMenu.state(["readonly"])
+        for droit in self.permissions:
+            self.droits.append(droit[0])
 
-        permissionsMenu.grid(column=1, row=15)
-        permissionsMenu.current(0)
-        return permissionsMenu
+        self.permissionsMenu['values'] = self.droits
+        self.permissionsMenu.state(["readonly"])
+
+        self.permissionsMenu.grid(column=1, row=15)
+        self.permissionsMenu.current(0)
+        return self.permissionsMenu
 
     def createNewUser(self):
         self.mainFrame.destroy()
         self.addUserFrame()
+
+    def createModifyUser(self):
+        self.mainFrame.destroy()
+        self.modifyUser = True
+        self.addUserFrame()
+
+    def getSelection(self, event):
+        curItem = self.userList.focus()
+        values = ()
+        values = self.userList.item(curItem, 'values')
+        item = values[2]
+        self.courriel = item
+        self.getUserInfo(item)                 # courriel du user à modifier
+
+
+
+    def getUserInfo(self, email):
+
+        self.userToModify = self.parent.getUserInfo(email)
+        self.dateEmbauche = self.parent.getEmploymentDate(email)                # returns list of lists
+        self.date = None
+
+        for date in self.dateEmbauche:
+            self.date = date[0]                                                 # to extract string from list
+        self.userDetails()
+
+    def userDetails(self):
+        for i in self.userToModify:
+
+            self.user["id"] = i[0]
+            self.user["compagnie"] = self.parent.company
+            self.user["nom"] = i[3]
+            self.user["prenom"] = i[4]
+            self.user["courriel"] = i[5]
+            self.user["role"] = i[6]
+            self.user["droit"] = i[7]
+            self.user["dateEmbauche"] = self.date
 
     def addUserFrame(self):
         self.root.geometry("325x325")
@@ -126,11 +172,19 @@ class Vue():
         self.buttonFrame = Frame(self.userFrame)
         self.confirmationFrame = Frame(self.userFrame)
 
-        self.createInfoFrame()
+        titleText = ""
+        if(self.modifyUser):
+            self.addUserInfo()
+            titleText = "* Modifier un utilisateur *"
+        else:
+            self.createInfoFrame()
+            titleText = "* Créer un utilisateur *"
+
         self.createUserButtonFrame()
 
+
         title = Label(self.userFrame,
-                      text="* Créer un utilisateur *", font=("Arial", 14))
+                      text=titleText, font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
         self.buttonFrame.pack()
@@ -167,10 +221,53 @@ class Vue():
             row += 1
             self.userInfo[i] = entry
 
+    def addUserInfo(self):
+        fields = ["Nom", "Prénom", "Rôle", "Droits", "Courriel", "Date d'embauche"]
+        row = 0
+
+        for i in fields:
+            entryLabel = Label(self.infoFrame, text=i)
+
+            if "Date" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+                entry.set_date(self.user["dateEmbauche"])
+            elif "Compagnie" in i:
+                entry = Entry(self.infoFrame)
+                company = self.parent.getCompany()
+                entry.insert(0,company)
+                entry.configure(state="disabled")
+            elif "Rôle" in i:
+                entry = self.createRolesDropDownMenu()
+                for j in range(len(self.existingRoles)):
+                    if self.existingRoles[j] == self.user["role"]:
+                        entry.current(j)
+            elif "Droits" in i:
+                entry = self.createPermissionsDropDownMenu()
+                for j in range(len(self.droits)):
+                    if self.droits[j] == self.user["droit"]:
+                        entry.current(j)
+            elif "Prénom" == i:
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.user["prenom"])
+            elif "Nom" == i:
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.user["nom"])
+            elif "Courriel" in i:
+                entry = Entry(self.infoFrame)
+                entry.insert(0,self.user["courriel"])
+
+            entryLabel.grid(row=row, column=0, sticky=E + W)
+            entry.grid(row=row, column=1, sticky=E + W)
+            row += 1
+            self.userInfo[i] = entry
+
+
+
     def getUserEntryData(self):
         self.userParam = {}
 
-        self.userParam["compagnie"] = self.parent.getCompanyID(self.parent.company)
+        self.userParam["compagnie"] = sys.argv[4]
         self.userParam["defaultPassword"] = "AAAaaa111"
         self.userParam["nom"] = self.userInfo["Nom"].get()
         self.userParam["prenom"] = self.userInfo["Prénom"].get()
@@ -178,29 +275,53 @@ class Vue():
         self.userParam["role"] = self.userInfo["Rôle"].get()
         self.userParam["droit"] = self.userInfo["Droits"].get()
 
-        # TODO create separate function and DB access to add new Employee to personnels table
-        self.parent.saveUser(self.userParam)
+        if not self.modifyUser:
+            repUser = self.parent.saveUser(self.userParam)
+
+            if repUser == "Success":
+                repEmployee = self.getEmployeeEntryData()
+
+                if repEmployee == "Success":
+                    self.showMessage("Nouvel utilisateur créé avec succès")
+        else:
+            self.userParam["ancienCourriel"] = self.courriel
+            repUser = self.parent.updateUser(self.userParam)
+
+            if repUser == "Success":
+                repEmployee = self.getEmployeeEntryData()
+
+                if repEmployee == "Success":
+                    self.showMessage("Utilisateur modifié avec succès")
 
     def getEmployeeEntryData(self):
         param = {}
 
         param["compagnie"] = self.parent.getCompany()
-        param["defaultPassword"] = "AAAaaa111"
         param["nom"] = self.userInfo["Nom"].get()
         param["prenom"] = self.userInfo["Prénom"].get()
         param["courriel"] = self.userInfo["Courriel"].get()
         param["role"] = self.userInfo["Rôle"].get()
-        param["droit"] = self.userInfo["Droits"].get()
         param["dateEmbauche"] = self.userInfo["Date d'embauche"].get_date()
 
-        self.parent.saveEmployee(param)
+        if not self.modifyUser:
+            return self.parent.saveEmployee(param)
+        else:
+            param["ancienCourriel"] = self.courriel
+            return self.parent.updateEmployee(param)
 
 
     def createUserButtonFrame(self):
-        self.createUserButton = Button(self.buttonFrame, text="Créer", command=self.getUserEntryData)
+
+        if self.modifyUser:
+            self.createModifyUserButton = Button(self.buttonFrame, text="Modifier", command=self.getUserEntryData)
+            self.createModifyUserButton.pack(side=LEFT)
+        else:
+            self.createUserButton = Button(self.buttonFrame, text="Créer", command=self.getUserEntryData)
+            self.createUserButton.pack(side=LEFT)
+
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.clearButton = Button(self.buttonFrame, text="Effacer", command=self.clearAllFields)
-        self.createUserButton.pack(side=LEFT)
+
         self.clearButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
 
@@ -240,6 +361,7 @@ class Controleur():
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
         self.company = None
+        self.getCompany()
         self.vue = Vue(self)
         self.vue.root.mainloop()
 
@@ -249,21 +371,25 @@ class Controleur():
     def getExistingPermissions(self):
         return self.connexion.getPermissions()
 
+    def getUserInfo(self, email):
+        return self.connexion.getUser(email)
+
     def getUsername(self):
         self.username = sys.argv[2]
         return self.username
+
+    def getEmploymentDate(self,email):
+        return self.connexion.getDate(email)
 
     def getUserPermissions(self):
         self.userPermissions = sys.argv[1]
         return self.userPermissions
 
-    def createNewRole(self, newRole):
-        pass
-
     def getCompany(self):
         companyInfo = []
         self.companyInfo = json.loads(sys.argv[4])
         self.company = self.companyInfo["nom"]
+        self.companyID = self.companyInfo["id"]
         return self.company
 
     def getCompanyID(self, compagnie):
@@ -275,11 +401,16 @@ class Controleur():
         return self.connexion.trouvermembres()
 
     def saveUser(self, newUser):
-        reponseServeur = self.connexion.saveUser(newUser)
-        self.vue.showMessage(reponseServeur)
+        return self.connexion.saveUser(newUser)
+
+    def updateUser(self, user):
+        return self.connexion.updateUser(user)
 
     def saveEmployee(self, newEmployee):
-        pass
+        return self.connexion.saveEmployee(newEmployee)
+
+    def updateEmployee(self, employee):
+        return self.connexion.updateEmployee(employee)
 
 if __name__ == '__main__':
     c = Controleur()

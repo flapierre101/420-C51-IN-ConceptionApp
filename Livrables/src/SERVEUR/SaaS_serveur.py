@@ -28,6 +28,13 @@ class Dbclient():
         info = self.curs.fetchall()
         return info
 
+    def getDate(self, email):
+        sqlRequest = "select date_embauche from 'personnels' where courriel = ?"
+        param = [email]
+        self.curs.execute(sqlRequest,param)
+        date = self.curs.fetchall()
+        return date
+
     def trouverclients(self):
         sqlnom = ("select compagnie, nom, courriel from 'client'")
         self.curs.execute(sqlnom)
@@ -63,6 +70,35 @@ class Dbclient():
         param.append(event)
         self.curs.execute(sqlRequest, param)
         return self.curs.fetchall()
+
+    def newEmployee(self, compagnie, nom, prenom, courriel, role,date_embauche):
+        sqlRequest = "INSERT INTO 'personnels' (compagnie, nom, prenom, role, courriel, date_embauche) VALUES (?,?,?,?,?,?)"
+        param = [compagnie, nom, prenom, role, courriel, date_embauche]
+        try:
+            self.curs.execute(sqlRequest,param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
+
+    def updateEmployee(self,compagnie, nom, prenom, courriel, role, date_embauche,ancienCourriel):
+        sqlRequest = '''
+                    UPDATE 'personnels' set
+                              compagnie = ?,
+                              nom = ?,
+                              prenom = ?,
+                              courriel = ?,
+                              role = ?,
+                              date_embauche = ?
+                    WHERE courriel = ?
+                              '''
+        try:
+            param = [compagnie, nom, prenom, courriel, role, date_embauche, ancienCourriel]
+            self.curs.execute(sqlRequest, param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
 
     def newEvent(self, nom, date_debut, date_fin, budget, desc):
         sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
@@ -261,6 +297,15 @@ class Dbman():
         info = self.curs.fetchall()
         return info
 
+    def getUser(self, email):
+        sqlRequest = ("select * from 'utilisateurs' where courriel = ?")
+        param = [email]
+        self.curs.execute(sqlRequest,param)
+        user = self.curs.fetchall()
+        print("getUser DB: ", user)
+        return user
+
+
     def getPermissions(self):
         sqlRequest = ("select distinct droit from 'utilisateurs'")
         self.curs.execute(sqlRequest)
@@ -284,6 +329,24 @@ class Dbman():
         except sqlite3.Error as er:
             print(er)
 
+    def updateUser(self,compagnie,nom,prenom,courriel,role,droit,ancienCourriel):
+        sqlRequest = '''
+            UPDATE 'utilisateurs' set
+                      compagnie = ?,
+                      nom = ?,
+                      prenom = ?,
+                      courriel = ?,
+                      role = ?,
+                      droit = ?
+            WHERE courriel = ?
+                      '''
+        try:
+            param = [compagnie,nom,prenom,courriel,role,droit,ancienCourriel]
+            self.curs.execute(sqlRequest,param)
+            self.conn.commit()
+            return self.curs.fetchall()
+        except sqlite3.Error as er:
+            print(er)
 
     def trouvermembres(self):
         sqlnom = (
@@ -380,6 +443,18 @@ def getRoles():
     else:
         return repr("Erreur")
 
+
+@app.route('/getUser', methods=["GET","POST"])
+def getUser():
+    if request.method == "POST":
+        email = request.form["email"]
+        db = Dbman()
+        user = db.getUser(email)
+        db.fermerdb()
+        return Response(json.dumps(user), mimetype='application/json')
+    else:
+        return repr("Erreur")
+
 @app.route('/getPermissions', methods=["GET", "POST"])
 def getPermissions():
     if request.method == "POST":
@@ -401,6 +476,17 @@ def getCompanyID():
     else:
         return repr("Erreur")
 
+
+@app.route('/getDate', methods=["GET","POST"])
+def getDate():
+    if request.method == "POST":
+        db = Dbclient()
+        email = request.form["email"]
+        date = db.getDate(email)
+        db.fermerdb()
+        return Response(json.dumps(date), mimetype='application/json')
+    else:
+        return repr("Erreur")
 
 @app.route('/trouvermembres', methods=["GET", "POST"])
 def trouvermembres():
@@ -496,6 +582,46 @@ def newEvent():
         db.newEvent(nom, date_debut, date_fin, budget, desc)
         return "test"
 
+
+@app.route('/newEmployee', methods=["GET","POST"])
+def newEmployee():
+    message = ""
+    if request.method == "POST":
+
+        try:
+            compagnie = request.form["compagnie"]
+            nom = request.form["nom"]
+            prenom = request.form["prenom"]
+            courriel = request.form["courriel"]
+            role = request.form["role"]
+            date_embauche = request.form["dateEmbauche"]
+            db = Dbclient()
+            db.newEmployee(compagnie,nom,prenom,courriel,role,date_embauche)
+            message = "Success"
+        except:
+            message = "Erreur"
+        return Response(json.dumps(message), mimetype='application/json')
+
+@app.route('/updateEmployee', methods=["GET","POST"])
+def updateEmployee():
+    message = ""
+    if request.method == "POST":
+        try:
+            compagnie = request.form["compagnie"]
+            nom = request.form["nom"]
+            prenom = request.form["prenom"]
+            courriel = request.form["courriel"]
+            role = request.form["role"]
+            date_embauche = request.form["dateEmbauche"]
+            ancienCourriel = request.form["ancienCourriel"]
+            db = Dbclient()
+            db.updateEmployee(compagnie, nom, prenom, courriel, role, date_embauche,ancienCourriel)
+            message = "Success"
+        except:
+            message = "Erreur"
+        return Response(json.dumps(message),mimetype='application/json')
+
+
 @app.route('/newUser', methods=["GET", "POST"])
 def newUser():
     message = ""
@@ -516,6 +642,24 @@ def newUser():
             message = "Erreur"
         return Response(json.dumps(message), mimetype='application/json')
 
+@app.route('/updateUser',methods=["GET","POST"])
+def updateUser():
+    message = ""
+    if request.method == "POST":
+        try:
+            compagnie = request.form["compagnie"]
+            nom = request.form["nom"]
+            prenom = request.form["prenom"]
+            courriel = request.form["courriel"]
+            role = request.form["role"]
+            droit = request.form["droit"]
+            ancienCourriel = request.form["ancienCourriel"]
+            db = Dbman()
+            rep = db.updateUser(compagnie,nom,prenom,ancienCourriel, courriel,role,droit)
+            message = "Success"
+        except:
+            message = "Erreur"
+        return Response(json.dumps(message),mimetype='application/json')
 
 @app.route('/newLivrable', methods=["GET", "POST"])
 def newLivrable():
