@@ -61,37 +61,6 @@ class Vue():
 
         return self.cadrelogin
 
-    # TODO - Interface pour enregistrer nouvel utilisateur - PAS PRIORITAIRE
-    """
-    def creercadresignup(self): 
-
-        self.cadresignup=Frame(self.cadreapp,width=800,height=400)
-
-        self.signuplabel=Label(self.cadresignup,text="Enregistrement pour Production CDJ",font=("Arial",18),
-                              borderwidth=2,relief=GROOVE)
-
-        self.signuplabnom=Label(self.cadresignup,text="Nom",font=("Arial",14))
-        self.signupnom=Entry(self.cadresignup,font=("Arial",14),width=30)
-        self.signuplabmdp=Label(self.cadresignup,text="MotdePasse",font=("Arial",14))
-        self.signupmdp=Entry(self.cadresignup,font=("Arial",14),show="*",width=30)
-
-        # les boutons d'actions
-        #self.btnannulersignup=Button(self.cadresignup,text="Annuler",font=("Arial",12),padx=10,pady=10,command=self.annulersignup)
-        #self.btnidentifiersignup=Button(self.cadresignup,text="Identifier",font=("Arial",12),padx=10,pady=10,command=self.identifiersignup)
-        #self.btnenregistrementsignup=Button(self.cadresignup,text="Enregistrement",font=("Arial",12),padx=10,pady=10,command=self.enregistrementsignup)
-
-        self.signuplabel.grid(row=10,column=10,columnspan=20,padx=10,pady=10,ipadx=10,ipady=10)
-        self.signuplabnom.grid(row=20,column=10,sticky=E,padx=5,pady=5)
-        self.signupnom.grid(row=20,column=20,padx=10,pady=5)
-        self.signuplabmdp.grid(row=30,column=10,sticky=E,padx=5,pady=5)
-        self.signupmdp.grid(row=30,column=20,padx=10,pady=5)
-
-        #self.btnannulersignup.grid(row=40,column=20,sticky=W,padx=10,pady=10)
-        #self.btnidentifiersignup.grid(row=40,column=20,padx=10,pady=10)
-        #self.btnenregistrementsignup.grid(row=40,column=40,padx=10,pady=10)
-
-        return self.cadresignup
-"""
 
     def gererforfait(self, msg = ""):
         self.modulevisible = False
