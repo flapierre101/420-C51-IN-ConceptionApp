@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from tkinter import scrolledtext
 from tkcalendar import *
 import urllib.request
 import urllib.parse
@@ -30,6 +31,7 @@ class Vue():
         self.style.theme_use("awdark")
         self.root.configure(bg='#33393b')
         self.eventInfo = {}
+        self.echeancierInfo = {}
         self.event = {}
         self.root.title("Production CDJ - Évènements")
         self.eventParam = {}
@@ -100,7 +102,7 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
 
     def createDetailsFrame(self):
-        self.root.geometry("325x325")
+        self.root.geometry("500x500")
         self.eventFrame = Frame(self.root)
         self.infoFrame = Frame(self.eventFrame)
         self.buttonFrame = Frame(self.eventFrame)
@@ -154,10 +156,60 @@ class Vue():
             self.updateEventButton.pack(side=LEFT)
             self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
             self.deleteEventButton.pack(side=RIGHT)
+            self.addEcheancierButton = Button(self.buttonFrame, text="Ajouter un échéancier", command=self.addEcheancier)
+            self.addEcheancierButton.pack(side=RIGHT)
 
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.backButton.pack(side=RIGHT)
 
+    def addEcheancier(self):
+        self.eventFrame.pack_forget()
+        self.createAddEcheancierFrame()
+        self.createEcheancierButtonFrame()
+
+    def createAddEcheancierFrame(self):
+        self.root.geometry("500x500")
+        self.eventFrame = Frame(self.root)
+        self.infoFrame = Frame(self.eventFrame)
+        self.buttonFrame = Frame(self.eventFrame)
+        self.confirmationFrame = Frame(self.eventFrame)
+
+        self.createEcheancierFrame()
+
+        title = Label(self.eventFrame,
+                      text="* Ajouter echeancier *", font=("Arial", 14))
+        title.pack()
+        self.infoFrame.pack()
+        self.buttonFrame.pack()
+        self.eventFrame.pack()
+        self.confirmationFrame.pack(pady=10)
+
+    def createEcheancierFrame(self):
+        fields = ["Titre", "Date d'échéance", "Date rappel", "Description rappel"]
+        row = 0
+
+        for i in fields:
+
+            entryLabel = Label(self.infoFrame, text=i)
+
+            if "Titre" in i:
+                entry = Entry(self.infoFrame)
+            elif "Date d'échéance" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+            elif "Date rappel" in i:
+                entry = DateEntry(self.infoFrame, width=12, background='darkblue',
+                                  foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
+            elif "Description rappel" in i:
+                entry = Entry(self.infoFrame)
+            else:
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
+
+
+            entryLabel.grid(row=row, column=0, sticky=E + W)
+            entry.grid(row=row, column=1, sticky=E + W)
+            row += 1
+            self.echeancierInfo[i] = entry
 
     def createInfoFrame(self):
         fields = ["Nom", "Date Début", "Date Fin", "Budget", "Description"]
@@ -188,6 +240,24 @@ class Vue():
         self.createEventButton.pack(side=LEFT)
         self.clearButton.pack(side=LEFT)
         self.backButton.pack(side=RIGHT)
+
+    def createEcheancierButtonFrame(self):
+        self.createEcheancierButton = Button(
+            self.buttonFrame, text="Créer", command=self.saveEcheancier)
+
+        self.createEcheancierButton.pack(side=LEFT)
+
+    def saveEcheancier(self):
+
+        params = {}
+        params["eventID"] = self.event["id"]
+        params["dueDate"] = self.echeancierInfo["Date d'échéance"].get_date()
+        params["dateRappel"] = self.echeancierInfo["Date rappel"].get_date()
+        params["descrappel"] = self.echeancierInfo["Description rappel"].get()
+        params["titre"] = self.echeancierInfo["Titre"].get()
+        self.parent.saveEcheancier(params)
+        self.backToMenu()
+
 
     def clearAllFields(self):
         self.eventInfo["Nom"].delete(0, "end")
@@ -267,7 +337,9 @@ class Modele():
 
 class Controleur():
     def __init__(self):
+
         y = json.loads(sys.argv[4])
+
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
@@ -288,6 +360,10 @@ class Controleur():
     def saveEvent(self, newEvent):
         reponseServeur = self.connexion.saveEvent(newEvent)
         self.vue.showMessage(reponseServeur)
+
+    def saveEcheancier(self, params):
+        reponseServeur = self.connexion.saveEcheancier(params)
+
 
     def deleteEvent(self, eventID):
         reponseServeur = self.connexion.deleteEvent(eventID)

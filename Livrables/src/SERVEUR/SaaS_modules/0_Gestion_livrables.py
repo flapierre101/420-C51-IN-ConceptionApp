@@ -121,7 +121,7 @@ class Vue():
     def createInfoDetailsFrame(self):
         fields = ["Titre","État", "Propriétaire", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
-        #print(self.parent.getUserRole())
+
         for i in fields:
 
             entryLabel = Label(self.infoFrame, text=i)
@@ -190,7 +190,7 @@ class Vue():
     def createLivrableFrame(self):
         fields = ["Titre", "Propriétaire","Évènement associé", "Échéancier associé", "Date Limite", "Notes"]
         row = 0
-        #print(self.parent.getUserRole())
+
         for i in fields:
 
             entryLabel = Label(self.infoFrame, text=i)
@@ -220,7 +220,6 @@ class Vue():
                 foreground='white', borderwidth=2, date_pattern='y-mm-dd', firstweekday='sunday')
                 if self.indexEcheancierSelect != None:
                     echeanciers = self.parent.getEcheanciers(self.indexEventSelect+1)
-                    print("Ici les échéanciers", echeanciers)
                     if echeanciers != "Rien":
                         for echeancier in echeanciers:                              # converts list of lists to list of strings
                             if self.livrableInfo["Échéancier associé"].get() == echeancier[0]:
@@ -232,6 +231,11 @@ class Vue():
 
             elif "Notes" in i:
                 entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
+
+            elif "Notes" in i:
+                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
+                if "Notes" in self.livrableInfo:
+                    entry.insert(END, self.livrableInfo["Notes"].get("1.0",END).strip())
 
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
@@ -254,7 +258,7 @@ class Vue():
             choices = self.parent.getEvents()          # returns a list of lists
         if table == "echeancier":
             idEvent = 1 if self.indexEventSelect == None else self.indexEventSelect + 1
-            choices = self.parent.getEcheanciers(idEvent)
+            choices = self.livrableEcheanciersList =self.parent.getEcheanciers(idEvent)
 
         self.existingChoice = []
         if choices == "Rien":
@@ -278,10 +282,9 @@ class Vue():
 
     def  comboEventSelection(self, event):
         self.indexEventSelect = self.livrableInfo["Évènement associé"].current()
-        print(self.indexEventSelect)
         self.indexEcheancierSelect = None
         self.dontcreate = True
-        #self.indexEventSelect = self.livrableInfo["Évènement associé"].current()
+
 
 
         self.livrableFrame.pack_forget()
@@ -291,6 +294,7 @@ class Vue():
         self.indexEcheancierSelect = self.livrableInfo["Échéancier associé"].current()
         if self.livrableInfo["Échéancier associé"].get() != "Aucun échéancier":
             self.dontcreate = False
+        self.livrableInfo["echeancierID"] = self.livrableEcheanciersList[self.indexEcheancierSelect][1]
         self.livrableFrame.pack_forget()
         self.addLivrableFrame()
 
@@ -310,12 +314,11 @@ class Vue():
         self.params = {}
 
         self.params["Titre"] = self.livrableInfo["Titre"].get()
-        self.params["Owner"] = self.livrableInfo["Propriétaire"].get()
-        self.params["Event"] = self.livrableInfo["Évènement associé"].get()
-        self.params["Echeancier"] = self.livrableInfo["Échéancier associé"].get()
+        self.params["Owner"] = self.parent.getUserEmail()
+        self.params["Echeancier"] = self.livrableInfo["echeancierID"]
         self.params["Notes"] = self.livrableInfo["Notes"].get("1.0",END).strip()
 
-        print(self.params)
+        self.parent.saveLivrable(self.params)
 
     def completeLivrable(self):
         valeur = 0 if self.listeComplete == 1 else 1
@@ -370,7 +373,7 @@ class Controleur():
         self.modele.inscrireUser(sys.argv)
         self.vue = Vue(self)
         self.vue.root.mainloop()
-        print(args)
+
 
     def getUsername(self):
         return self.modele.username

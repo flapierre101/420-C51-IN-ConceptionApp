@@ -128,6 +128,11 @@ class Connexion:
         rep = self.appelserveur(url, newLivrable)
         return "Nouveau livrable enregistré"
 
+    def saveEcheancier(self, params):
+        url = self.urlserveur + "/saveEcheancier"
+        rep = self.appelserveur(url, params)
+        return "Nouveau livrable enregistré"
+
     def deleteLivrable(self, livrableID):
         url = self.urlserveur + "/deleteLivrable"
         params = {"id":livrableID}
@@ -148,6 +153,13 @@ class Connexion:
     def getLivrables(self, courriel, complete):
         url = self.urlserveur+"/getLivrables"
         params = {"courriel" : courriel, "complete": complete}
+        reptext=self.appelserveur(url,params)
+        mondict=json.loads(reptext)
+        return mondict
+
+    def getEcheanciers(self, idEvent):
+        url = self.urlserveur+"/getEcheanciers"
+        params = {"event" : idEvent}
         reptext=self.appelserveur(url,params)
         mondict=json.loads(reptext)
         return mondict
