@@ -244,7 +244,6 @@ class Vue():
                     self.event["budget"] = i[3]
                     self.event["desc"] = i[4]
                     self.event["id"] = i[5]
-                    print("print ln 218", self.event)
 
             self.gestionFrame.destroy()
             self.createDetailsFrame()
@@ -261,9 +260,7 @@ class Modele():
 
 class Controleur():
     def __init__(self):
-        print(sys.argv[4])
         y = json.loads(sys.argv[4])
-        print(y["forfait"])
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
@@ -279,7 +276,6 @@ class Controleur():
         return self.userRole
     
     def getUserPermissions(self):
-        print(sys.argv)
         return sys.argv[1]
 
     def saveEvent(self, newEvent):

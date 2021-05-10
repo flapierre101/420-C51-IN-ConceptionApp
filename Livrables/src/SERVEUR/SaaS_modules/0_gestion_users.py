@@ -26,7 +26,6 @@ class Vue():
         self.userToModify = []
         self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
         self.title = Label(self.root, text="*** Gestion d'utilisateurs ***", font=("Arial", 16)).pack()
-        print(sys.argv)
         self.createModuleFrame()
 
     def createModuleFrame(self):
@@ -372,7 +371,6 @@ class Controleur():
     def getCompany(self):
         companyInfo = []
         self.companyInfo = json.loads(sys.argv[4])
-        print(self.companyInfo)
         self.company = self.companyInfo["nom"]
         self.companyID = self.companyInfo["id"]
         return self.company
@@ -386,7 +384,6 @@ class Controleur():
         return self.connexion.trouvermembres()
 
     def saveUser(self, newUser):
-        print("saveUser Controlleur: ", newUser)
         return self.connexion.saveUser(newUser)
 
     def updateUser(self, user):
