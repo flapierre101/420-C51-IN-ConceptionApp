@@ -645,7 +645,7 @@ def updateUser():
             droit = request.form["droit"]
             ancienCourriel = request.form["ancienCourriel"]
             db = Dbman()
-            rep = db.updateUser(compagnie,nom,prenom,ancienCourriel, courriel,role,droit)
+            rep = db.updateUser(compagnie,nom,prenom, courriel,role,droit,ancienCourriel)
             message = "Success"
         except:
             message = "Erreur"
