@@ -182,3 +182,12 @@ Les problèmes rencontrés :
 - François : probleme d'accès à certaine infos. Problème réglé en cours de route.
 - Dany : Plus long que prévue dû à la porté de variable.
 - Caroline :  Plus long que prévue dû au nombre d'accès dans les base de données.
+
+
+## 17 mai 
+
+- Jour de remise
+    - Temps réservé pour tester l'application
+    - Mise à jour de la documentation.
+    - Préparation de l'oral
+    - Nettoyage du code source. 
