@@ -8,9 +8,7 @@ import json
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# import ../connexion.py
 from connexion import *
-
 
 
 class Vue():
@@ -18,11 +16,11 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        # Dark theme
         self.root.tk.call('package', 'require', 'awdark')
+        # Light theme
         self.root.tk.call('package', 'require', 'awlight')
         self.style = Style(self.root)
-        # self.style.theme_use("awlight")
-        # self.root.configure(bg='#e8e8e7')
         self.style.theme_use("awdark")
         self.root.configure(bg='#33393b')
         self.userInfo = {}
@@ -83,7 +81,6 @@ class Vue():
     def createButtonFrame(self):
         self.createAddButton = Button(self.buttonFrame, text="Ajouter un employé",command=self.createNewUser)
         self.createModifyButton = Button(self.buttonFrame, text="Modifier un employé",command=self.createModifyUser)
-        # self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.createAddButton.pack(fill=Y)
         self.createModifyButton.pack(fill=Y)
@@ -119,7 +116,6 @@ class Vue():
 
         self.permissionsMenu['values'] = self.droits
         self.permissionsMenu.state(["readonly"])
-
         self.permissionsMenu.grid(column=1, row=15)
         self.permissionsMenu.current(0)
         return self.permissionsMenu
@@ -140,7 +136,6 @@ class Vue():
         item = values[2]
         self.courriel = item
         self.getUserInfo(item)                 # courriel du user à modifier
-
 
 
     def getUserInfo(self, email):
@@ -181,7 +176,6 @@ class Vue():
             titleText = "* Créer un utilisateur *"
 
         self.createUserButtonFrame()
-
 
         title = Label(self.userFrame,
                       text=titleText, font=("Arial", 14))
@@ -261,8 +255,6 @@ class Vue():
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
             self.userInfo[i] = entry
-
-
 
     def getUserEntryData(self):
         self.userParam = {}
@@ -344,9 +336,6 @@ class Vue():
 
         if self.messageLabel:
             self.messageLabel.destroy()
-
-
-
 
 
 class Modele():

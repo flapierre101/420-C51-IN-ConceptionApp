@@ -1,11 +1,8 @@
-#import flask
-from tkinter.constants import INSERT
 from flask import Flask, request, json
 from werkzeug.wrappers import Response
 import os
 # pour retrouver le dossier courant d'execution
 import sys
-
 import sqlite3
 
 app = Flask(__name__)
@@ -14,6 +11,7 @@ app.secret_key = "qwerasdf1234"
 MAX_CLIENT_F1 = 5
 MAX_CLIENT_F2 = 500
 MAX_CLIENT_F3 = 1500
+
 
 class Dbclient():
     def __init__(self):
@@ -31,7 +29,7 @@ class Dbclient():
     def getDate(self, email):
         sqlRequest = "select date_embauche from 'personnels' where courriel = ?"
         param = [email]
-        self.curs.execute(sqlRequest,param)
+        self.curs.execute(sqlRequest, param)
         date = self.curs.fetchall()
         return date
 
@@ -71,17 +69,17 @@ class Dbclient():
         self.curs.execute(sqlRequest, param)
         return self.curs.fetchall()
 
-    def newEmployee(self, compagnie, nom, prenom, courriel, role,date_embauche):
+    def newEmployee(self, compagnie, nom, prenom, courriel, role, date_embauche):
         sqlRequest = "INSERT INTO 'personnels' (compagnie, nom, prenom, role, courriel, date_embauche) VALUES (?,?,?,?,?,?)"
         param = [compagnie, nom, prenom, role, courriel, date_embauche]
         try:
-            self.curs.execute(sqlRequest,param)
+            self.curs.execute(sqlRequest, param)
             self.conn.commit()
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
 
-    def updateEmployee(self,compagnie, nom, prenom, courriel, role, date_embauche,ancienCourriel):
+    def updateEmployee(self, compagnie, nom, prenom, courriel, role, date_embauche, ancienCourriel):
         sqlRequest = '''
                     UPDATE 'personnels' set
                               compagnie = ?,
@@ -93,7 +91,8 @@ class Dbclient():
                     WHERE courriel = ?
                               '''
         try:
-            param = [compagnie, nom, prenom, courriel, role, date_embauche, ancienCourriel]
+            param = [compagnie, nom, prenom, courriel,
+                     role, date_embauche, ancienCourriel]
             self.curs.execute(sqlRequest, param)
             self.conn.commit()
             return self.curs.fetchall()
@@ -127,7 +126,7 @@ class Dbclient():
                     notes =:notes
             Where id =:id''')
         try:
-            self.curs.execute(sqlRequest, {'id': id, 'notes':notes})
+            self.curs.execute(sqlRequest, {'id': id, 'notes': notes})
             self.conn.commit()
             return "Evenement mis a jour !"
         except sqlite3.Error as er:
@@ -135,12 +134,13 @@ class Dbclient():
             return "Echec de la mise a jour !"
 
     def saveLivrable(self, titre, courriel, echeancierID, notes):
-        sqlnom = ( "select id from 'personnels' where courriel=:courriel")
+        sqlnom = ("select id from 'personnels' where courriel=:courriel")
         self.curs.execute(sqlnom, {'courriel': courriel})
         usager = self.curs.fetchall()
         if usager:
             params = [titre, echeancierID, usager[0][0], notes]
-            sqlRequest = ("INSERT INTO 'livrables'(desc, echeancier, responsable, notes) VALUES (?,?,?,?)")
+            sqlRequest = (
+                "INSERT INTO 'livrables'(desc, echeancier, responsable, notes) VALUES (?,?,?,?)")
             try:
                 self.curs.execute(sqlRequest, params)
                 self.conn.commit()
@@ -150,9 +150,9 @@ class Dbclient():
         return "Echec de la mise a jour !"
 
     def saveEcheancier(self, titre, dueDate, eventID, dateRappel, descrappel):
-
         params = [titre, dueDate, eventID, dateRappel, descrappel]
-        sqlRequest = ("INSERT INTO 'echeancier'(desc, duedate, evenement, daterappel, descrappel) VALUES (?,?,?,?,?)")
+        sqlRequest = (
+            "INSERT INTO 'echeancier'(desc, duedate, evenement, daterappel, descrappel) VALUES (?,?,?,?,?)")
         try:
             self.curs.execute(sqlRequest, params)
             self.conn.commit()
@@ -168,7 +168,7 @@ class Dbclient():
                     complete =:valeur
             Where id=:id''')
         try:
-            self.curs.execute(sqlRequest, {'id': id, 'valeur':valeur})
+            self.curs.execute(sqlRequest, {'id': id, 'valeur': valeur})
             self.conn.commit()
             return "Evenement mis a jour !"
         except sqlite3.Error as er:
@@ -176,7 +176,7 @@ class Dbclient():
             return "Echec de la mise a jour !"
 
     def populate(self, table, id):
-        sqlnom = ( "select * from " + table + " where id=:id")
+        sqlnom = ("select * from " + table + " where id=:id")
         self.curs.execute(sqlnom, {'id': id, 'table': table})
         rep = self.curs.fetchall()
         if not rep:
@@ -187,40 +187,37 @@ class Dbclient():
         return rep
 
     def getLivrablesUser(self, courriel, complete):
-        sqlnom = ( "select * from 'personnels' where courriel=:courriel")
+        sqlnom = ("select * from 'personnels' where courriel=:courriel")
         self.curs.execute(sqlnom, {'courriel': courriel})
         usager = self.curs.fetchall()
         if usager:
-            sqlnom = ("select * from 'livrables' where responsable=:qui and complete=:complete")
-            self.curs.execute(sqlnom, {'qui': usager[0][0], 'complete':complete})
+            sqlnom = (
+                "select * from 'livrables' where responsable=:qui and complete=:complete")
+            self.curs.execute(
+                sqlnom, {'qui': usager[0][0], 'complete': complete})
             livrables = self.curs.fetchall()
             return livrables
-
-
         return "Rien"
 
     def getEcheanciers(self, event):
-        sqlnom = ( "select desc, id, duedate from 'echeancier' where evenement=:event")
+        sqlnom = (
+            "select desc, id, duedate from 'echeancier' where evenement=:event")
         self.curs.execute(sqlnom, {'event': event})
         echeanciers = self.curs.fetchall()
         if echeanciers:
             return echeanciers
-
         return "Rien"
 
-    ### Module Gestion Client
+    # Module Gestion Client
 
     def getClients(self):
-        sqlnom=("select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
+        sqlnom = (
+            "select idclient, nom, courriel, tel, compagnie, adresse, rue, ville from 'client'")
         self.curs.execute(sqlnom)
-        info=self.curs.fetchall()
+        info = self.curs.fetchall()
         return info
 
-    def getOneClient(self, client):
-        pass
-
     def saveClient(self, param):
-        # sqlRequest = "INSERT INTO 'evenement'(nom, date_debut, date_fin, budget, desc) VALUES (?,?,?,?,?)"
         sqlRequest = "INSERT INTO 'client' (nom, courriel, tel, compagnie, adresse, rue, ville) VALUES (?,?,?,?,?,?,?)"
         try:
             self.curs.execute(sqlRequest, param)
@@ -229,7 +226,6 @@ class Dbclient():
         except sqlite3.Error as er:
             print(er)
             return er
-
 
     def deleteClient(self, clientId):
         sqlRequest = "DELETE FROM 'client' where idclient = ?"
@@ -254,9 +250,9 @@ class Dbclient():
             WHERE idclient = ?
        '''
         try:
-           self.curs.execute(sqlRequest, updatedData)
-           self.conn.commit()
-           return "Success"
+            self.curs.execute(sqlRequest, updatedData)
+            self.conn.commit()
+            return "Success"
 
         except sqlite3.Error as er:
             print(er)
@@ -266,7 +262,6 @@ class Dbman():
     def __init__(self):
         nomdb = os.getcwd()+"/SaaS_DB/"+"Production_CDJ_corpo.sqlite"
         self.conn = sqlite3.connect(nomdb)
-        #self.conn = sqlite3.connect("Production_CDJ_corpo.sqlite")
         self.curs = self.conn.cursor()
 
     def identifierusager(self, nom, mdp):
@@ -291,10 +286,9 @@ class Dbman():
     def getUser(self, email):
         sqlRequest = ("select * from 'utilisateurs' where courriel = ?")
         param = [email]
-        self.curs.execute(sqlRequest,param)
+        self.curs.execute(sqlRequest, param)
         user = self.curs.fetchall()
         return user
-
 
     def getPermissions(self):
         sqlRequest = ("select distinct droit from 'utilisateurs'")
@@ -302,24 +296,25 @@ class Dbman():
         info = self.curs.fetchall()
         return info
 
-    def getCompanyID(self,company):
+    def getCompanyID(self, company):
         sqlRequest = ("select id from clients where nom = ?")
         param = [company]
-        self.curs.execute(sqlRequest,param)
+        self.curs.execute(sqlRequest, param)
         id = self.curs.fetchall()
         return id
 
-    def newUser(self, compagnie,password,nom,prenom,courriel,role,droit):
-        sqlRequest = ("INSERT INTO 'utilisateurs'(compagnie, password, nom, prenom, courriel, role, droit) VALUES (?,?,?,?,?,?,?)")
+    def newUser(self, compagnie, password, nom, prenom, courriel, role, droit):
+        sqlRequest = (
+            "INSERT INTO 'utilisateurs'(compagnie, password, nom, prenom, courriel, role, droit) VALUES (?,?,?,?,?,?,?)")
         try:
-            param = [compagnie,password,nom,prenom,courriel,role,droit]
+            param = [compagnie, password, nom, prenom, courriel, role, droit]
             self.curs.execute(sqlRequest, param)
             self.conn.commit()
             return self.curs.fetchall()
         except sqlite3.Error as er:
             print(er)
 
-    def updateUser(self,compagnie,nom,prenom,courriel,role,droit,ancienCourriel):
+    def updateUser(self, compagnie, nom, prenom, courriel, role, droit, ancienCourriel):
         sqlRequest = '''
             UPDATE 'utilisateurs' set
                       compagnie = ?,
@@ -331,8 +326,9 @@ class Dbman():
             WHERE courriel = ?
                       '''
         try:
-            param = [compagnie,nom,prenom,courriel,role,droit,ancienCourriel]
-            self.curs.execute(sqlRequest,param)
+            param = [compagnie, nom, prenom,
+                     courriel, role, droit, ancienCourriel]
+            self.curs.execute(sqlRequest, param)
             self.conn.commit()
             return self.curs.fetchall()
         except sqlite3.Error as er:
@@ -358,6 +354,7 @@ class Dbman():
         except sqlite3.Error as er:
             print(er)
 
+
 def demanderclients():
     db = Dbclient()
     clients = db.trouverclients()
@@ -377,7 +374,6 @@ def index():
 def trouvermodules():
     listefichiers = []
     monhome = os.path.dirname(os.path.realpath(sys.argv[0]))+"/SaaS_modules"
-    # monhome=os.getcwd()+"/SaaS_modules"
     listefichiers = os.listdir(monhome)
     return Response(json.dumps(listefichiers), mimetype='application/json')
 
@@ -392,7 +388,6 @@ def telechargermodule():
         lemodule = bonfichier.read()
         bonfichier.close()
         return Response(json.dumps(lemodule), mimetype='application/json')
-        # return repr(usager)
     else:
         return repr("pas ok")
 
@@ -407,7 +402,6 @@ def identifierusager():
 
         db.fermerdb()
         return Response(json.dumps(usager), mimetype='application/json')
-        # return repr(usager)
     else:
         return repr("pas ok")
 
@@ -434,7 +428,7 @@ def getRoles():
         return repr("Erreur")
 
 
-@app.route('/getUser', methods=["GET","POST"])
+@app.route('/getUser', methods=["GET", "POST"])
 def getUser():
     if request.method == "POST":
         email = request.form["email"]
@@ -445,6 +439,7 @@ def getUser():
     else:
         return repr("Erreur")
 
+
 @app.route('/getPermissions', methods=["GET", "POST"])
 def getPermissions():
     if request.method == "POST":
@@ -454,6 +449,7 @@ def getPermissions():
         return Response(json.dumps(permissions), mimetype='application/json')
     else:
         return repr("Erreur")
+
 
 @app.route('/getCompanyID', methods=["GET", "POST"])
 def getCompanyID():
@@ -467,7 +463,7 @@ def getCompanyID():
         return repr("Erreur")
 
 
-@app.route('/getDate', methods=["GET","POST"])
+@app.route('/getDate', methods=["GET", "POST"])
 def getDate():
     if request.method == "POST":
         db = Dbclient()
@@ -478,15 +474,14 @@ def getDate():
     else:
         return repr("Erreur")
 
+
 @app.route('/trouvermembres', methods=["GET", "POST"])
 def trouvermembres():
     if request.method == "POST":
         db = Dbman()
         membres = db.trouvermembres()
-
         db.fermerdb()
         return Response(json.dumps(membres), mimetype='application/json')
-        # return repr(usager)
     else:
         return repr("pas ok")
 
@@ -497,7 +492,6 @@ def requeteserveur():
         nomfonction = request.form["fonction"]
         rep = mesfonctions[nomfonction]()
         return Response(json.dumps(rep), mimetype='application/json')
-        # return repr(usager)
     else:
         return repr("pas ok")
 
@@ -552,12 +546,10 @@ def updateForfait():
         db = Dbman()
         db.updateForfaitClient(compagnieID, forfait)
         db.fermerdb()
-        # return Response(json.dumps(eventList), mimetype='application/json')
         return Response(json.dumps("ok"), mimetype='application/json')
 
     else:
         return repr("Error")
-
 
 
 @app.route('/newEvent', methods=["GET", "POST"])
@@ -573,7 +565,7 @@ def newEvent():
         return "test"
 
 
-@app.route('/newEmployee', methods=["GET","POST"])
+@app.route('/newEmployee', methods=["GET", "POST"])
 def newEmployee():
     message = ""
     if request.method == "POST":
@@ -586,13 +578,15 @@ def newEmployee():
             role = request.form["role"]
             date_embauche = request.form["dateEmbauche"]
             db = Dbclient()
-            db.newEmployee(compagnie,nom,prenom,courriel,role,date_embauche)
+            db.newEmployee(compagnie, nom, prenom,
+                           courriel, role, date_embauche)
             message = "Success"
         except:
             message = "Erreur"
         return Response(json.dumps(message), mimetype='application/json')
 
-@app.route('/updateEmployee', methods=["GET","POST"])
+
+@app.route('/updateEmployee', methods=["GET", "POST"])
 def updateEmployee():
     message = ""
     if request.method == "POST":
@@ -605,18 +599,18 @@ def updateEmployee():
             date_embauche = request.form["dateEmbauche"]
             ancienCourriel = request.form["ancienCourriel"]
             db = Dbclient()
-            db.updateEmployee(compagnie, nom, prenom, courriel, role, date_embauche,ancienCourriel)
+            db.updateEmployee(compagnie, nom, prenom, courriel,
+                              role, date_embauche, ancienCourriel)
             message = "Success"
         except:
             message = "Erreur"
-        return Response(json.dumps(message),mimetype='application/json')
+        return Response(json.dumps(message), mimetype='application/json')
 
 
 @app.route('/newUser', methods=["GET", "POST"])
 def newUser():
     message = ""
     if request.method == "POST":
-
         try:
             compagnie = request.form["compagnie"]
             password = request.form["defaultPassword"]
@@ -626,13 +620,14 @@ def newUser():
             role = request.form["role"]
             droit = request.form["droit"]
             db = Dbman()
-            rep = db.newUser(compagnie,password,nom,prenom,courriel,role,droit)
+            db.newUser(compagnie, password, nom, prenom, courriel, role, droit)
             message = "Success"
         except:
             message = "Erreur"
         return Response(json.dumps(message), mimetype='application/json')
 
-@app.route('/updateUser',methods=["GET","POST"])
+
+@app.route('/updateUser', methods=["GET", "POST"])
 def updateUser():
     message = ""
     if request.method == "POST":
@@ -645,11 +640,13 @@ def updateUser():
             droit = request.form["droit"]
             ancienCourriel = request.form["ancienCourriel"]
             db = Dbman()
-            rep = db.updateUser(compagnie,nom,prenom,ancienCourriel, courriel,role,droit)
+            rep = db.updateUser(compagnie, nom, prenom,
+                                ancienCourriel, courriel, role, droit)
             message = "Success"
         except:
             message = "Erreur"
-        return Response(json.dumps(message),mimetype='application/json')
+        return Response(json.dumps(message), mimetype='application/json')
+
 
 @app.route('/newLivrable', methods=["GET", "POST"])
 def newLivrable():
@@ -667,10 +664,10 @@ def newLivrable():
     else:
         return repr("Error")
 
+
 @app.route('/saveEcheancier', methods=["GET", "POST"])
 def saveEcheancier():
     if request.method == "POST":
-
 
         eventID = request.form["eventID"]
         dueDate = request.form["dueDate"]
@@ -679,16 +676,10 @@ def saveEcheancier():
         titre = request.form["titre"]
 
         db = Dbclient()
-        resultat = db.saveEcheancier(titre, dueDate, eventID, dateRappel, descrappel)
+        resultat = db.saveEcheancier(
+            titre, dueDate, eventID, dateRappel, descrappel)
         db.fermerdb()
         return Response(json.dumps(resultat), mimetype='application/json')
-    else:
-        return repr("Error")
-
-@app.route('/deleteLivrable', methods=["GET", "POST"])
-def deleteLivrable():
-    if request.method == "POST":
-        pass
     else:
         return repr("Error")
 
@@ -718,6 +709,7 @@ def getLivrable():
     else:
         return repr("pas ok")
 
+
 @app.route('/getEcheanciers', methods=["GET", "POST"])
 def getEcheanciers():
     if request.method == "POST":
@@ -729,6 +721,7 @@ def getEcheanciers():
         return Response(json.dumps(echanciers), mimetype='application/json')
     else:
         return repr("pas ok")
+
 
 @app.route('/updateLivrable', methods=["GET", "POST"])
 def updateLivrable():
@@ -743,6 +736,8 @@ def updateLivrable():
         return repr("pas ok")
 
 # Sers à populer les données propres à un foreign key dans une table.
+
+
 @app.route('/populate', methods=["GET", "POST"])
 def populate():
     if request.method == "POST":
@@ -756,7 +751,7 @@ def populate():
         return repr("pas ok")
 
 
-### ROUTES CLIENTS
+# ROUTES CLIENTS
 @app.route('/getClients', methods=["GET", "POST"])
 def getClients():
     db = Dbclient()
@@ -764,11 +759,13 @@ def getClients():
     db.fermerdb()
     return Response(json.dumps(data), mimetype='application/json')
 
+
 @app.route('/getMaxClient', methods=["GET", "POST"])
 def maxClient():
     infoClient = request.form["coData"]
     maxclientT = globals()["MAX_CLIENT_F" + infoClient]
     return str(maxclientT)
+
 
 @app.route('/save_client', methods=["GET", "POST"])
 def save_client():
@@ -792,6 +789,7 @@ def save_client():
         else:
             return "Pas de ID"
 
+
 @app.route('/deleteClient', methods=["GET", "POST"])
 def deleteClient():
     if request.method == "POST":
@@ -803,6 +801,7 @@ def deleteClient():
     else:
         message = "Error"
     return Response(json.dumps(message), mimetype='application/json')
+
 
 @app.route('/updateClient', methods=["GET", "POST"])
 def updateClient():
@@ -830,5 +829,4 @@ def updateClient():
 
 
 if __name__ == '__main__':
-    # app.run(debug=True)
     app.run(debug=True, host='127.0.0.1', port=5000)
