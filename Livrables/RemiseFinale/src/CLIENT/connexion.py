@@ -59,7 +59,7 @@ class Connexion:
 
     def saveEvent(self, newEvent):
         url = self.urlserveur + "/newEvent"
-        self.appelserveur(url, event)
+        self.appelserveur(url, newEvent)
         return "Nouvel évènement enregistré"
 
     def saveUser(self, newUser):

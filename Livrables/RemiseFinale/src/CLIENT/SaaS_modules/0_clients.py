@@ -20,8 +20,9 @@ class Vue():
         # Light theme
         self.root.tk.call('package', 'require', 'awlight')
         self.style = Style(self.root)
-        self.style.theme_use("awdark")
-        self.root.configure(bg='#33393b')
+        self.style.theme_use("awlight")
+        # self.root.configure(bg='#33393b')
+        self.root.configure(bg='#e8e8e7')
         self.root.title("Production CDJ - Clients")
         self.clientInfo = {}
         self.listeclients = self.parent.getClients()
