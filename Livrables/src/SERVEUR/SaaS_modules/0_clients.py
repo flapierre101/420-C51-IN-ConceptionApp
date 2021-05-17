@@ -120,7 +120,7 @@ class Vue():
                       text="* Créer un Client *", font=("Arial", 14))
         title.pack()
         self.infoFrame.pack()
-        self.buttonFrame.pack()
+        self.buttonFrame.pack(pady=20)
         self.clientFrame.pack()
         self.confirmationFrame.pack(pady=10)
 
@@ -162,7 +162,7 @@ class Vue():
             if fields[i] == "ID":
                 entry.configure(state=DISABLED)
 
-            entryLabel.grid(row=i, column=0, sticky=E+W)
+            entryLabel.grid(row=i, column=0, sticky=E+W, pady=3)
             entry.grid(row=i, column=1, sticky=E+W)
             self.clientInfo[fields[i]] = entry
 
@@ -171,16 +171,16 @@ class Vue():
             self.buttonFrame, text="Ajouter", command=self.save_client)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.newClientButton.pack(side=LEFT)
-        self.backButton.pack(side=RIGHT)
+        self.newClientButton.pack(side=LEFT, padx=5)
+        self.backButton.pack(side=RIGHT, padx=5)
 
     def modifClientButtonFrame(self):
         self.updateClientButton = Button(
             self.buttonFrame, text="Modifier", command=self.update_client)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.updateClientButton.pack(side=LEFT)
-        self.backButton.pack(side=RIGHT)
+        self.updateClientButton.pack(side=LEFT, pady=20, padx=5)
+        self.backButton.pack(side=RIGHT, pady=20, padx=5)
 
     def backToMenu(self):
         self.clientFrame.pack_forget()

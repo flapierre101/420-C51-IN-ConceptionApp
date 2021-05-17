@@ -38,10 +38,10 @@ class Vue():
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
         self.listeLivrables = self.parent.getLivrables(self.listeComplete)
-        self.root.geometry("500x350")
+        self.root.geometry("600x320")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
-        self.livrableList = Listbox(self.listFrame, width=30)
+        self.livrableList = Listbox(self.listFrame, width=45)
 
         row = 1
         for i in self.listeLivrables:
@@ -49,8 +49,8 @@ class Vue():
             row += 1
         text = "Livrables assignés incomplets" if self.listeComplete == 0 else "Livrables assignés complétés"
         listLabel = Label(self.listFrame, text=text)
-        listLabel.pack(padx=20)
-        self.livrableList.pack()
+        listLabel.pack(padx=10)
+        self.livrableList.pack(padx=20)
 
         self.listFrame.pack(side=LEFT)
         self.livrableInfo = {}
@@ -69,9 +69,9 @@ class Vue():
             self.buttonFrame, text="Enregistrer notes", command=self.updateLivrables)
         self.backButton = Button(
             self.buttonFrame, text="Retour au menu", command=self.backToMenu)
-        self.updatelivrableButton.pack()
-        self.updateNotes.pack()
-        self.backButton.pack()
+        self.updatelivrableButton.pack(fill=X, pady=5, padx=5, side=RIGHT)
+        self.updateNotes.pack(fill=X, pady=10, padx=5, side=RIGHT)
+        self.backButton.pack(fill=X, pady=10, padx=5, side=RIGHT)
 
     def createButtonFrame(self):
         self.livrableDetailButton = Button(
@@ -84,9 +84,9 @@ class Vue():
         else:
             self.showcompletebtn = Button(
                 self.buttonFrame, text="Afficher livrables incomplets", command=self.invertLivrableList)
-        self.livrableDetailButton.pack(fill=X, pady=5, padx=50)
-        self.createAddButton.pack(fill=X, pady=5, padx=50)
-        self.showcompletebtn.pack(fill=X, pady=5, padx=50)
+        self.livrableDetailButton.pack(fill=X, pady=5, padx=30)
+        self.createAddButton.pack(fill=X, pady=5, padx=30)
+        self.showcompletebtn.pack(fill=X, pady=5, padx=30)
 
     def invertLivrableList(self):
         self.listeComplete = 0 if self.listeComplete == 1 else 1
@@ -94,7 +94,7 @@ class Vue():
         self.createModuleFrame()
 
     def createDetailsFrame(self):
-        self.root.geometry("500x325")
+        self.root.geometry("585x425")
         self.livrableFrame = Frame(self.root)
         self.infoFrame = Frame(self.livrableFrame)
         self.buttonFrame = Frame(self.livrableFrame)
@@ -104,7 +104,7 @@ class Vue():
 
         title = Label(self.livrableFrame,
                       text="* Détail du livrable *", font=("Arial", 14))
-        title.pack()
+        title.pack(pady=5)
         self.infoFrame.pack()
         self.buttonFrame.pack()
         self.livrableFrame.pack()
@@ -143,7 +143,7 @@ class Vue():
                 entry.config(state='disabled')
 
 
-            entryLabel.grid(row=row, column=0, sticky=E + W)
+            entryLabel.grid(row=row, column=0, sticky=E + W, padx=10)
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
             self.livrableInfo[i] = entry
@@ -176,8 +176,8 @@ class Vue():
         self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         if self.dontcreate:
             self.createLivrableButton['state'] = DISABLED
-        self.createLivrableButton.pack(side=LEFT)
-        self.backButton.pack(side=RIGHT)
+        self.createLivrableButton.pack(side=LEFT, pady=5, padx=5)
+        self.backButton.pack(side=RIGHT, pady=5, padx=5)
 
     def createLivrableFrame(self):
         fields = ["Titre", "Propriétaire","Évènement associé", "Échéancier associé", "Date Limite", "Notes"]

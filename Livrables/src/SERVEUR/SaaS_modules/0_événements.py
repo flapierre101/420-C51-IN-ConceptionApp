@@ -33,18 +33,18 @@ class Vue():
         self.eventParam = {}
         self.messageLabel = None
         self.welcomeLabel = Label(
-            self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
+            self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack(pady=5)
         self.title = Label(
-            self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack()
+            self.root, text="*** Gestion d'évènements ***", font=("Arial", 16)).pack(pady=5)
         self.createModuleFrame()
 
     def createModuleFrame(self):
         self.gestionFrame = Frame(self.root)
         self.listeprojets = self.parent.getEvent()
-        self.root.geometry("325x325")
+        self.root.geometry("500x350")
         self.listFrame = Frame(self.gestionFrame)
         self.buttonFrame = Frame(self.gestionFrame)
-        self.eventList = Listbox(self.listFrame)
+        self.eventList = Listbox(self.listFrame, width=40)
         self.confirmationFrame = Frame(self.gestionFrame)
 
         row = 1
@@ -60,7 +60,7 @@ class Vue():
         self.listFrame.pack(side=LEFT)
 
         self.createButtonFrame()
-        self.buttonFrame.pack()
+        self.buttonFrame.pack(pady=20)
         self.confirmationFrame.pack(pady=10)
         self.gestionFrame.pack()
 
@@ -68,12 +68,12 @@ class Vue():
         if self.parent.getUserPermissions() == "Admin":
             self.createEventButton = Button(
                 self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
-            self.createEventButton.pack(fill=Y)
+            self.createEventButton.pack(fill=X, pady=5, padx=40)
 
         self.eventDetailsButton = Button(
             self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
 
-        self.eventDetailsButton.pack(fill=Y)
+        self.eventDetailsButton.pack(fill=X, pady=5, padx=40)
 
     def createNewEvent(self):
         self.gestionFrame.destroy()
