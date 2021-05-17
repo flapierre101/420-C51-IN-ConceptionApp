@@ -90,13 +90,14 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
     - affichage de la liste des clients
     - ajout de nouveau clients
     - supression de client existant
-
-- Avertissements - problèmes connus
-    - Disposition du UI temporaire. Rafinement à venir
-    - Verification des permissions d'utilisateurs
+    - V.0.5 NOUVEAU: Verification des permissions d'utilisateurs
+    - V.0.5 NOUVEAU: Affichage du nombre de clients dans la BD et
+        la capacité maximum selon le forfait actif.
+    - V.0.5 NOUVEAU: Modification des informations d'un client.
+    - V.0.5 NOUVEAU: Mise à jour dynamique de l'affichage avec
+        données das la BD.
 
 - Fonctionnalités non implémentées
-    - Modification des informations d'un client.
     - Faire une recherche afin de trouver un client
 
 ## Fonctionnement module gestion de livrables

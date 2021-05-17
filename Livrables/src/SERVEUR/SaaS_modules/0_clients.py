@@ -27,9 +27,9 @@ class Vue():
         self.listeclients = self.parent.getClients()
         self.maxClient = self.parent.getMaxClient()
         self.welcomeLabel = Label(
-            self.root, text="Bienvenue ", font=("Arial", 14)).pack()
+            self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack(pady=10)
         self.title = Label(
-            self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack()
+            self.root, text="*** Gestion des Clients ***", font=("Arial", 16)).pack(pady=5)
         self.createModuleFrame()
 
     def createModuleFrame(self):
@@ -41,7 +41,7 @@ class Vue():
         self.confirmationFrame = Frame(self.gestionFrame)
         self.listeclients = self.parent.getClients()
         self.maxClientLabel = Label(self.gestionFrame, text="Client: "+str(
-            len(self.listeclients))+"/"+str(self.maxClient), font=("Arial", 12)).pack()
+            len(self.listeclients))+"/"+str(self.maxClient), font=("Arial", 12)).pack(pady=10)
 
         self.clientsTableau["column"] = (
             "ID", "Nom", "Courriel", "Téléphone", "Compagnie", "Adresse", "Rue", "Ville")
@@ -257,6 +257,10 @@ class Controleur():
 
     def getMaxClient(self):
         return self.connexion.getMaxClient(self.userInfo['forfait'])
+
+    def getUsername(self):
+        self.username = sys.argv[2]
+        return self.username
 
 
 if __name__ == '__main__':

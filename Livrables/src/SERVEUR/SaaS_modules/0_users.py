@@ -31,7 +31,7 @@ class Vue():
         self.modifyUser = False
         self.userToModify = []
         self.welcomeLabel = Label(self.root, text="Bienvenue " + self.parent.getUsername(), font=("Arial", 14)).pack()
-        self.title = Label(self.root, text="*** Gestion d'utilisateurs ***", font=("Arial", 16)).pack()
+        self.title = Label(self.root, text="*** Gestion d'utilisateurs ***", font=("Arial", 16)).pack(pady=10)
         self.createModuleFrame()
 
     def createModuleFrame(self):
@@ -67,23 +67,22 @@ class Vue():
         self.userList.tag_configure("odd", background='Gray', foreground='White')
         self.userList.tag_configure("event", background='Lightgray', foreground='Black')
 
-
         listLabel = Label(self.listFrame, text="Liste des utilisateurs")
         listLabel.pack()
-        self.userList.pack()
+        self.userList.pack(side=TOP)
 
         self.listFrame.pack(side=LEFT)
 
         self.createButtonFrame()
-        self.buttonFrame.pack(padx=20)
+        self.buttonFrame.pack(pady=20, padx=10)
         self.mainFrame.pack()
 
     def createButtonFrame(self):
         self.createAddButton = Button(self.buttonFrame, text="Ajouter un employé",command=self.createNewUser)
         self.createModifyButton = Button(self.buttonFrame, text="Modifier un employé",command=self.createModifyUser)
 
-        self.createAddButton.pack(fill=Y)
-        self.createModifyButton.pack(fill=Y)
+        self.createAddButton.pack(fill=X, padx=10, pady=5, side=TOP)
+        self.createModifyButton.pack(fill=X, padx=10, pady=5, side=BOTTOM)
 
     def createRolesDropDownMenu(self):
         n = StringVar()
