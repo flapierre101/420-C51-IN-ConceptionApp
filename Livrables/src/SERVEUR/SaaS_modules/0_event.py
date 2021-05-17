@@ -2,19 +2,15 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import scrolledtext
 from tkcalendar import *
-import urllib.request
-import urllib.parse
 from flask import json
 import datetime
 import sys
 import re
 
-
 # à copier dans chaque nouveau module pour avoir la classe connexion
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# import ../connexion.py
 from connexion import *
 
 
@@ -23,11 +19,11 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        # Dark theme
         self.root.tk.call('package', 'require', 'awdark')
+        # Light theme
         self.root.tk.call('package', 'require', 'awlight')
         self.style = Style(self.root)
-        # self.style.theme_use("awlight")
-        # self.root.configure(bg='#e8e8e7')
         self.style.theme_use("awdark")
         self.root.configure(bg='#33393b')
         self.eventInfo = {}
@@ -68,15 +64,14 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
         self.gestionFrame.pack()
 
-
     def createButtonFrame(self):
         if self.parent.getUserPermissions() == "Admin":
-            self.createEventButton = Button(self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
+            self.createEventButton = Button(
+                self.buttonFrame, text="Créer un évènement", command=self.createNewEvent)
             self.createEventButton.pack(fill=Y)
 
         self.eventDetailsButton = Button(
             self.buttonFrame, text="Détail de l'évènement", command=self.eventDetails)
-        #self.eventPersonnelButton = Button(self.buttonFrame, text="Employés de ")
 
         self.eventDetailsButton.pack(fill=Y)
 
@@ -153,14 +148,18 @@ class Vue():
     def createDetailsButtonFrame(self):
 
         if self.parent.getUserPermissions() == "Admin":
-            self.updateEventButton = Button(self.buttonFrame, text="Modifier", command=self.updateEvent)
+            self.updateEventButton = Button(
+                self.buttonFrame, text="Modifier", command=self.updateEvent)
             self.updateEventButton.pack(side=LEFT)
-            self.deleteEventButton = Button(self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
+            self.deleteEventButton = Button(
+                self.buttonFrame, text="Supprimer l'évènement", command=self.deleteEvent)
             self.deleteEventButton.pack(side=RIGHT)
-            self.addEcheancierButton = Button(self.buttonFrame, text="Ajouter un échéancier", command=self.addEcheancier)
+            self.addEcheancierButton = Button(
+                self.buttonFrame, text="Ajouter un échéancier", command=self.addEcheancier)
             self.addEcheancierButton.pack(side=RIGHT)
 
-        self.backButton = Button(self.buttonFrame, text="Retour au menu", command=self.backToMenu)
+        self.backButton = Button(
+            self.buttonFrame, text="Retour au menu", command=self.backToMenu)
         self.backButton.pack(side=RIGHT)
 
     def addEcheancier(self):
@@ -186,7 +185,8 @@ class Vue():
         self.confirmationFrame.pack(pady=10)
 
     def createEcheancierFrame(self):
-        fields = ["Titre", "Date d'échéance", "Date rappel", "Description rappel"]
+        fields = ["Titre", "Date d'échéance",
+                  "Date rappel", "Description rappel"]
         row = 0
 
         for i in fields:
@@ -204,8 +204,8 @@ class Vue():
             elif "Description rappel" in i:
                 entry = Entry(self.infoFrame)
             else:
-                entry = scrolledtext.ScrolledText(self.infoFrame, width=15, height=6)
-
+                entry = scrolledtext.ScrolledText(
+                    self.infoFrame, width=15, height=6)
 
             entryLabel.grid(row=row, column=0, sticky=E + W)
             entry.grid(row=row, column=1, sticky=E + W)
@@ -259,7 +259,6 @@ class Vue():
         self.parent.saveEcheancier(params)
         self.backToMenu()
 
-
     def clearAllFields(self):
         self.eventInfo["Nom"].delete(0, "end")
         self.eventInfo["Date Début"].set_date(datetime.date.today())
@@ -271,13 +270,9 @@ class Vue():
             self.messageLabel.destroy()
 
     def saveEvent(self):
-        # TODO valider budget numbers only
-
         self.eventParam = self.getEntryData()
-
         if re.match(r"^[0-9.]*$", self.eventParam["budget"]):
             self.parent.saveEvent(self.eventParam)
-
         else:
             self.showMessage("Veuillez entrer un budget valide")
 
@@ -310,7 +305,6 @@ class Vue():
         self.messageLabel.pack()
 
     def eventDetails(self):
-
         try:
             selection = self.eventList.get(self.eventList.curselection())
 
@@ -338,7 +332,7 @@ class Modele():
 
 class Controleur():
     def __init__(self):
-        y = json.loads(sys.argv[4])
+        json.loads(sys.argv[4])
         self.modele = Modele(self)
         self.connexion = Connexion()
         self.urlserveur = self.connexion.urlserveur
@@ -361,8 +355,7 @@ class Controleur():
         self.vue.showMessage(reponseServeur)
 
     def saveEcheancier(self, params):
-        reponseServeur = self.connexion.saveEcheancier(params)
-
+        self.connexion.saveEcheancier(params)
 
     def deleteEvent(self, eventID):
         reponseServeur = self.connexion.deleteEvent(eventID)

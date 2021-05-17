@@ -18,7 +18,6 @@ class Vue():
     def changercadre(self, nomcadre):
         cadre = self.cadres[nomcadre]
         if self.cadreactif:
-            # self.cadreactif.destroy()
             self.cadreactif.pack_forget()
         self.cadreactif = cadre
         self.cadreactif.pack()
@@ -27,7 +26,6 @@ class Vue():
 
     def creercadres(self):
         self.cadres["login"] = self.creercadrelogin()
-        # self.cadres["enregistrement"]=self.creercadresignup() # non implanté
 
     def creercadrelogin(self):
         self.cadrelogin = Frame(self.cadreapp, width=800, height=400)
@@ -149,8 +147,6 @@ class Vue():
         self.cadrecommande = Frame(self.cadreprincipal, width=400, height=400)
         btnsaction = []
         if usager.droit == "Admin":
-            btnsaction.append(Button(self.cadrecommande, text="Gestion de membres",
-                                     font=("Arial", 12), padx=10, pady=10, command=self.gerermembres))
             btnsaction.append(Button(self.cadrecommande, text="Forfaits",
                                      font=("Arial", 12), padx=10, pady=10, command=self.gererforfait)),
         btnsaction.append(Button(self.cadrecommande, text="Modules",
@@ -229,21 +225,12 @@ class Vue():
             self.loginmdp.insert(0, mdp)
         self.loginnom.focus_set()
         self.changercadre("login")
-        # centrer au depart
-        # self.root.update()
-        # self.centrerfenetre()
 
-    def gerermembres(self):
-        self.modulevisible = False
-        listemembres = self.parent.trouvermembres()
-        entete = ["Nom", "courriel", "Rôle", "Droit d'accès"]
-        self.integretableau(listemembres, entete)
 
     def gerermodules(self):
         self.modulevisible = True
         listemodules = self.parent.trouvermodules()
         self.dictlisteformatee = {}
-        # TO DO chercher info dans base de donnée
         compagnie = self.parent.getcompagnie()
         for module in listemodules:
 
@@ -252,7 +239,6 @@ class Vue():
                 moduleformate = module[2:-3]
                 moduleformate = moduleformate.replace("_", " ")
                 moduleformate = moduleformate.capitalize()
-                #
                 # Creer un dictionnaire avec le nom réel du fichier sur le serveur, la clé étant le nom formaté :
                 self.dictlisteformatee[moduleformate] = module
 
@@ -266,9 +252,6 @@ class Vue():
         nom = self.loginnom.get()
         mdp = self.loginmdp.get()
         self.parent.identifierusager(nom, mdp)
-
-    def creerUsager(self):
-        pass
 
     def avertirusager(self, titre, message):
         rep = messagebox.askyesno(titre, message)

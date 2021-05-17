@@ -13,12 +13,12 @@ class Vue():
         self.parent=parent
         self.root=Tk()
         self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        # Dark theme
         self.root.tk.call('package', 'require', 'awdark')
+        # Light theme
         self.root.tk.call('package', 'require', 'awlight')
         self.style = Style(self.root)
-        # self.style.theme_use("awlight")
-        # self.root.configure(bg='#e8e8e7')
-        self.style.theme_use("awdark")
+        self.style.theme_use("awlight")
         self.root.configure(bg='#33393b')
         self.root.title("Production CDJ - Finance")
         self.cadreapp=Frame(self.root)
