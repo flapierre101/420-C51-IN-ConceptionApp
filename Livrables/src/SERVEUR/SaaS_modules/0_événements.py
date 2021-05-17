@@ -80,7 +80,7 @@ class Vue():
         self.createEventFrame()
 
     def createEventFrame(self):
-        self.root.geometry("325x325")
+        self.root.geometry("500x350")
         self.eventFrame = Frame(self.root)
         self.infoFrame = Frame(self.eventFrame)
         self.buttonFrame = Frame(self.eventFrame)
