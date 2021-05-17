@@ -162,7 +162,7 @@ Ce que je compte faire
 
 Les problèmes rencontrés :
 - François : Affichage des messages ne fonctionne pas. Max clients doit être dans saas_serveur.
-- Dany : Complexcité de coordonné le module livrable et échéencier simultatément.
+- Dany : Complexité de coordonné le module livrable et échéencier simultatément.
 - Caroline : Gestion du dropdown et changement/modifier les infos dans BD
 
 
