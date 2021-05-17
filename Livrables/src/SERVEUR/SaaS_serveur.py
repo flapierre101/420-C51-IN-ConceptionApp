@@ -120,15 +120,6 @@ class Dbclient():
         except sqlite3.Error as er:
             print(er)
 
-    def getEventEcheancier(self):
-        pass
-
-    def newEcheancier(self):
-        pass
-
-    def getFournisseurList(self):
-        pass
-
     def updateLivrable(self, id, notes):
         sqlRequest = ('''
             Update livrables
@@ -302,7 +293,6 @@ class Dbman():
         param = [email]
         self.curs.execute(sqlRequest,param)
         user = self.curs.fetchall()
-        print("getUser DB: ", user)
         return user
 
 
