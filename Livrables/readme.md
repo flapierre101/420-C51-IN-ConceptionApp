@@ -1,12 +1,12 @@
 ### Auteurs : Dany Viens, Caroline Emond-Serret, François Lapierre
 
-# Readme créé le xx xx xx
+# Readme créé le 17 mai 2020
 
 
 Ce document est disponible sous forme .txt et .md
 Pour une meilleure visualisation, utilisez le format .md
 
-Document .txt disponible pour le résumé des scrums et de la plannification de chacun de nos sprints.
+Un document .txt et .md est disponible pour le résumé des scrums et de la plannification de chacun de nos sprints.
 
 
 Information sur l'état du logiciel
@@ -22,7 +22,11 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
 
     L'objectif du logiciel est d'offrir différents modules permettent de gérer la préparation à un évènement, mais également d'aider à gérer les clients participants à l'évènement.
 
+    Pour se connecter avec un compte admin :
+        - Nom: "aaa@xyz.com", Mot de Passe : "aaa"
 
+    Pour se connecter avec un compte sans droit d'administration :
+        - Nom: "bbb@xyz.com", Mot de Passe : "aaa"
 
 ## Modèle d'affaire
 
@@ -36,8 +40,25 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
         - Chaque forfait donne accès à différents modules ou des fonctionnalités plus avancées
     - Est basé sur un montant annuel X pour les clients.
 
+# Historique des versions:
+
+-  Version 0.5 : 17 mai 2020 - 
+-  Version 0.3 : 26 avril 2020 - Création de la version 1 du Readme.
 
 
+## À venir dans les futures versions
+
+- Module réunion
+    - Permettre de créer des réunions, gestions des salles etc.
+- Module campagne publicitaire
+    - Garder un historique des campagnes publiciataires, garder le matériel promotionnel réunion dans un base de donnée
+- Gestion des finances
+    - Gestion du coût du matérial, salaire, entrée d'argent
+- Module inventaire
+    - Gestion de l'inventaire (nombre en stock selon catégories)
+- Module Sous-traitance
+    - Gestion des contrats de sous-traitance et base de données avec les différents 
+    
 # Étapes à suivre pour utilisation:
 
 ## Fonctionnement module général
@@ -64,7 +85,7 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
     - Aucun!
 
 - Fonctionnalités non implémentées
-    - Changer le visuel
+    - Fonction "déconnexion" pour changer d'utilisateur sans fermer le programme
 
 ## Fonctionnement module gestion d'événement
 
@@ -74,12 +95,15 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
     - Affiche la liste des événements en cours
     - Permet la création d'un nouvel événement
     - Permet de consulter les détails d'un événements et de le modifier.
+        - V.0.5 NOUVEAU : De cette page, il est possible de créer un nouvel échéancier pour l'évènement. 
 
 - Avertissements - problèmes connus
-    - Verification des permissions d'utilisateurs
+    - aucun
 
 - Fonctionnalités non implémentées et à venir:
     - Une interface permettant de lié des livrables, des clients, des utilisateurs/employés, des échéanciers, etc... Ainsi voir tous les éléments d'un événement au même endroit.
+
+
 
 
 ## Fonctionnement module gestion de client
@@ -110,18 +134,22 @@ Avertissements -(IE : ce qui ne fonctionnement pas)
     - L'écran principal affiche la liste des livrables et non complété assignés à l'employé connecté
     - Peut obtenir les détails du livrable en choisant un item dans la liste et en appuyant sur le bouton "Detail"
         - Donne la description, l'état, le propriétaire, l'échéancier associé et la date limite de l'échéancier.
+    - V.0.5 NOUVEAU : Possibilité de d'ajouter un livrable
 
 - Détaillé
     - Possibilité d'afficher les livrables complété ou non complété.
     - Dans l'écran "Détail du livrable", il est possible d'indiquer que le livrable est complété.
+    - V.0.5 NOUVEAU : Dans l'écran "Ajouter un livrable"
+        - Sélectionner l'évènement voulu dans le menu déroulant
+            - Il sera ensuite possible de sélectionner l'échéancier désiré
+        - Une fois qu'un évènement valide et un échéancier valide sont choisi, le bouton "Créer" sera actif.
 
 - Avertissements - problèmes connus
     - Si l'on ne choisit pas de livrables avant de cliquer sur "detail", le logiciel affichera une erreur.
+    - V.0.5 NOUVEAU : Possibilité de créer un livrable sans ajouter de titre ou de notes. 
 
 - Fonctionnalités non implémentées
-    - Afficher le détail de l'échéancier ou de l'évènement associé au livrable
-    - Créer un nouveau livrable
-        -Drop-down menu pour l'évènement et l'échéancier associé.
+    - Afficher le détail de l'échéancier.
     - Afficher les livrables par évènement.
 
 ## Fonctionnement module gestion d'utilisateur

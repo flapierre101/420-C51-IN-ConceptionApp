@@ -147,8 +147,6 @@ class Vue():
         self.cadrecommande = Frame(self.cadreprincipal, width=400, height=400)
         btnsaction = []
         if usager.droit == "Admin":
-            btnsaction.append(Button(self.cadrecommande, text="Gestion de membres",
-                                     font=("Arial", 12), padx=10, pady=10, command=self.gerermembres))
             btnsaction.append(Button(self.cadrecommande, text="Forfaits",
                                      font=("Arial", 12), padx=10, pady=10, command=self.gererforfait)),
         btnsaction.append(Button(self.cadrecommande, text="Modules",
@@ -228,11 +226,6 @@ class Vue():
         self.loginnom.focus_set()
         self.changercadre("login")
 
-    def gerermembres(self):
-        self.modulevisible = False
-        listemembres = self.parent.trouvermembres()
-        entete = ["Nom", "courriel", "Rôle", "Droit d'accès"]
-        self.integretableau(listemembres, entete)
 
     def gerermodules(self):
         self.modulevisible = True

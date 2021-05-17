@@ -147,7 +147,7 @@ class Vue():
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
             self.livrableInfo[i] = entry
-            self.livrableInfo["Notes"].get("1.0",END).strip()
+
 
     def createNewLivrable(self):
         self.gestionFrame.destroy()
