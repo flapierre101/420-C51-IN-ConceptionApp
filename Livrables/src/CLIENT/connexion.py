@@ -57,7 +57,7 @@ class Connexion:
         Popen([sys.executable, "./SaaS_modules/"+fichier,
               droit, usager, courriel, compagnie], shell=1).pid
 
-    def saveEvent(self, event):
+    def saveEvent(self, newEvent):
         url = self.urlserveur + "/newEvent"
         self.appelserveur(url, event)
         return "Nouvel évènement enregistré"
