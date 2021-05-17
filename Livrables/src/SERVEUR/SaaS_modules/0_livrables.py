@@ -3,19 +3,11 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import scrolledtext
 from tkcalendar import *
-import urllib.request
-import urllib.parse
-from flask import json
-import datetime
 import sys
-import re
-
-
-# à copier dans chaque nouveau module pour avoir la classe connexion
 import os
 import sys
+# à copier dans chaque nouveau module pour avoir la classe connexion
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# import ../connexion.py
 from connexion import *
 
 class Vue():
@@ -23,11 +15,11 @@ class Vue():
         self.parent = parent
         self.root = Tk()
         self.root.tk.call('lappend', 'auto_path', './Styles/awthemes-10.3.0')
+        # Dark theme
         self.root.tk.call('package', 'require', 'awdark')
+        # Light theme
         self.root.tk.call('package', 'require', 'awlight')
         self.style = Style(self.root)
-        # self.style.theme_use("awlight")
-        # self.root.configure(bg='#e8e8e7')
         self.style.theme_use("awdark")
         self.root.configure(bg='#33393b')
         self.livrableInfo = {}
@@ -155,7 +147,7 @@ class Vue():
             entry.grid(row=row, column=1, sticky=E + W)
             row += 1
             self.livrableInfo[i] = entry
-        text = self.livrableInfo["Notes"].get("1.0",END).strip()
+            self.livrableInfo["Notes"].get("1.0",END).strip()
 
     def createNewLivrable(self):
         self.gestionFrame.destroy()
@@ -285,8 +277,6 @@ class Vue():
         self.indexEcheancierSelect = None
         self.dontcreate = True
 
-
-
         self.livrableFrame.pack_forget()
         self.addLivrableFrame()
 
@@ -415,8 +405,6 @@ class Controleur():
 
     def getEcheanciers(self, idEvent):
         return self.connexion.getEcheanciers(idEvent)
-
-
 
 
 if __name__ == '__main__':

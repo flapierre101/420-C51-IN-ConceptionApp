@@ -4,21 +4,13 @@ from vue import *
 from modele import *
 from connexion import *
 
-import urllib.request
-import urllib.parse
-import sys
 
-
-import json
-
-from subprocess import Popen
 ##################
 class Controleur:
     def __init__(self):
-        #self.urlserveur= "http://jmdeschamps.pythonanywhere.com"
         self.modele=Modele(self)
-        self.connexion = Connexion()       
-        self.urlserveur= self.connexion.urlserveur 
+        self.connexion = Connexion()
+        self.urlserveur= self.connexion.urlserveur
         self.vue=Vue(self)
         self.vue.afficherlogin("aaa@xyz.com","AAAaaa111")
         self.vue.root.mainloop()
@@ -31,9 +23,9 @@ class Controleur:
 
     def identifierusager(self,courriel,mdp):
         reponse = self.connexion.identifierusager(courriel, mdp)
-        if "inconnu" in reponse:            
+        if "inconnu" in reponse:
             self.vue.avertirusager("Erreur","Mot de passe ou identifiant non reconnnu \n\nReesayer?")
-        else:            
+        else:
             self.modele.inscrireusager(reponse, courriel)
             self.vue.creercadreprincipal(self.modele)
             self.vue.changercadre("principal")
